@@ -14,6 +14,7 @@ import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
 class MainActivity : AppCompatActivity() {
 
     private lateinit var constraintLayout: ConstraintLayout
+    private lateinit var constraintLayoutDraw : ConstraintLayout
     private lateinit var btnMakeRectangle: Button
 
     private lateinit var rectangleFactory: RectangleFactory
@@ -25,19 +26,18 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("AppTest", "${this.window.decorView.height}")
 
-        constraintLayout = findViewById(R.id.constraintLayout)
-        constraintLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+        constraintLayoutDraw = findViewById(R.id.constrainLayoutDraw)
+        constraintLayoutDraw.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
             override fun onGlobalLayout() {
-                constraintLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val width = constraintLayout.width
-                val height = constraintLayout.height
+                constraintLayoutDraw.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val width = constraintLayoutDraw.width
+                val height = constraintLayoutDraw.height
                 rectangleFactory = RectangleFactory(width, height)
                 Log.d("AppTest", "width:$width, height:$height")
             }
-
         })
 
-        constraintLayout.setOnTouchListener { view, motionEvent ->
+        constraintLayoutDraw.setOnTouchListener { view, motionEvent ->
             if(motionEvent.action == MotionEvent.ACTION_DOWN){
                 Log.d("AppTest", "view.x : ${view.x}, view.y : ${view.y}")
                 Log.d("AppTest", "event.x : ${motionEvent.x}, event.y : ${motionEvent.y}")
@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
         setBtnMakeRectangle()
     }
 
