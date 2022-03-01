@@ -6,7 +6,7 @@ import android.util.DisplayMetrics
 import android.view.View
 
 
-class RectangleViewModelFactory(val mainActivity: Context) {
+class RectangleViewModelFactory(private val mainActivity: Context) {
     private val rectangleView = RectangleViewModel()
 
     private fun setRectangleViewID() {
@@ -50,28 +50,13 @@ class RectangleViewModelFactory(val mainActivity: Context) {
         rectangleView.setAlpha(alpha)
     }
 
-    fun createView(view: View) {
-        setRectangleViewAttr()
-        view.setBackgroundColor(
-            Color.rgb(
-                rectangleView.getColor()[0],
-                rectangleView.getColor()[1],
-                rectangleView.getColor()[2]
-            )
-        )
-        view.alpha = rectangleView.getAlpha()
-        view.x = rectangleView.getPoint()[0].toFloat()
-        view.y = rectangleView.getPoint()[1].toFloat()
-        view.layoutParams.width = rectangleView.getSize()[0]
-        view.layoutParams.height = rectangleView.getSize()[1]
-    }
-
-    fun setRectangleViewAttr() {
+    fun getInstance(): RectangleViewModel {
         setRectangleViewID()
         setRectangleViewPoint()
         setRectangleViewColor()
         setRectangleViewAlpha()
         setRectangleViewSize()
+        return rectangleView
     }
 
     fun printInfo(): String {

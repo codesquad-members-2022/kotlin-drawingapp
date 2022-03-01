@@ -1,7 +1,9 @@
 package com.codesquard.kotlin_drawingapp
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -16,19 +18,26 @@ class MainActivity : AppCompatActivity() {
         val third = findViewById<TextView>(R.id.third_view)
         val fourth = findViewById<TextView>(R.id.fourth_view)
 
-        val firstView = RectangleViewModelFactory(this)
-        firstView.setRectangleViewAttr()
-        val secondView = RectangleViewModelFactory(this)
-        secondView.setRectangleViewAttr()
-        val thirdView = RectangleViewModelFactory(this)
-        thirdView.setRectangleViewAttr()
-        val fourthView = RectangleViewModelFactory(this)
-        fourthView.setRectangleViewAttr()
+        createView(first)
+        createView(second)
+        createView(third)
+        createView(fourth)
+    }
 
-        Log.d("Rect1", firstView.printInfo())
-        Log.d("Rect2", secondView.printInfo())
-        Log.d("Rect3", thirdView.printInfo())
-        Log.d("Rect4", fourthView.printInfo())
+    private fun createView(view: View) {
+        val rectangle = RectangleViewModelFactory(this).getInstance()
+        view.setBackgroundColor(
+            Color.rgb(
+                rectangle.getColor()[0],
+                rectangle.getColor()[1],
+                rectangle.getColor()[2]
+            )
+        )
+        view.alpha = rectangle.getAlpha()
+        view.x = rectangle.getPoint()[0].toFloat()
+        view.y = rectangle.getPoint()[1].toFloat()
+        view.layoutParams.width = rectangle.getSize()[0]
+        view.layoutParams.height = rectangle.getSize()[1]
     }
 
 }
