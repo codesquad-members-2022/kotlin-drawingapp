@@ -6,11 +6,11 @@ class Rectangle {
     val size: Size = Size(150, 120)
     val id: String = numberFactory.getIdValue()
     val point: Point =
-        Point(numberFactory.getRandomPointNumber(), numberFactory.getRandomPointNumber())
+        Point(numberFactory.getRandomXPointNumber(), numberFactory.getRandomYPointNumber())
     val color: Color = Color(
         numberFactory.getRandomRgbNumber(),
         numberFactory.getRandomRgbNumber(),
         numberFactory.getRandomRgbNumber()
     )
-    val alpha: Int = numberFactory.getRandomAlphaNumber()
+    val alpha: Float = numberFactory.getRandomAlphaFloat()
 }
