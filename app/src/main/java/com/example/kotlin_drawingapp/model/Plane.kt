@@ -49,21 +49,39 @@ class Plane(private val context: Context, private val density: Float) {
     }
 
     fun getRectangleByPosition(x: Float, y: Float): Rectangle? {
+        val index = getRectangleIndex(x, y)
+        return if (index == -1) {
+            null
+        } else {
+            rectArray[index].rect
+        }
+    }
+
+    private fun getRectangleIndex(x: Float, y: Float): Int {
         val convertX = convertPxToDp(x)
         val convertY = convertPxToDp(y)
 
         for (i in rectArray.size - 1 downTo 0) {
             if (rectArray[i].rect.point.x <= convertX && rectArray[i].rect.point.x + rectArray[i].rect.size.width >= convertX) {
                 if (rectArray[i].rect.point.y <= convertY && rectArray[i].rect.point.y + rectArray[i].rect.size.height >= convertY) {
-                    return rectArray[i].rect
+                    return i
                 }
             }
         }
 
-        return null
+        return -1
     }
 
-    fun drawSelectRectangleByPosition(x: Float, y: Float): ImageView? {
+    fun getRectangleImageByPosition(x: Float, y: Float): ImageView? {
+        val index = getRectangleIndex(x, y)
+        return if (index == -1) {
+            null
+        } else {
+            rectArray[index].imageView
+        }
+    }
+
+    fun getSelectRectangleBorder(x: Float, y: Float): ImageView? {
         val rect = getRectangleByPosition(x, y)
         var border: ImageView? = null
         border = rect?.let {
