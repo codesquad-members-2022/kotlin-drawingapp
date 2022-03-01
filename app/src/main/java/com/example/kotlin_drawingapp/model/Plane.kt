@@ -48,7 +48,7 @@ class Plane(private val context: Context, private val density: Float) {
         return rectArray[index].rect
     }
 
-    private fun getRectangleByPosition(x: Float, y: Float): Rectangle? {
+    fun getRectangleByPosition(x: Float, y: Float): Rectangle? {
         val convertX = convertPxToDp(x)
         val convertY = convertPxToDp(y)
 
