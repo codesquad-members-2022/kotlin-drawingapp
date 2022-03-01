@@ -1,28 +1,24 @@
 package com.example.kotlindrawingapp
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.square.Square
 
 
-class CustomCanvas : View {
+class CustomCanvas : View, Contract.View {
 
-    val paint = Paint()
-    val path = Path()
+    private val paint: Paint = Paint()
+    private var rect: RectF = RectF()
 
-    constructor(context: Context) : super(context) {}
-    constructor(context: Context, attr: AttributeSet) : super(context, attr) {}
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attr: AttributeSet) : super(context, attr)
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-
-        paint.color = Color.GREEN
-        canvas?.drawPath(path, paint)
+        canvas?.drawRect(rect, paint)
     }
 
     fun drawRectangle(square: Square) {
@@ -30,13 +26,22 @@ class CustomCanvas : View {
         val y = square.point.y
         val width = square.size.width
         val height = square.size.height
-        path.addRect(
-            x.toFloat(),
-            y.toFloat(),
-            x.toFloat() + width,
-            y.toFloat() + height,
-            Path.Direction.CCW
-        )
+        rect = RectF(x.toFloat(), y.toFloat(), (x + width).toFloat(), (y + height).toFloat())
+        paint(square)
+        invalidate()
+    }
+
+    private fun paint(square: Square) {
+        val alpha = square.alpha.alpha
+        val red = square.rgb.red
+        val green = square.rgb.green
+        val blue = square.rgb.blue
+        paint.color = Color.argb(alpha, red, green, blue)
+    }
+
+    fun setStroke() {
+        paint.strokeWidth = 5F
+        paint.style = Paint.Style.STROKE
         invalidate()
     }
 }

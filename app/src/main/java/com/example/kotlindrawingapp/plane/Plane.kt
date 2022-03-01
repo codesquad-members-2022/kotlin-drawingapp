@@ -18,6 +18,14 @@ class Plane private constructor(private var _squares: List<Square>) {
         return _squares.any { it.point == square.point }
     }
 
+    fun contain(x: Float, y: Float): Int {
+        val square = _squares.find {
+            (it.point.x <= x) && ((it.point.x + it.size.width) >= x)
+                    && (it.point.y <= y) && ((it.point.y + it.size.height) >= y)
+        }
+        return square?.let { _squares.indexOf(square) } ?: -1
+    }
+
     companion object {
         fun of(squares: List<Square>): Plane {
             return Plane(squares)
