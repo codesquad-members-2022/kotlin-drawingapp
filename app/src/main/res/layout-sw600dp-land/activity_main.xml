@@ -10,7 +10,61 @@
     <FrameLayout
         android:id="@+id/image_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-421dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/sideBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_rgb_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="50dp"
+            android:text="배경색"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/tv_rgb_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rgb_title"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/imageview_border"
+            android:padding="10dp"
+            android:text="#000000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_alpha_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_rgb_value"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="50dp"
+            android:text="투명도"
+            android:textColor="@color/black" />
+
+        <SeekBar
+            android:id="@+id/seekbar_opacity"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_alpha_title"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_addRectangle"
@@ -21,12 +75,10 @@
         android:paddingBottom="10dp"
         android:text="⬜\n사각형"
         android:textAlignment="center"
-
         android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
