@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">kotlin-drawingapp</string>
+  <string name="사각형">사각형</string>
 </resources>
