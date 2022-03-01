@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="backgroundColorText">배경색</string>
+    <string name="alphaText">투명도</string>
+    <string name="alphaButton1Text">+</string>
+    <string name="alphaButtonText2">-</string>
 </resources>
