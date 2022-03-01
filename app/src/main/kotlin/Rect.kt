@@ -7,6 +7,10 @@ class Rect(rectId:String, val point:Point, val size:Size, val backGroundColor: B
         this.opacity=opacity
     }
 
+    fun getOpacity():Int{
+        return this.opacity
+    }
+
     override fun toString(): String {
         return "${this.rectId}, $point $size $backGroundColor Alpha: $opacity"
     }
