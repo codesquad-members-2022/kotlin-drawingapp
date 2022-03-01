@@ -2,8 +2,8 @@ package com.example.kotlindrawingapp.square
 
 data class Square(
     private val id: ID,
-    private val point: Point,
-    private val size: Size,
+    val point: Point,
+    val size: Size,
     private val rgb: RGB,
     private val alpha: Alpha
 ) {
