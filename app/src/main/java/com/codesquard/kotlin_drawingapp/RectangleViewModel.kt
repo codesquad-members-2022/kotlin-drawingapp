@@ -1,9 +1,12 @@
 package com.codesquard.kotlin_drawingapp
 
+import android.content.Context
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.view.View
 
-class RectangleViewModelFactory {
+
+class RectangleViewModelFactory(val mainActivity: Context) {
     private val rectangleView = RectangleViewModel()
 
     private fun setRectangleViewID() {
@@ -17,24 +20,47 @@ class RectangleViewModelFactory {
         rectangleView.setID(randomID)
     }
 
-    fun setRectangleViewPoint(pointX: Int, pointY: Int) {
+    private fun setRectangleViewPoint() {
+        val pointX = (0..1000).random()
+        val pointY = (0..1000).random()
         rectangleView.setPoint(pointX, pointY)
     }
 
-    fun setRectangleViewColor(r: UByte, g: UByte, b: UByte) {
+    private fun dp2px(dp: Float): Float {
+        val resources = mainActivity.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+    }
+
+    private fun setRectangleViewSize() {
+        val width = dp2px(150f)
+        val height = dp2px(120f)
+        rectangleView.setSize(width.toInt(), height.toInt())
+    }
+
+    private fun setRectangleViewColor() {
+        val r = (0..255).random()
+        val g = (0..255).random()
+        val b = (0..255).random()
         rectangleView.setColor(r, g, b)
     }
 
-    fun setRectangleViewAlpha(alpha: Int) {
+    private fun setRectangleViewAlpha() {
+        val alpha = (1..10).random()
         rectangleView.setAlpha(alpha)
     }
 
     fun createView(view: View) {
+        setRectangleViewID()
+        setRectangleViewPoint()
+        setRectangleViewColor()
+        setRectangleViewAlpha()
+        setRectangleViewSize()
         view.setBackgroundColor(
             Color.rgb(
-                rectangleView.getColor()[0].toInt(),
-                rectangleView.getColor()[1].toInt(),
-                rectangleView.getColor()[2].toInt()
+                rectangleView.getColor()[0],
+                rectangleView.getColor()[1],
+                rectangleView.getColor()[2]
             )
         )
         view.alpha = rectangleView.getAlpha()
@@ -49,8 +75,8 @@ class RectangleViewModelFactory {
 class RectangleViewModel {
     private lateinit var id: String
     private lateinit var point: Array<Int>
-    private val size = arrayOf(150, 120)
-    private lateinit var color: Array<UByte>
+    private lateinit var size: Array<Int>
+    private lateinit var color: Array<Int>
     private var alpha = 0f
 
     fun setPoint(x: Int, y: Int) {
@@ -59,9 +85,13 @@ class RectangleViewModel {
 
     fun getPoint() = point
 
+    fun setSize(width: Int, height: Int) {
+        size = arrayOf(width, height)
+    }
+
     fun getSize() = size
 
-    fun setColor(r: UByte, g: UByte, b: UByte) {
+    fun setColor(r: Int, g: Int, b: Int) {
         color = arrayOf(r, g, b)
     }
 
