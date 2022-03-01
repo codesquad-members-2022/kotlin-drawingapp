@@ -13,6 +13,10 @@ class Rect(rectId:String, val point: Point, val size: Size, var backGroundColor:
         return this.opacity
     }
 
+    fun setOpacity(opacity: Int){
+        this.opacity= opacity
+    }
+
     override fun toString(): String {
         return "${this.rectId}, $point $size $backGroundColor Alpha: $opacity"
     }

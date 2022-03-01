@@ -92,4 +92,9 @@ class Plane(private val context: Context, private val density:Float) {
         return randomColor
     }
 
+    fun changeOpacity(rectView: ImageView, opacity:Int){
+        rectangleList.find { it.imageView==rectView }?.rect?.setOpacity(opacity)
+
+    }
+
 }

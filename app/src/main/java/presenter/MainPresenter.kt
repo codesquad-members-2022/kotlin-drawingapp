@@ -32,5 +32,10 @@ class MainPresenter(
         view.showColorChange(rectView, randomColor, colorValueView )
     }
 
+    override fun changeOpacity(rectView: ImageView, opacity: Int) {
+        plane.changeOpacity(rectView,opacity)
+        view.showOpacityChange(rectView,opacity)
+    }
+
 }
 
