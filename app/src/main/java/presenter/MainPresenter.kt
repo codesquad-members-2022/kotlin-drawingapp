@@ -3,6 +3,8 @@ package presenter
 import Plane
 import android.content.Context
 import android.widget.ImageView
+import android.widget.TextView
+import model.RectFactory
 import view.MainContract
 
 class MainPresenter(
@@ -23,6 +25,11 @@ class MainPresenter(
             val imageBorder = plane.makeImageBorder(xPos, yPos)
             view.showSelected(selectedRectangle, selectedRectangleView, imageBorder)
         }
+    }
+
+    override fun changeColor(rectView: ImageView, colorValueView: TextView) {
+        val randomColor = plane.changeColor(rectView)
+        view.showColorChange(rectView, randomColor, colorValueView )
     }
 
 }

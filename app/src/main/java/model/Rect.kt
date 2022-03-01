@@ -1,4 +1,6 @@
-class Rect(rectId:String, val point:Point, val size:Size, val backGroundColor: BackGroundColor, opacity:Int) {
+package model
+
+class Rect(rectId:String, val point: Point, val size: Size, var backGroundColor: BackGroundColor, opacity:Int) {
     private var rectId=""
     private var opacity=0
 

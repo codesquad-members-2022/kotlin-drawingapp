@@ -1,3 +1,5 @@
+package model
+
 import android.graphics.Color
 
 data class BackGroundColor(val redValue:Int, val greenValue:Int, val blueValue:Int){

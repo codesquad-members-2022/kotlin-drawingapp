@@ -1,11 +1,12 @@
 package view
 
-import Rect
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.codesquad.kotlin_drawingapp.R
+import model.BackGroundColor
+import model.Rect
 import presenter.MainPresenter
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         presenter = MainPresenter(this, this, resources.displayMetrics.density)
         mainLayout = findViewById(R.id.image_container)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
+        val tvRGBValue = findViewById<TextView>(R.id.tv_rgb_value)
         btnMakeRectangle.setOnClickListener {
             mainLayout.addView(presenter.createRectangle())
         }
@@ -29,8 +31,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout.setOnTouchListener { _, motionEvent ->
             mainLayout.removeView(selectedBorder)
             selectedBorder = null
+            selectedRectangleView=null
             presenter.selectRectangle(motionEvent.x, motionEvent.y)
             true
+        }
+        tvRGBValue.setOnClickListener {
+            selectedRectangleView?.let { selectedView ->
+                presenter.changeColor(
+                    selectedView,
+                    tvRGBValue
+                )
+            }
         }
     }
 
@@ -38,12 +49,22 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         selectedBorder = border
         selectedRectangleView = rectView
         rectView?.let {
-            val rgbValueTextView= findViewById<TextView>(R.id.tv_rgb_value)
-            val opacitySeekBar =findViewById<SeekBar>(R.id.seekbar_opacity)
+            val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
+            val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
             rgbValueTextView.text = rect.backGroundColor.getRGBHexValue()
             opacitySeekBar.progress = rect.getOpacity()
             mainLayout.addView(border)
         }
+    }
+
+    override fun showColorChange(
+        rectView: ImageView,
+        color: BackGroundColor,
+        colorValueView: TextView
+    ) {
+        rectView.setBackgroundColor(color.getBackGroundColor())
+        colorValueView.text = color.getRGBHexValue()
+
     }
 
 }

@@ -1,22 +1,24 @@
+package model
+
 class RectFactory {
 
     companion object{
-        fun makeRect():Rect{
+        fun makeRect(): Rect {
             return makeNewRectType()
         }
 
-        private fun makeNewRectType():Rect{
+        private fun makeNewRectType(): Rect {
             return Rect(randomRectId(), makeRandomPoint(), makeSize(), makeRandomRGB(), makeRandomOpacity())
 
         }
 
-        private fun makeSize():Size{
+        private fun makeSize(): Size {
             val width= 150
             val height= 120
             return Size(width,height)
         }
 
-        private fun makeRandomPoint():Point{
+        private fun makeRandomPoint(): Point {
             val xPos= (1..1024).random()
             val yPos = (1..600).random()
             return Point(xPos,yPos)
@@ -26,7 +28,7 @@ class RectFactory {
             return (1..10).random()
         }
 
-        private  fun makeRandomRGB():BackGroundColor{
+        private  fun makeRandomRGB(): BackGroundColor {
             val redValue= (0..255).random()
             val blueValue= (0..255).random()
             val greenValue=(0..255).random()
