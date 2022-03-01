@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlin_drawingapp">
         <activity
-            android:name=".MainActivity"
+            android:name=".rectangle.RectangleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

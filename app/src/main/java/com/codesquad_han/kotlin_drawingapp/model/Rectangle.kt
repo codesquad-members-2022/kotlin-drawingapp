@@ -1,6 +1,12 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
-class Rectangle(id: String, point: Point, size: Size, backgroundColor: BackgroundColor, transparency: Transparency)  {
+class Rectangle(
+    id: String,
+    point: Point,
+    size: Size,
+    backgroundColor: BackgroundColor,
+    transparency: Transparency
+) {
     private var id = id
     private var point = point
     private var size = size

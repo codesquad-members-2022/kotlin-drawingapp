@@ -1,33 +1,42 @@
-package com.codesquad_han.kotlin_drawingapp
+package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.codesquad_han.kotlin_drawingapp.BasePresenter
+import com.codesquad_han.kotlin_drawingapp.R
+import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
 
-class MainActivity : AppCompatActivity() {
+class RectangleActivity : AppCompatActivity(), RectangleContract.View{
 
-    private lateinit var constraintLayout: ConstraintLayout
-    private lateinit var constraintLayoutDraw : ConstraintLayout
+    private lateinit var constraintLayoutDraw: ConstraintLayout
     private lateinit var btnMakeRectangle: Button
 
     private lateinit var rectangleFactory: RectangleFactory
 
+    override lateinit var presenter: BasePresenter
+    private lateinit var plane: Plane
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_rectangle)
+
+        // presenter 초기화
+        plane = Plane()
+        presenter = RectanglePresenter(plane,this)
 
         Log.d("AppTest", "${this.window.decorView.height}")
 
         constraintLayoutDraw = findViewById(R.id.constrainLayoutDraw)
-        constraintLayoutDraw.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
+        constraintLayoutDraw.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 constraintLayoutDraw.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = constraintLayoutDraw.width
@@ -38,26 +47,31 @@ class MainActivity : AppCompatActivity() {
         })
 
         constraintLayoutDraw.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_DOWN){
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 Log.d("AppTest", "view.x : ${view.x}, view.y : ${view.y}")
                 Log.d("AppTest", "event.x : ${motionEvent.x}, event.y : ${motionEvent.y}")
-                Log.d("AppTest", "event.rawX : ${motionEvent.rawX}, event.rawY : ${motionEvent.rawY}")
+                Log.d(
+                    "AppTest",
+                    "event.rawX : ${motionEvent.rawX}, event.rawY : ${motionEvent.rawY}"
+                )
             }
             true
         }
+
         setBtnMakeRectangle()
+
     }
 
-    fun setBtnMakeRectangle(){
+    fun setBtnMakeRectangle() {
         btnMakeRectangle = findViewById(R.id.btnGenerateRectangle)
         btnMakeRectangle.setOnClickListener {
             makeRectangle(4)
         }
     }
 
-    fun makeRectangle(num: Int){
+    fun makeRectangle(num: Int) {
         (1..num).forEach {
-            Log.d("AppTest","Rect$it ${rectangleFactory.generateRectangle().toString()}")
+            Log.d("AppTest", "Rect$it ${rectangleFactory.generateRectangle().toString()}")
         }
     }
 
@@ -65,5 +79,14 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d("AppTest", "$this/ onResume")
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // 만든 사각형 정보 가져와서 이미지 뷰 동적 생성하기
+    override fun showRectangle() {
+        TODO("Not yet implemented")
+    }
+
+
 
 }
