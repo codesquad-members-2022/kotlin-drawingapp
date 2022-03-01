@@ -16,5 +16,14 @@ class MainPresenter(
         return plane.create(RectFactory.makeRect())
     }
 
+    override fun selectRectangle(xPos: Float, yPos: Float) {
+        val selectedRectangle = plane.getRectangleByPosition(xPos, yPos)
+        selectedRectangle?.let {
+            val selectedRectangleView = plane.getRectangleView(selectedRectangle)
+            val imageBorder = plane.makeImageBorder(xPos, yPos)
+            view.showSelected(selectedRectangle, selectedRectangleView, imageBorder)
+        }
+    }
+
 }
 
