@@ -51,11 +51,7 @@ class RectangleViewModelFactory(val mainActivity: Context) {
     }
 
     fun createView(view: View) {
-        setRectangleViewID()
-        setRectangleViewPoint()
-        setRectangleViewColor()
-        setRectangleViewAlpha()
-        setRectangleViewSize()
+        setRectangleViewAttr()
         view.setBackgroundColor(
             Color.rgb(
                 rectangleView.getColor()[0],
@@ -68,6 +64,18 @@ class RectangleViewModelFactory(val mainActivity: Context) {
         view.y = rectangleView.getPoint()[1].toFloat()
         view.layoutParams.width = rectangleView.getSize()[0]
         view.layoutParams.height = rectangleView.getSize()[1]
+    }
+
+    fun setRectangleViewAttr() {
+        setRectangleViewID()
+        setRectangleViewPoint()
+        setRectangleViewColor()
+        setRectangleViewAlpha()
+        setRectangleViewSize()
+    }
+
+    fun printInfo(): String {
+        return rectangleView.toString()
     }
 
 }
@@ -111,6 +119,6 @@ class RectangleViewModel {
     fun getID() = id
 
     override fun toString(): String {
-        return "(${id}), X:${point[0]}, Y:${point[0]}, W${size[0]}, H${size[1]}, R:${color[0]}, G:${color[1]}, B:${color[2]}, Alpha: $alpha"
+        return "(${id}), X:${point[0]}, Y:${point[1]}, W150, H120, R:${color[0]}, G:${color[1]}, B:${color[2]}, Alpha: ${alpha.toInt()}"
     }
 }

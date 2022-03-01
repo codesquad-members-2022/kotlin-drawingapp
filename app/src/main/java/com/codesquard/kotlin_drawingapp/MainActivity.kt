@@ -1,8 +1,7 @@
 package com.codesquard.kotlin_drawingapp
 
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.WindowMetrics
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -17,10 +16,19 @@ class MainActivity : AppCompatActivity() {
         val third = findViewById<TextView>(R.id.third_view)
         val fourth = findViewById<TextView>(R.id.fourth_view)
 
-        RectangleViewModelFactory(this).createView(first)
-        RectangleViewModelFactory(this).createView(second)
-        RectangleViewModelFactory(this).createView(third)
-        RectangleViewModelFactory(this).createView(fourth)
+        val firstView = RectangleViewModelFactory(this)
+        firstView.setRectangleViewAttr()
+        val secondView = RectangleViewModelFactory(this)
+        secondView.setRectangleViewAttr()
+        val thirdView = RectangleViewModelFactory(this)
+        thirdView.setRectangleViewAttr()
+        val fourthView = RectangleViewModelFactory(this)
+        fourthView.setRectangleViewAttr()
+
+        Log.d("Rect1", firstView.printInfo())
+        Log.d("Rect2", secondView.printInfo())
+        Log.d("Rect3", thirdView.printInfo())
+        Log.d("Rect4", fourthView.printInfo())
     }
 
 }
