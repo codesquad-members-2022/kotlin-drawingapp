@@ -14,7 +14,7 @@ import com.example.myapplication.Class.Rectangle
 import com.example.myapplication.databinding.ActivityMainBinding
 import kotlin.math.roundToInt
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainContract.View {
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,23 +32,49 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        val mainPresenter: MainPresenter = MainPresenter()
+
         binding.makeRectangle.setOnClickListener {
             val rectangle = Rectangle()
+            mainPresenter.saveRectangle(rectangle)
             val view = ImageView(this)
-            view.setBackgroundColor(Color.rgb(rectangle.color.r,rectangle.color.g,rectangle.color.b))
+            view.setBackgroundColor(
+                Color.rgb(
+                    rectangle.color.r,
+                    rectangle.color.g,
+                    rectangle.color.b
+                )
+            )
             view.alpha = rectangle.alpha
+            view.tag = rectangle.id
 
             val displayMetrics = resources.displayMetrics
             val width = (rectangle.size.width * displayMetrics.density).roundToInt()
             val height = (rectangle.size.height * displayMetrics.density).roundToInt()
-            val layoutParams = FrameLayout.LayoutParams(width,height)
+            val layoutParams = FrameLayout.LayoutParams(width, height)
 
             val left = (rectangle.point.x * displayMetrics.density).roundToInt()
             val top = (rectangle.point.y * displayMetrics.density).roundToInt()
-            layoutParams.setMargins(left,top,0,0)
+            layoutParams.setMargins(left, top, 0, 0)
 
             view.layoutParams = layoutParams
-            binding.frameLayout?.addView(view,0)
+            binding.frameLayout?.addView(view, 0)
+
+            val temp = view.findViewWithTag<ImageView>(rectangle.id)
+            temp.setOnClickListener {
+                binding.backgroundButton.text = String.format(
+                    "#%02x%02x%02x",
+                    rectangle.color.r,
+                    rectangle.color.g,
+                    rectangle.color.b
+                )
+                // 어떻게 다시 되돌리는지 ?
+                temp.setBackgroundResource(R.drawable.shape_drawable)
+            }
         }
+    }
+
+    override fun getRectangle(index: Int): Rectangle {
+        TODO("Not yet implemented")
     }
 }
