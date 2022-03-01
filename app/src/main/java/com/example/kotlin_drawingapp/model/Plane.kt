@@ -99,4 +99,8 @@ class Plane(private val context: Context, private val density: Float) {
 
         return border
     }
+
+    fun setRectangleAlpha(rect: ImageView, alpha: Int) {
+        rect.alpha = (alpha/10.0).toFloat()
+    }
 }
