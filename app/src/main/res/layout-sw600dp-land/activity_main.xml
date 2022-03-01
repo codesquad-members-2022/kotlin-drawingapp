@@ -62,6 +62,7 @@
             android:layout_below="@id/tv_alpha_title"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
+            android:max="10"
             android:layout_marginRight="10dp" />
 
     </RelativeLayout>
