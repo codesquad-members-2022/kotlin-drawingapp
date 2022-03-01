@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     rectangle.color.g,
                     rectangle.color.b
                 )
-                // 어떻게 다시 되돌리는지 ?
+                binding.alphaValue?.text = (rectangle.alpha * 10).toString()
+                // 변경한 테두리 .. 어떻게 다시 되돌리는지 ?
                 temp.setBackgroundResource(R.drawable.shape_drawable)
             }
         }
