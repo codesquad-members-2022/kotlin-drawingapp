@@ -1,4 +1,4 @@
-package com.example.kotlin_drawingapp
+package com.example.kotlin_drawingapp.model
 
 import android.graphics.Point
 import android.util.Size
