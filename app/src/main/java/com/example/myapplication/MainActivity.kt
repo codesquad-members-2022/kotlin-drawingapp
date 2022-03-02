@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             view.layoutParams = layoutParams
             binding.frameLayout?.addView(view, 0)
 
-            val temp = view.findViewWithTag<ImageView>(rectangle.id)
-            temp.setOnClickListener {
+            val rectangleImage = view.findViewWithTag<ImageView>(rectangle.id)
+            rectangleImage.setOnClickListener {
                 binding.backgroundButton.text = String.format(
                     "#%02x%02x%02x",
                     rectangle.color.r,
@@ -70,7 +70,19 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 )
                 binding.alphaValue?.text = (rectangle.alpha * 10).toString()
                 // 변경한 테두리 .. 어떻게 다시 되돌리는지 ?
-                temp.setBackgroundResource(R.drawable.shape_drawable)
+                rectangleImage.setBackgroundResource(R.drawable.shape_drawable)
+
+                binding.backgroundButton.setOnClickListener {
+                    val r = rectangle.getNewColor().r
+                    val g = rectangle.getNewColor().g
+                    val b = rectangle.getNewColor().b
+                    rectangleImage.setBackgroundColor(Color.rgb(r,g,b))
+
+                    binding.backgroundButton.text = String.format(
+                        "#%02x%02x%02x",
+                        r, g, b
+                    )
+                }
             }
         }
     }

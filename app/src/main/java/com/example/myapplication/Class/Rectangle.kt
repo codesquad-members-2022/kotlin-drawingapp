@@ -13,4 +13,10 @@ class Rectangle {
         numberFactory.getRandomRgbNumber()
     )
     val alpha: Float = numberFactory.getRandomAlphaFloat()
+    fun getNewColor():Color{
+        return Color(numberFactory.getRandomRgbNumber(),
+            numberFactory.getRandomRgbNumber(),
+            numberFactory.getRandomRgbNumber()
+        )
+    }
 }
