@@ -11,7 +11,7 @@ import android.view.View
 
 @SuppressLint("ViewConstructor")
 class CustomView(context: Context?, check: Listener) : View(context) {
-    var checkTouch: Listener = check
+    var listenr: Listener = check
 
     private var flag = false
     private val squareModelFactory = SquareModelFactory()
@@ -24,11 +24,30 @@ class CustomView(context: Context?, check: Listener) : View(context) {
     private val secondRandomLocation = plane.randomLocation()
     private val thirdRandomLocation = plane.randomLocation()
 
-    private val firstRect = plane.makeRect(firstRandomLocation[0], firstRandomLocation[1], firstRandomLocation[0] + rectWidth, firstRandomLocation[1] + rectHeight)
-    private val secondRect = plane.makeRect(secondRandomLocation[0], secondRandomLocation[1], secondRandomLocation[0] + rectWidth, secondRandomLocation[1] + rectHeight)
-    private val thirdRect = plane.makeRect(thirdRandomLocation[0], thirdRandomLocation[1], thirdRandomLocation[0] + rectWidth, thirdRandomLocation[1] + rectHeight)
+    private val firstRect = plane.makeRect(
+        firstRandomLocation[0],
+        firstRandomLocation[1],
+        firstRandomLocation[0] + rectWidth,
+        firstRandomLocation[1] + rectHeight,
+    )
 
-    @SuppressLint("DrawAllocation")
+    private val secondRect = plane.makeRect(
+        secondRandomLocation[0],
+        secondRandomLocation[1],
+        secondRandomLocation[0] + rectWidth,
+        secondRandomLocation[1] + rectHeight,
+    )
+
+    private val thirdRect = plane.makeRect(
+        thirdRandomLocation[0],
+        thirdRandomLocation[1],
+        thirdRandomLocation[0] + rectWidth,
+        thirdRandomLocation[1] + rectHeight,
+    )
+
+    private val colorList = mutableListOf(Color.GRAY, Color.BLUE, Color.RED)
+
+    @SuppressLint("DrawAllocation", "ResourceAsColor")
     override fun onDraw(canvas: Canvas?) {
         val firstPaint = Paint()
         val secondPaint = Paint()
@@ -37,9 +56,10 @@ class CustomView(context: Context?, check: Listener) : View(context) {
         firstPaint.style = Paint.Style.FILL
         secondPaint.style = Paint.Style.FILL
         thirdPaint.style = Paint.Style.FILL
-        firstPaint.color = Color.GRAY
-        secondPaint.color = Color.BLUE
-        thirdPaint.color = Color.RED
+
+        firstPaint.color = colorList[0]
+        secondPaint.color = colorList[1]
+        thirdPaint.color = colorList[2]
 
         canvas?.drawRect(firstRect, firstPaint)
         canvas?.drawRect(secondRect, secondPaint)
@@ -55,16 +75,16 @@ class CustomView(context: Context?, check: Listener) : View(context) {
             MotionEvent.ACTION_DOWN ->
                 when {
                     firstRect.contains(locationX!!, locationY!!) -> {
-                        checkTouch.check(true)
+                        listenr.check(true, colorList[0])
                     }
                     secondRect.contains(locationX!!, locationY!!) -> {
-                        checkTouch.check(true)
+                        listenr.check(true, colorList[1])
                     }
                     thirdRect.contains(locationX!!, locationY!!) -> {
-                        checkTouch.check(true)
+                        listenr.check(true, colorList[2])
                     }
                     else -> {
-                        checkTouch.check(false)
+                        listenr.check(false, Color.WHITE)
                     }
                 }
         }

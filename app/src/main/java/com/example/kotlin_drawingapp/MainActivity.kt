@@ -22,8 +22,13 @@ class MainActivity : AppCompatActivity(), Listener {
         binding.frameLayout.addView(customView)
     }
 
-    override fun check(flag: Boolean) {
-        if (flag) binding.textView4.text = "터치확인"
-        else binding.textView4.text = "터치 불가능"
+    override fun check(flag: Boolean, color: Int){
+        return if (flag) {
+            binding.textView4.text = "터치확인"
+            val hexString = String.format("#%06X", color)
+            binding.textView2.text = hexString
+        } else {
+            binding.textView4.text = "터치 불가능"
+        }
     }
 }
