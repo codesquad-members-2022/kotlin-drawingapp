@@ -1,9 +1,5 @@
 package com.codesquard.kotlin_drawingapp
 
-import android.content.Context
-import android.util.DisplayMetrics
-
-
 class RectangleViewModelFactory {
     private val rectangleView = RectangleViewModel()
 
@@ -19,8 +15,8 @@ class RectangleViewModelFactory {
     }
 
     private fun setRectangleViewPoint() {
-        val pointX = (0..1000).random()
-        val pointY = (0..1000).random()
+        val pointX = (300..900).random().toFloat()
+        val pointY = (300..900).random().toFloat()
         rectangleView.setPoint(pointX, pointY)
     }
 
@@ -31,8 +27,8 @@ class RectangleViewModelFactory {
     }*/
 
     private fun setRectangleViewSize() {
-        val width = 525
-        val height = 420
+        val width = 150
+        val height = 120
         rectangleView.setSize(width, height)
     }
 
@@ -44,7 +40,7 @@ class RectangleViewModelFactory {
     }
 
     private fun setRectangleViewAlpha() {
-        val alpha = (1..10).random()
+        val alpha = (100..1000).random()
         rectangleView.setAlpha(alpha)
     }
 
@@ -65,12 +61,12 @@ class RectangleViewModelFactory {
 
 class RectangleViewModel {
     private lateinit var id: String
-    private lateinit var point: Array<Int>
+    private lateinit var point: Array<Float>
     private lateinit var size: Array<Int>
     private lateinit var color: Array<Int>
-    private var alpha = 0f
+    private var alpha: Int = 0
 
-    fun setPoint(x: Int, y: Int) {
+    fun setPoint(x: Float, y: Float) {
         point = arrayOf(x, y)
     }
 
@@ -89,8 +85,7 @@ class RectangleViewModel {
     fun getColor() = color
 
     fun setAlpha(alpha: Int) {
-        if (alpha in 1..10)
-            this.alpha = alpha.toFloat()
+            this.alpha = alpha
     }
 
     fun getAlpha() = alpha
