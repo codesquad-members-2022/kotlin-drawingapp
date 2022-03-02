@@ -1,52 +1,59 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.codesquad_han.kotlin_drawingapp.BasePresenter
 import com.codesquad_han.kotlin_drawingapp.R
+import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
 
-class RectangleActivity : AppCompatActivity(), RectangleContract.View{
+class RectangleActivity : AppCompatActivity(), RectangleContract.View {
 
-    private lateinit var constraintLayoutDraw: ConstraintLayout
-    private lateinit var btnMakeRectangle: Button
+    private lateinit var binding: ActivityRectangleBinding
 
     private lateinit var rectangleFactory: RectangleFactory
 
     override lateinit var presenter: BasePresenter
-    private lateinit var plane: Plane
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_rectangle)
 
-        // presenter 초기화
-        plane = Plane()
-        presenter = RectanglePresenter(plane,this)
+        binding = ActivityRectangleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        var widthMinus = ConvertDPtoPX(this, 150)
 
         Log.d("AppTest", "${this.window.decorView.height}")
 
-        constraintLayoutDraw = findViewById(R.id.constrainLayoutDraw)
-        constraintLayoutDraw.viewTreeObserver.addOnGlobalLayoutListener(object :
+
+        binding.frameLayoutDraw!!.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                constraintLayoutDraw.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val width = constraintLayoutDraw.width
-                val height = constraintLayoutDraw.height
+                binding.frameLayoutDraw!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val width = binding.frameLayoutDraw!!.width - widthMinus
+                val height = binding.frameLayoutDraw!!.height
                 rectangleFactory = RectangleFactory(width, height)
                 Log.d("AppTest", "width:$width, height:$height")
+
+                initPresenter(rectangleFactory)
             }
         })
 
-        constraintLayoutDraw.setOnTouchListener { view, motionEvent ->
+        binding.frameLayoutDraw!!.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 Log.d("AppTest", "view.x : ${view.x}, view.y : ${view.y}")
                 Log.d("AppTest", "event.x : ${motionEvent.x}, event.y : ${motionEvent.y}")
@@ -58,13 +65,18 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View{
             true
         }
 
-        setBtnMakeRectangle()
+        //setBtnMakeRectangle()
+        setBtnMakeRectangle2()
 
     }
 
+    // presenter 초기화
+    fun initPresenter(rectangleFactory: RectangleFactory) {
+        presenter = RectanglePresenter(Plane(rectangleFactory), this)
+    }
+
     fun setBtnMakeRectangle() {
-        btnMakeRectangle = findViewById(R.id.btnGenerateRectangle)
-        btnMakeRectangle.setOnClickListener {
+        binding.btnGenerateRectangle!!.setOnClickListener {
             makeRectangle(4)
         }
     }
@@ -81,12 +93,32 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View{
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // 만든 사각형 정보 가져와서 이미지 뷰 동적 생성하기
-    override fun showRectangle() {
-        TODO("Not yet implemented")
+    fun setBtnMakeRectangle2(){
+        binding.btnGenerateRectangle?.setOnClickListener {
+            presenter.start()
+        }
     }
 
+    // 만든 사각형 정보 가져와서 이미지 뷰 동적 생성하기
+    override fun showRectangle(width: Int, height: Int, x:Int, y:Int, colorStr: String) {
+        val dynamicImageView = ImageView(this)
+        val layoutParams = LinearLayout.LayoutParams(ConvertDPtoPX(this, width), ConvertDPtoPX(this, height))
+        dynamicImageView.layoutParams = layoutParams
+        dynamicImageView.setBackgroundResource(R.drawable.stroke1)
 
+        var gradientDrawable = dynamicImageView.background as GradientDrawable
+        //gradientDrawable.setColor(ContextCompat.getColor(this, R.color.purple_200))
+        gradientDrawable.setColor(Color.parseColor("#$colorStr"))
+
+        dynamicImageView.x = x.toFloat()
+        dynamicImageView.y = y.toFloat()
+
+        binding.frameLayoutDraw!!.addView(dynamicImageView)
+    }
+
+    fun ConvertDPtoPX(context: Context, dp: Int): Int {
+        val density = context.resources.displayMetrics.density
+        return Math.round(dp.toFloat() * density)
+    }
 
 }

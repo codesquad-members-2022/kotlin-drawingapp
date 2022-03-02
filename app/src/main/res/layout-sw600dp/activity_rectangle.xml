@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".rectangle.RectangleActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constrainLayoutDraw"
+    <FrameLayout
+        android:id="@+id/frameLayoutDraw"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintWidth_percent="0.75">
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutRightSide"
@@ -39,11 +39,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/gl_v_10"
+                android:id="@+id/gl_v_8"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.1" />
+                app:layout_constraintGuide_percent="0.08" />
 
             <View
                 android:id="@+id/view1"
@@ -60,7 +60,7 @@
                 android:text="배경색"
                 android:maxLines="1"
                 app:layout_constraintHeight_percent="0.07"
-                app:layout_constraintStart_toEndOf="@id/gl_v_10"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
                 app:layout_constraintTop_toBottomOf="@id/view1"
                 app:layout_constraintWidth_percent="0.8" />
 
@@ -80,7 +80,7 @@
                 android:maxLines="1"
                 android:text="#000000"
                 app:layout_constraintHeight_percent="0.1"
-                app:layout_constraintStart_toEndOf="@id/gl_v_10"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
                 app:layout_constraintTop_toBottomOf="@id/view2"
                 app:layout_constraintWidth_percent="0.8"
                 android:padding="5dp"/>
@@ -100,7 +100,7 @@
                 android:text="투명도"
                 android:maxLines="1"
                 app:layout_constraintHeight_percent="0.07"
-                app:layout_constraintStart_toEndOf="@id/gl_v_10"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
                 app:layout_constraintTop_toBottomOf="@id/view3"
                 app:layout_constraintWidth_percent="0.8" />
 
@@ -116,8 +116,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/view4"
-                app:layout_constraintStart_toStartOf="@id/gl_v_10"
-                app:layout_constraintWidth_percent="0.8"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintWidth_percent="0.85"
 
                 android:valueFrom="0"
                 android:valueTo="10"
