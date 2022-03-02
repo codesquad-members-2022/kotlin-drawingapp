@@ -4,7 +4,9 @@ import com.example.kotlindrawingapp.CustomCanvas
 
 interface Contract {
 
-    interface View {}
+    interface View {
+        fun updateBoard(color: String, alpha: Int)
+    }
 
     interface Presenter {
         fun drawRectangle(canvas: CustomCanvas)

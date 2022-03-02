@@ -4,16 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Button
+import android.widget.SeekBar
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.presenter.Presenter
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
-    lateinit var button: Button
+    private lateinit var button: Button
     lateinit var canvasLayout: ConstraintLayout
     lateinit var customCanvas: CustomCanvas
     lateinit var presenter: Presenter
+    lateinit var colorTextView: TextView
+    lateinit var seekBar: SeekBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         button = findViewById(R.id.btn_square)
         canvasLayout = findViewById(R.id.container_canvas)
+        colorTextView = findViewById(R.id.tv_color)
+        seekBar = findViewById(R.id.seekBar_alpha)
         presenter = Presenter(this)
 
         button.setOnClickListener {
@@ -44,4 +50,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
         }
         return true
     }
+
+    override fun updateBoard(color: String, alpha: Int) {
+        colorTextView.text = "#$color"
+        seekBar.progress = alpha
+    }
+
 }

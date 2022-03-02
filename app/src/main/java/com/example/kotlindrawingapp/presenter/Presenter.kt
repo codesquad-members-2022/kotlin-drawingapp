@@ -1,6 +1,5 @@
 package com.example.kotlindrawingapp.presenter
 
-import android.util.Log
 import com.example.kotlindrawingapp.CustomCanvas
 import com.example.kotlindrawingapp.plane.Plane
 import com.example.kotlindrawingapp.square.*
@@ -27,9 +26,17 @@ class Presenter(
     }
 
     override fun selectRectangle(x: Float, y: Float) {
-        val index = plane.contain(x, y - 185)
-        if (index != -1) {
-            canvasList[index].setStroke()
+        val idx = plane.contain(x, y - 185)
+        deselect()
+        if (idx != -1) {
+            deselect()
+            canvasList[idx].selectRectangle(squares[idx])
+            val rgb = squares[idx].rgb.decimalToHex()
+            view.updateBoard(rgb, squares[idx].alpha.alpha)
         }
+    }
+
+    private fun deselect() {
+        canvasList.forEachIndexed { index, canvas -> canvas.removeStroke(squares[index]) }
     }
 }

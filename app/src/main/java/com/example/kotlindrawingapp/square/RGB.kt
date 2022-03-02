@@ -14,6 +14,13 @@ data class RGB(
         return color in MINIMUM..MAXIMUM
     }
 
+    fun decimalToHex(): String {
+        val red = Integer.toHexString(red)
+        val green = Integer.toHexString(green)
+        val blue = Integer.toHexString(blue)
+        return red + green + blue
+    }
+
     companion object {
         private const val MINIMUM = 0
         private const val MAXIMUM = 255

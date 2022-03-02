@@ -4,13 +4,13 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.square.Square
 
 
-class CustomCanvas : View, Contract.View {
+class CustomCanvas : View {
 
     private val paint: Paint = Paint()
+    private var selectedPaint: Paint = Paint()
     private var rect: RectF = RectF()
 
     constructor(context: Context) : super(context)
@@ -18,6 +18,7 @@ class CustomCanvas : View, Contract.View {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        canvas?.drawRect(rect, selectedPaint)
         canvas?.drawRect(rect, paint)
     }
 
@@ -39,9 +40,25 @@ class CustomCanvas : View, Contract.View {
         paint.color = Color.argb(alpha, red, green, blue)
     }
 
-    fun setStroke() {
-        paint.strokeWidth = 5F
-        paint.style = Paint.Style.STROKE
+    fun selectRectangle(square: Square) {
+        val x = square.point.x
+        val y = square.point.y
+        val width = square.size.width
+        val height = square.size.height
+        rect = RectF(x.toFloat(), y.toFloat(), (x + width).toFloat(), (y + height).toFloat())
+        selectedPaint.strokeWidth = 15F
+        selectedPaint.style = Paint.Style.STROKE
+        selectedPaint.color = Color.BLACK
+        invalidate()
+    }
+
+    fun removeStroke(square: Square) {
+        val x = square.point.x
+        val y = square.point.y
+        val width = square.size.width
+        val height = square.size.height
+        rect = RectF(x.toFloat(), y.toFloat(), (x + width).toFloat(), (y + height).toFloat())
+        selectedPaint = Paint()
         invalidate()
     }
 }
