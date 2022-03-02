@@ -1,5 +1,7 @@
 package model
 
+import androidx.lifecycle.MutableLiveData
+
 class RectFactory {
 
     companion object{
@@ -8,7 +10,7 @@ class RectFactory {
         }
 
         private fun makeNewRectType(): Rect {
-            return Rect(randomRectId(), makeRandomPoint(), makeSize(), makeRandomRGB(), makeRandomOpacity())
+            return Rect(randomRectId(), makeRandomPoint(), makeSize(), MutableLiveData( makeRandomRGB()), MutableLiveData(makeRandomOpacity()))
 
         }
 

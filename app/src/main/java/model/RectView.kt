@@ -13,8 +13,8 @@ class RectView(context: Context, val rect:Rect) : View(context) {
     private val right= (rect.point.xPos + rect.size.width).toFloat()
     private val top= rect.point.yPos.toFloat()
     private val bottom = (rect.point.yPos + rect.size.height).toFloat()
-    private var backGroundColor= rect.backGroundColor.getBackGroundColor()
-    private var opacity= ((rect.opacity*25.5).toInt())
+    private var backGroundColor= rect.backGroundColor.value?.getBackGroundColor()
+    private var opacity= ((rect.opacity.value?.times(25.5))?.toInt())
     private var selectedBorder = false
 
 
@@ -22,8 +22,12 @@ class RectView(context: Context, val rect:Rect) : View(context) {
         super.onDraw(canvas)
         val paint= Paint()
         paint.style = Paint.Style.FILL
-        paint.color = backGroundColor
-        paint.alpha = opacity
+        backGroundColor?.let{
+            paint.color= it
+        }
+        opacity?.let {
+           paint.alpha= it
+       }
         canvas.drawRect(left,top,right,bottom, paint)
         if(selectedBorder) {
             paint.style = Paint.Style.STROKE
@@ -49,7 +53,7 @@ class RectView(context: Context, val rect:Rect) : View(context) {
     }
 
     fun opacityChange(opacity:Int){
-        this.opacity =  (opacity*25.5).toInt()
+        this.opacity = (opacity*25.5).toInt()
         invalidate()
     }
 

@@ -21,14 +21,12 @@ class MainPresenter(
         }
     }
 
-    override fun changeColor(rectView: RectView, colorValueView: TextView) {
+    override fun changeColor(rectView: RectView) {
         val randomColor = plane.changeColor(rectView)
-        view.showColorChange(rectView, randomColor, colorValueView)
     }
 
     override fun changeOpacity(rectView: RectView, opacity: Int) {
         plane.changeOpacity(rectView, opacity)
-        view.showOpacityChange(rectView, opacity)
     }
 
     override fun createRectanglePaint() {
