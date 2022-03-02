@@ -12,10 +12,10 @@ import com.example.kotlindrawingapp.presenter.Presenter
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
-    lateinit var customCanvas: CustomCanvas
-    lateinit var presenter: Presenter
-    lateinit var colorTextView: TextView
-    lateinit var seekBar: SeekBar
+    private lateinit var customCanvas: CustomCanvas
+    private lateinit var presenter: Presenter
+    private lateinit var colorTextView: TextView
+    private lateinit var seekBar: SeekBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
