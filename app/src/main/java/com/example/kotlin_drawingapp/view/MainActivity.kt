@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         val btnGenerateRectangle = findViewById<Button>(R.id.btn_generate_rect)
         btnGenerateRectangle.setOnClickListener {
-            mainLayout.addView(presenter.create())
+            presenter.create()
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
@@ -52,6 +52,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+    }
+
+    override fun update(imageView: ImageView) {
+        mainLayout.addView(imageView)
     }
 
     override fun select(border: ImageView?, rectImage: ImageView?, rect: Rectangle?) {
