@@ -10,8 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 
 @SuppressLint("ViewConstructor")
-class CustomView(context: Context?, check: Listener) : View(context) {
-    var listenr: Listener = check
+class CustomView(context: Context?, val listener: Listener) : View(context) {
 
     private var flag = false
     private val squareModelFactory = SquareModelFactory()
@@ -75,16 +74,16 @@ class CustomView(context: Context?, check: Listener) : View(context) {
             MotionEvent.ACTION_DOWN ->
                 when {
                     firstRect.contains(locationX!!, locationY!!) -> {
-                        listenr.check(true, colorList[0])
+                        listener.check(true, colorList[0])
                     }
                     secondRect.contains(locationX!!, locationY!!) -> {
-                        listenr.check(true, colorList[1])
+                        listener.check(true, colorList[1])
                     }
                     thirdRect.contains(locationX!!, locationY!!) -> {
-                        listenr.check(true, colorList[2])
+                        listener.check(true, colorList[2])
                     }
                     else -> {
-                        listenr.check(false, Color.WHITE)
+                        listener.check(false, Color.WHITE)
                     }
                 }
         }
