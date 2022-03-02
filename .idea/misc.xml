@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/drawable/stroke1.xml" value="0.2135" />
+        <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/drawable/textview_background_1.xml" value="0.2135" />
         <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/layout-land/activity_main.xml" value="0.16510416666666666" />
         <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/layout-sw600dp/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/layout-sw600dp/activity_rectangle.xml" value="0.2" />
         <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Win10/Desktop/changhee/CodeSquadAndroidClass/mission03/kotlin-drawingapp/app/src/main/res/layout/activity_rectangle.xml" value="0.28958333333333336" />
       </map>
     </option>
   </component>
