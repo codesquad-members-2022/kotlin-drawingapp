@@ -10,4 +10,4 @@
 /captures
 .externalNativeBuild
 .cxx
-compiler.xml
+*.xml
