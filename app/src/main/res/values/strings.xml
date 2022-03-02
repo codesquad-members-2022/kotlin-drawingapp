@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">kotlin-drawingapp</string>
+    <string name="backGroundColor">배경색</string>
+    <string name="alpha">투명도</string>
 </resources>

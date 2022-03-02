@@ -2,14 +2,6 @@ package com.example.kotlin_drawingapp
 
 import kotlin.random.Random
 
-interface SquareModelFrame {
-    fun createSeparatedId(): String
-    fun createSize(): Array<String>
-    fun createPoint(): Array<String>
-    fun createRGB(): Array<String>
-    fun createAlpha(): String
-}
-
 class SquareModel : SquareModelFrame{
     companion object {
         const val STRING_LENGTH = 3
@@ -52,9 +44,4 @@ class SquareModel : SquareModelFrame{
     override fun createAlpha(): String {
         return (1..10).random().toString()
     }
-}
-
-fun main() {
-    val a = SquareModel()
-    print(a.createSeparatedId())
 }

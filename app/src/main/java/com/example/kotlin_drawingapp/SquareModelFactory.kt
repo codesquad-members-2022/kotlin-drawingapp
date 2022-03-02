@@ -8,7 +8,7 @@ class SquareModelFactory {
     private val arrayOfIdSeparate = arrayOf(firstIdSeparate ,secondIdSeparate ,thirdIdSeparate)
     private val idResult = arrayOfIdSeparate.joinToString("-")
 
-    private fun createSquareObject(): Array<String>  {
+    fun createSquareObject(): Array<String>  {
         return arrayOf(
             idResult,
             squareModel.createSize()[0],
