@@ -4,20 +4,29 @@ import android.content.Context
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.kotlin_drawingapp.R
 import com.example.kotlin_drawingapp.shapemodel.Rectangle
 import kotlin.math.roundToInt
 
-private data class IvBindRect(val imageView: ImageView, val rect: Rectangle)
+data class IvBindRect(val imageView: ImageView, val rect: Rectangle)
 
 class Plane(private val context: Context, private val density: Float) {
-    private val rectArray = mutableListOf<IvBindRect>()
+    private val _rectArray = mutableListOf<IvBindRect>()
+
+    private val _rectList = MutableLiveData<List<IvBindRect>>()
+    val rectList: LiveData<List<IvBindRect>> = _rectList
 
     fun getCount(): Int {
-        return rectArray.size
+        return _rectArray.size
     }
 
-    fun create(rect: Rectangle): ImageView {
+    fun getLastCreateImage(): ImageView {
+        return _rectArray[_rectArray.size - 1].imageView
+    }
+
+    fun create(rect: Rectangle) {
         val imageView = ImageView(context)
         val param = FrameLayout.LayoutParams(
             convertDpToPx(rect.size.width),
@@ -28,9 +37,8 @@ class Plane(private val context: Context, private val density: Float) {
         imageView.alpha = (rect.alpha / 10.0).toFloat()
         imageView.setBackgroundColor(rect.rgb.getRgb())
         imageView.id = ViewCompat.generateViewId()
-        rectArray.add(IvBindRect(imageView, rect))
-
-        return imageView
+        _rectArray.add(IvBindRect(imageView, rect))
+        _rectList.value = _rectArray
     }
 
     private fun convertDpToPx(dp: Int): Int {
@@ -42,10 +50,10 @@ class Plane(private val context: Context, private val density: Float) {
     }
 
     fun getRectangleByIndex(index: Int): Rectangle? {
-        if (index < 0 || index >= rectArray.size) {
+        if (index < 0 || index >= _rectArray.size) {
             return null
         }
-        return rectArray[index].rect
+        return _rectArray[index].rect
     }
 
     fun getRectangleByPosition(x: Float, y: Float): Rectangle? {
@@ -53,7 +61,7 @@ class Plane(private val context: Context, private val density: Float) {
         return if (index == -1) {
             null
         } else {
-            rectArray[index].rect
+            _rectArray[index].rect
         }
     }
 
@@ -61,9 +69,9 @@ class Plane(private val context: Context, private val density: Float) {
         val convertX = convertPxToDp(x)
         val convertY = convertPxToDp(y)
 
-        for (i in rectArray.size - 1 downTo 0) {
-            if (rectArray[i].rect.point.x <= convertX && rectArray[i].rect.point.x + rectArray[i].rect.size.width >= convertX) {
-                if (rectArray[i].rect.point.y <= convertY && rectArray[i].rect.point.y + rectArray[i].rect.size.height >= convertY) {
+        for (i in _rectArray.size - 1 downTo 0) {
+            if (_rectArray[i].rect.point.x <= convertX && _rectArray[i].rect.point.x + _rectArray[i].rect.size.width >= convertX) {
+                if (_rectArray[i].rect.point.y <= convertY && _rectArray[i].rect.point.y + _rectArray[i].rect.size.height >= convertY) {
                     return i
                 }
             }
@@ -77,7 +85,7 @@ class Plane(private val context: Context, private val density: Float) {
         return if (index == -1) {
             null
         } else {
-            rectArray[index].imageView
+            _rectArray[index].imageView
         }
     }
 
