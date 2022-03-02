@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
             val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
             rgbValueTextView.text = rect.backGroundColor.getRGBHexValue()
-            opacitySeekBar.progress = rect.getOpacity()
+            opacitySeekBar.progress = rect.opacity
             mainLayout.addView(border)
         }
     }
