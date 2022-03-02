@@ -1,41 +1,39 @@
-package presenter
-
-import Plane
+import model.Plane
 import android.content.Context
-import android.widget.ImageView
 import android.widget.TextView
 import model.RectFactory
+import model.RectView
 import view.MainContract
 
 class MainPresenter(
     private val view: MainContract.View,
-    private val context: Context,
-    private val density: Float
+    private val context: Context
 ) : MainContract.Presenter {
 
-    private val plane= Plane(context,density)
-    override fun createRectangle(): ImageView {
-        return plane.create(RectFactory.makeRect())
-    }
+    private val plane = Plane(context)
 
     override fun selectRectangle(xPos: Float, yPos: Float) {
-        val selectedRectangle = plane.getRectangleByPosition(xPos, yPos)
+        val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
+        val selectedRectangleView= plane.getCustomRectangleViewByPosition(xPos,yPos)
+        view.drawBorder(selectedRectangleView)
         selectedRectangle?.let {
-            val selectedRectangleView = plane.getRectangleView(selectedRectangle)
-            val imageBorder = plane.makeImageBorder(xPos, yPos)
-            view.showSelected(selectedRectangle, selectedRectangleView, imageBorder)
+            view.displayAttribute(selectedRectangle)
         }
     }
 
-    override fun changeColor(rectView: ImageView, colorValueView: TextView) {
+    override fun changeColor(rectView: RectView, colorValueView: TextView) {
         val randomColor = plane.changeColor(rectView)
-        view.showColorChange(rectView, randomColor, colorValueView )
+        view.showColorChange(rectView, randomColor, colorValueView)
     }
 
-    override fun changeOpacity(rectView: ImageView, opacity: Int) {
-        plane.changeOpacity(rectView,opacity)
-        view.showOpacityChange(rectView,opacity)
+    override fun changeOpacity(rectView: RectView, opacity: Int) {
+        plane.changeOpacity(rectView, opacity)
+        view.showOpacityChange(rectView, opacity)
+    }
+
+    override fun createRectanglePaint() {
+        val rectPaint = plane.createRectanglePaint(RectFactory.makeRect())
+        view.drawRectangle(rectPaint)
     }
 
 }
-

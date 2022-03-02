@@ -19,8 +19,8 @@ class RectFactory {
         }
 
         private fun makeRandomPoint(): Point {
-            val xPos= (1..1024).random()
-            val yPos = (1..600).random()
+            val xPos= (1..2048).random()
+            val yPos = (1..1536).random()
             return Point(xPos,yPos)
         }
 

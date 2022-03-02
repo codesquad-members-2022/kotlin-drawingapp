@@ -1,5 +1,6 @@
 package view
 
+import MainPresenter
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.*
@@ -7,84 +8,87 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
 import model.Rect
-import presenter.MainPresenter
+import model.RectView
+
 
 class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var mainLayout: FrameLayout
     private lateinit var presenter: MainPresenter
-    private var selectedBorder: ImageView? = null
-    private var selectedRectangleView: ImageView? = null
-
+    private var selectedCustomRectangleView: RectView? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        presenter = MainPresenter(this, this, resources.displayMetrics.density)
+        presenter = MainPresenter(this, this)
         mainLayout = findViewById(R.id.image_container)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
         val tvRGBValue = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
         btnMakeRectangle.setOnClickListener {
-            mainLayout.addView(presenter.createRectangle())
+            presenter.createRectanglePaint()
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
-            mainLayout.removeView(selectedBorder)
-            selectedBorder = null
-            selectedRectangleView = null
-            presenter.selectRectangle(motionEvent.x, motionEvent.y)
-            true
-        }
-        tvRGBValue.setOnClickListener {
-            selectedRectangleView?.let { selectedView ->
-                presenter.changeColor(
-                    selectedView,
-                    tvRGBValue
-                )
-            }
-        }
-        opacitySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                opacitySeekBar: SeekBar?,
-                opacity: Int,
-                fromUser: Boolean
-            ) {
-                selectedRectangleView.apply {
-                    selectedRectangleView?.let { presenter.changeOpacity(it, opacity) }
+            if (selectedCustomRectangleView == null) {
+                presenter.selectRectangle(motionEvent.x, motionEvent.y)
+            } else {
+                selectedCustomRectangleView?.let {
+                    it.eraseBorder()
+                    presenter.selectRectangle(motionEvent.x, motionEvent.y)
                 }
             }
+            true
+        }
 
-            override fun onStartTrackingTouch(opacitySeekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(opacitySeekBar: SeekBar?) {}
+        tvRGBValue.setOnClickListener {
+            selectedCustomRectangleView?.let { selectedView ->
+                presenter.changeColor(selectedView, tvRGBValue)
+            }
+        }
+
+        opacitySeekBar.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener
+        {
+            override fun onProgressChanged(seekBar: SeekBar?, opacity: Int, fromUser: Boolean) {
+                selectedCustomRectangleView?.let { presenter.changeOpacity(it, opacity) }
+            }
+
+            override fun onStartTrackingTouch(seekBar:SeekBar?) {}
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+
         })
     }
+    override fun drawRectangle(rectView: RectView) {
+        mainLayout.addView(rectView)
 
-    override fun showSelected(rect: Rect, rectView: ImageView?, border: ImageView?) {
-        selectedBorder = border
-        selectedRectangleView = rectView
-        rectView?.let {
-            val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
-            val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-            rgbValueTextView.text = rect.backGroundColor.getRGBHexValue()
-            opacitySeekBar.progress = rect.opacity
-            mainLayout.addView(border)
-        }
+    }
+
+    override fun drawBorder(rectView: RectView?) {
+        this.selectedCustomRectangleView = rectView
+        rectView?.drawBorder()
+    }
+
+    override fun displayAttribute(rect: Rect) {
+        val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
+        val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
+        rgbValueTextView.text = rect.backGroundColor.getRGBHexValue()
+        opacitySeekBar.progress = rect.opacity
     }
 
     override fun showColorChange(
-        rectView: ImageView,
+        rectView: RectView,
         color: BackGroundColor,
         colorValueView: TextView
     ) {
-        rectView.setBackgroundColor(color.getBackGroundColor())
+        rectView.colorChange(color)
         colorValueView.text = color.getRGBHexValue()
 
     }
 
-    override fun showOpacityChange(rectView: ImageView, opacity: Int) {
-        rectView.alpha = (opacity/10.0).toFloat()
+    override fun showOpacityChange(rectView: RectView, opacity: Int) {
+        rectView.opacityChange(opacity)
     }
 
 }
