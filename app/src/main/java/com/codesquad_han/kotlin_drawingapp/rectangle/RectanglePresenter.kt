@@ -31,7 +31,15 @@ class RectanglePresenter(val plane: Plane, val rectangleView: RectangleContract.
     }
 
     fun getColorString(alpha: Int, r: Int, g: Int, b: Int): String {  // 수정하기 형식에 안맞게 나오는 경우도 존재!!
-        return "${Integer.toHexString(r)}${Integer.toHexString(g)}${Integer.toHexString(b)}"
+        var red = Integer.toHexString(r)
+        var green = Integer.toHexString(g)
+        var blue = Integer.toHexString(b)
+
+        if(red.length == 1) red = "0" + red
+        if(green.length == 1) green = "0" + green
+        if(blue.length == 1) blue = "0" + blue
+        
+        return "${red}${green}${blue}"
     }
 
 }
