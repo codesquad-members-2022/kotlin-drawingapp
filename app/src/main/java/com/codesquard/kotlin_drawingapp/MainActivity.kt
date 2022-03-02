@@ -15,10 +15,10 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         setContentView(R.layout.activity_main)
         mainLayout = findViewById(R.id.main_layout)
         presenter = TaskPresenter(this)
-        onClickButon()
+        onClickButton()
     }
 
-    private fun onClickButon() {
+    private fun onClickButton() {
         firstBtn = findViewById(R.id.create_btn)
         firstBtn.setOnClickListener {
             showRectangle()
