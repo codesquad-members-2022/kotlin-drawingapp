@@ -1,5 +1,7 @@
 package com.example.kotlindrawingapp.square
 
+import android.util.Log
+
 data class RGB(
     val red: Int,
     val green: Int,
@@ -15,10 +17,13 @@ data class RGB(
     }
 
     fun decimalToHex(): String {
-        val red = Integer.toHexString(red)
-        val green = Integer.toHexString(green)
-        val blue = Integer.toHexString(blue)
-        return red + green + blue
+        var red = Integer.toHexString(red)
+        var green = Integer.toHexString(green)
+        var blue = Integer.toHexString(blue)
+        if (red.length == 1) red = "0$red"
+        if (green.length == 1) green = "0$green"
+        if (blue.length == 1) blue = "0$blue"
+        return "#$red$green$blue"
     }
 
     companion object {

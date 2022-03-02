@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
 
     override fun updateBoard(color: String, alpha: Int) {
-        colorTextView.text = "#$color"
+        colorTextView.text = color
         seekBar.progress = alpha
     }
 
