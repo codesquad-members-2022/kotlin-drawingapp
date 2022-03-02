@@ -1,9 +1,6 @@
 package view
 
 import model.Rect
-import android.widget.TextView
-import model.BackGroundColor
-
 import model.RectView
 
 interface MainContract {

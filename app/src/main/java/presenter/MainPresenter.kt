@@ -1,6 +1,5 @@
 import model.Plane
 import android.content.Context
-import android.widget.TextView
 import model.RectFactory
 import model.RectView
 import view.MainContract
