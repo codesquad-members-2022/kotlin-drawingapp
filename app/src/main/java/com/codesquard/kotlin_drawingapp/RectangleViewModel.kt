@@ -1,12 +1,10 @@
 package com.codesquard.kotlin_drawingapp
 
 import android.content.Context
-import android.graphics.Color
 import android.util.DisplayMetrics
-import android.view.View
 
 
-class RectangleViewModelFactory(private val mainActivity: Context) {
+class RectangleViewModelFactory {
     private val rectangleView = RectangleViewModel()
 
     private fun setRectangleViewID() {
@@ -26,16 +24,16 @@ class RectangleViewModelFactory(private val mainActivity: Context) {
         rectangleView.setPoint(pointX, pointY)
     }
 
-    private fun dp2px(dp: Float): Float {
+    /*private fun dp2px(dp: Float): Float {
         val resources = mainActivity.resources
         val metrics = resources.displayMetrics
         return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-    }
+    }*/
 
     private fun setRectangleViewSize() {
-        val width = dp2px(150f)
-        val height = dp2px(120f)
-        rectangleView.setSize(width.toInt(), height.toInt())
+        val width = 525
+        val height = 420
+        rectangleView.setSize(width, height)
     }
 
     private fun setRectangleViewColor() {
