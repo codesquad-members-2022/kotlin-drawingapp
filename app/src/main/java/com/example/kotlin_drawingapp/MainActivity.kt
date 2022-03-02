@@ -1,7 +1,5 @@
 package com.example.kotlin_drawingapp
 
-
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +20,6 @@ class MainActivity : AppCompatActivity(), Listener {
 
         val customView = CustomView(this, this)
         binding.frameLayout.addView(customView)
-        customView.flag
     }
 
     override fun check(flag: Boolean) {
