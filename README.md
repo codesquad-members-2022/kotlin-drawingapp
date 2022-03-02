@@ -16,3 +16,6 @@
 
 
 ***
+
+## 사각형 랜덤 위치 생성
+![image](https://user-images.githubusercontent.com/69443895/156312309-a484c70d-1858-4ad9-b5c0-302bae4c59fc.png)
