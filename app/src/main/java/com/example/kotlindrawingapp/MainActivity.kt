@@ -12,8 +12,6 @@ import com.example.kotlindrawingapp.presenter.Presenter
 
 class MainActivity : AppCompatActivity(), Contract.View {
 
-    private lateinit var button: Button
-    lateinit var canvasLayout: ConstraintLayout
     lateinit var customCanvas: CustomCanvas
     lateinit var presenter: Presenter
     lateinit var colorTextView: TextView
@@ -23,8 +21,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button = findViewById(R.id.btn_square)
-        canvasLayout = findViewById(R.id.container_canvas)
+        val button: Button = findViewById(R.id.btn_square)
+        val canvasLayout: ConstraintLayout = findViewById(R.id.container_canvas)
         colorTextView = findViewById(R.id.tv_color)
         seekBar = findViewById(R.id.seekBar_alpha)
         presenter = Presenter(this)

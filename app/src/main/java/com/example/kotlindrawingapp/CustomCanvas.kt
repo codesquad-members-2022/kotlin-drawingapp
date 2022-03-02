@@ -7,15 +7,12 @@ import android.view.View
 import com.example.kotlindrawingapp.square.Square
 
 
-class CustomCanvas : View {
+class CustomCanvas(context: Context) : View(context) {
 
     private var paint: Paint = Paint()
     private var selectedPaint: Paint = Paint()
     private var rect: RectF = RectF()
     private var flag = false
-
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attr: AttributeSet) : super(context, attr)
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
