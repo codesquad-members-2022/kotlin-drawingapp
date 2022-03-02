@@ -12,9 +12,14 @@ class MainPresenter(
     private val density: Float
     ) : MainContract.Presenter {
 
-    private val plane = Plane(context, density)
-    override fun create(): ImageView {
-        return plane.create(RectangleFactory.create())
+    private val plane: Plane = Plane(context, density)
+    init {
+        plane.rectList.observeForever {
+            view.update(plane.getLastCreateImage())
+        }
+    }
+    override fun create() {
+        plane.create(RectangleFactory.create())
     }
 
     override fun select(x: Float, y: Float) {
