@@ -2,6 +2,7 @@ package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -9,16 +10,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewTreeObserver
-import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.codesquad_han.kotlin_drawingapp.BasePresenter
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
+import com.codesquad_han.kotlin_drawingapp.model.RectangleImageviewData
 
 class RectangleActivity : AppCompatActivity(), RectangleContract.View {
 
@@ -26,7 +24,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View {
 
     private lateinit var rectangleFactory: RectangleFactory
 
-    override lateinit var presenter: BasePresenter
+    override lateinit var presenter: RectangleContract.Presenter
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +97,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View {
         }
     }
 
-    // 만든 사각형 정보 가져와서 이미지 뷰 동적 생성하기
+    // 만든 사각형 정보 가져와서 이미지 뷰 동적으로 생성하기
     override fun showRectangle(width: Int, height: Int, x:Int, y:Int, colorStr: String) {
         val dynamicImageView = ImageView(this)
         val layoutParams = LinearLayout.LayoutParams(ConvertDPtoPX(this, width), ConvertDPtoPX(this, height))
@@ -110,8 +108,13 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View {
         //gradientDrawable.setColor(ContextCompat.getColor(this, R.color.purple_200))
         gradientDrawable.setColor(Color.parseColor("#$colorStr"))
 
-        dynamicImageView.x = x.toFloat()
+        dynamicImageView.x = x.toFloat() // 사각형 왼쪽 상단 좌표
         dynamicImageView.y = y.toFloat()
+
+        presenter.saveImageView(dynamicImageView)
+        dynamicImageView.setOnClickListener {
+            presenter.selectRectangleImageView(dynamicImageView)
+        }
 
         binding.frameLayoutDraw!!.addView(dynamicImageView)
     }
@@ -119,6 +122,18 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View {
     fun ConvertDPtoPX(context: Context, dp: Int): Int {
         val density = context.resources.displayMetrics.density
         return Math.round(dp.toFloat() * density)
+    }
+
+    override fun showSelectedRectangle(rectangleList: ArrayList<RectangleImageviewData>) {
+        rectangleList.forEach {
+            var gradientDrawable = it.imageView?.background as GradientDrawable
+            if(it.selected){
+                gradientDrawable.setStroke(5, Color.RED)
+            }
+            else{
+                gradientDrawable.setStroke(5, null)
+            }
+        }
     }
 
 }
