@@ -45,8 +45,8 @@ class Plane {
 
     fun getRectangleByPosition(x: Int, y: Int): Rectangle? {
         for (index in rectangleList.size-1 downTo 0) {
-            if (rectangleList[index].point.x >= x && rectangleList[index].point.x + x <= x &&
-                rectangleList[index].point.y >= y && rectangleList[index].point.y + y <= y
+            if (rectangleList[index].point.x <= x && rectangleList[index].point.x + rectangleList[index].size.width >= x &&
+                rectangleList[index].point.y <= y && rectangleList[index].point.y + rectangleList[index].size.height >= y
             ) {
                 return rectangleList[index]
             }
