@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
+import com.example.kotlin_drawingapp.square.ID
+import com.example.kotlin_drawingapp.square.SquareFactory
 
 class MainActivity : AppCompatActivity(), Listener {
     private lateinit var binding: ActivityMainBinding
@@ -12,11 +14,10 @@ class MainActivity : AppCompatActivity(), Listener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val squareModelFactory = SquareModelFactory()
-        Log.d("Rect1", squareModelFactory.createLogMessage())
-        Log.d("Rect2", squareModelFactory.createLogMessage())
-        Log.d("Rect3", squareModelFactory.createLogMessage())
-        Log.d("Rect4", squareModelFactory.createLogMessage())
+        Log.d("Rect1", SquareFactory.createSquare().toString())
+        Log.d("Rect2", SquareFactory.createSquare().toString())
+        Log.d("Rect3", SquareFactory.createSquare().toString())
+        Log.d("Rect4", SquareFactory.createSquare().toString())
 
         val customView = CustomView(this, this)
         binding.constraintLayout.addView(customView)

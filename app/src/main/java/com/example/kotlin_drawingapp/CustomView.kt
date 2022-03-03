@@ -7,16 +7,17 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.view.MotionEvent
 import android.view.View
+import com.example.kotlin_drawingapp.square.Size
 
 @SuppressLint("ViewConstructor")
 class CustomView(context: Context?, val listener: Listener) : View(context) {
 
     private var flag = false
-    private val squareModelFactory = SquareModelFactory()
     private val plane = Plane()
+    private val size = Size()
 
-    private val rectWidth = squareModelFactory.createSquareObject()[1].toInt()
-    private val rectHeight = squareModelFactory.createSquareObject()[2].toInt()
+    private val rectWidth = size.createSize()[0].toInt()
+    private val rectHeight = size.createSize()[1].toInt()
 
     private val firstRandomLocation = plane.randomLocation()
     private val secondRandomLocation = plane.randomLocation()
