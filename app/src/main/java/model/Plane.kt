@@ -8,7 +8,7 @@ class Plane(private val context: Context) {
 
     fun createRectanglePaint(): RectView {
         val rect = RectFactory.makeRect()
-        val rectView = RectView(context,rect)
+        val rectView = RectView(context, rect)
         customRectangleList.add(rectView)
         return rectView
     }
@@ -52,12 +52,12 @@ class Plane(private val context: Context) {
 
     fun changeColor(rectView: RectView): BackGroundColor {
         val randomColor = BackGroundColor((0..255).random(), (0..255).random(), (0..255).random())
-        customRectangleList.find { it== rectView }?.rect?.backGroundColor?.value = randomColor
+        customRectangleList.find { it == rectView }?.rect?.backGroundColor?.value = randomColor
         return randomColor
     }
 
     fun changeOpacity(rectView: RectView, opacity: Int) {
-        customRectangleList.find { it== rectView }?.rect?.opacity?.value=  opacity
+        customRectangleList.find { it == rectView }?.rect?.opacity?.value = opacity
 
     }
 }

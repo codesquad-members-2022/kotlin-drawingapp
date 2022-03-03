@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var mainLayout: FrameLayout
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
-    private lateinit var tvRgbValue :TextView
+    private lateinit var tvRgbValue: TextView
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
         selectedCustomRectangleView?.colorChange(colorValue)
         tvRgbValue.text = colorValue.getRGBHexValue()

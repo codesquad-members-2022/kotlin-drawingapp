@@ -1,7 +1,7 @@
-import model.Plane
 import android.content.Context
-import view.RectView
+import model.Plane
 import view.MainContract
+import view.RectView
 
 class MainPresenter(
     private val view: MainContract.View,
@@ -12,7 +12,7 @@ class MainPresenter(
 
     override fun selectRectangle(xPos: Float, yPos: Float) {
         val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
-        val selectedRectangleView= plane.getCustomRectangleViewByPosition(xPos,yPos)
+        val selectedRectangleView = plane.getCustomRectangleViewByPosition(xPos, yPos)
         view.drawBorder(selectedRectangleView)
         selectedRectangle?.let {
             view.displayAttribute(selectedRectangle)
