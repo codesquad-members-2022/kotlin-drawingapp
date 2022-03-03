@@ -31,6 +31,16 @@ class MainActivity : AppCompatActivity(), Contract.View {
         button.setOnClickListener {
             presenter.drawRectangle()
         }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                presenter.editRectangleAlpha(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     override fun updateBoard(color: String, alpha: Int) {

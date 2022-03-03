@@ -10,5 +10,7 @@ interface Contract {
         fun drawRectangle()
 
         fun loadBoard(index: Int)
+
+        fun editRectangleAlpha(alpha: Int)
     }
 }

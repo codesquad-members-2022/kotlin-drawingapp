@@ -6,6 +6,7 @@ import com.example.kotlindrawingapp.square.*
 class SquareRepository {
 
     val plane: Plane = Plane.of(listOf())
+    var selectedSquare: Square? = null
     private var index = 0
     private val squares = listOf<Square>(
         SquareFactory.createSquare(Point(10, 200), Size(), RGB(245, 0, 245), Alpha(9)),

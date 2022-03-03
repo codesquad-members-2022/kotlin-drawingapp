@@ -21,9 +21,18 @@ class Presenter(
     override fun loadBoard(index: Int) {
         if (index != NOT_FOUND) {
             val square = repository.findSquare(index)
+            repository.selectedSquare = square
             val rgb = square.rgb.decimalToHex()
             view.updateBoard(rgb, square.alpha.alpha)
         }
+    }
+
+    override fun editRectangleAlpha(alpha: Int) {
+        repository.selectedSquare
+            ?.let {
+                it.alpha.alpha = alpha
+                customView.drawRectangle(it)
+            }
     }
 
     companion object {
