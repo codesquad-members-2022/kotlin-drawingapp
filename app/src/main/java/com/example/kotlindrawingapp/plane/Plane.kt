@@ -23,7 +23,7 @@ class Plane private constructor(private var _squares: List<Square>) {
             (it.point.x <= x) && ((it.point.x + it.size.width) >= x)
                     && (it.point.y <= y) && ((it.point.y + it.size.height) >= y)
         }
-        return square?.let { _squares.indexOf(square) } ?: -1
+        return _squares.indexOf(square)
     }
 
     companion object {
