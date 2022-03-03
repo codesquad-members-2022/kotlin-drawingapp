@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.RectangleBorder
 
 private const val TAG = "MainActivity"
 
@@ -46,8 +47,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         seekBarAlpha.progress = alpha
     }
 
-    override fun showRectangleBorder(border: Rectangle?) {
-
+    override fun showRectangleBorder(rectangleBorderList: List<RectangleBorder>) {
+        drawView.drawRectangleBorder(rectangleBorderList)
     }
 
     override fun setRectangleAlpha(index: Int, alpha: Int) {
