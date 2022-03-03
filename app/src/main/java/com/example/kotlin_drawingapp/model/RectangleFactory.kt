@@ -2,8 +2,6 @@ package com.example.kotlin_drawingapp.model
 
 import android.graphics.Point
 import android.util.Size
-import com.example.kotlin_drawingapp.shapemodel.Color
-import com.example.kotlin_drawingapp.shapemodel.Rectangle
 import kotlin.random.Random
 
 class RectangleFactory {
