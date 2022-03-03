@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     }
 
-    override fun showRectangleBorder(border: Rectangle) {
+    override fun showRectangleBorder(border: Rectangle?) {
 
     }
 
