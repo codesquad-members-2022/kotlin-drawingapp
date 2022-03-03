@@ -4,10 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
-import com.example.kotlin_drawingapp.square.ID
 import com.example.kotlin_drawingapp.square.SquareFactory
 
-class MainActivity : AppCompatActivity(), Listener {
+class MainActivity : AppCompatActivity(), Contract.View {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +18,11 @@ class MainActivity : AppCompatActivity(), Listener {
         Log.d("Rect3", SquareFactory.createSquare().toString())
         Log.d("Rect4", SquareFactory.createSquare().toString())
 
-        val customView = CustomView(this, this)
+        val customView = Canvas(this, this)
         binding.constraintLayout.addView(customView)
     }
 
-    override fun check(flag: Boolean, color: Int){
+    override fun showInfo(flag: Boolean, color: Int) {
         return if (flag) {
             binding.textView4.text = "터치확인"
             val hexString = String.format("#%06X", color)

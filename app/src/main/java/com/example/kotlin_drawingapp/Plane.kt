@@ -13,10 +13,6 @@ class Plane {
         return location
     }
 
-    fun makeRect(left: Int, right: Int, top: Int, bottom: Int): Rect {
-        return Rect(left, right, top, bottom)
-    }
-
     fun addRect(rect: Rect): MutableList<Rect>{
         rectList.add(rect)
         return rectList

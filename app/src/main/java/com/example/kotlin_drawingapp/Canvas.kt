@@ -5,12 +5,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.View
 import com.example.kotlin_drawingapp.square.Size
 
 @SuppressLint("ViewConstructor")
-class CustomView(context: Context?, val listener: Listener) : View(context) {
+class Canvas(context: Context?, private val contract: Contract.View) : View(context), Contract.Presenter {
 
     private var flag = false
     private val plane = Plane()
@@ -23,21 +24,21 @@ class CustomView(context: Context?, val listener: Listener) : View(context) {
     private val secondRandomLocation = plane.randomLocation()
     private val thirdRandomLocation = plane.randomLocation()
 
-    private val firstRect = plane.makeRect(
+    private val firstRect = makeRect(
         firstRandomLocation[0],
         firstRandomLocation[1],
         firstRandomLocation[0] + rectWidth,
         firstRandomLocation[1] + rectHeight,
     )
 
-    private val secondRect = plane.makeRect(
+    private val secondRect = makeRect(
         secondRandomLocation[0],
         secondRandomLocation[1],
         secondRandomLocation[0] + rectWidth,
         secondRandomLocation[1] + rectHeight,
     )
 
-    private val thirdRect = plane.makeRect(
+    private val thirdRect = makeRect(
         thirdRandomLocation[0],
         thirdRandomLocation[1],
         thirdRandomLocation[0] + rectWidth,
@@ -74,16 +75,16 @@ class CustomView(context: Context?, val listener: Listener) : View(context) {
             MotionEvent.ACTION_DOWN ->
                 when {
                     firstRect.contains(locationX!!, locationY!!) -> {
-                        listener.check(true, colorList[0])
+                        contract.showInfo(true, colorList[0])
                     }
                     secondRect.contains(locationX!!, locationY!!) -> {
-                        listener.check(true, colorList[1])
+                        contract.showInfo(true, colorList[1])
                     }
                     thirdRect.contains(locationX!!, locationY!!) -> {
-                        listener.check(true, colorList[2])
+                        contract.showInfo(true, colorList[2])
                     }
                     else -> {
-                        listener.check(false, Color.WHITE)
+                        contract.showInfo(false, Color.WHITE)
                     }
                 }
         }
