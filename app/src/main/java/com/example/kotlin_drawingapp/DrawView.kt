@@ -7,8 +7,19 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.RectangleBorder
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+    interface SetOnDrawViewTouchListener {
+        fun onClick(point: PointF)
+    }
+
+    private var drawViewTouchListener: SetOnDrawViewTouchListener? = null
+    fun setOnRectangleClickListener(listener: SetOnDrawViewTouchListener) {
+        drawViewTouchListener = listener
+    }
+
+    private var drawnRectangleBorderList = listOf<RectangleBorder>()
     private var drawnRectangleList = listOf<Rectangle>()
     fun drawRectangle(rectangles: List<Rectangle>) {
         drawnRectangleList = rectangles
