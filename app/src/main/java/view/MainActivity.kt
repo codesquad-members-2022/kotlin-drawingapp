@@ -12,20 +12,19 @@ import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
 import model.Rect
-import model.RectView
 
 
 class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var mainLayout: FrameLayout
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
-
+    private lateinit var tvRgbValue :TextView
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
         selectedCustomRectangleView?.colorChange(colorValue)
-        findViewById<TextView>(R.id.tv_rgb_value).text = colorValue.getRGBHexValue()
+        tvRgbValue.text = colorValue.getRGBHexValue()
     }
     private val opacityObserver = Observer<Int> { opacity ->
-        this.selectedCustomRectangleView?.opacityChange(opacity)
+        selectedCustomRectangleView?.opacityChange(opacity)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -35,10 +34,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         presenter = MainPresenter(this, this)
         mainLayout = findViewById(R.id.image_container)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
-        val tvRGBValue = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
+        tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
+
         btnMakeRectangle.setOnClickListener {
-            presenter.createRectanglePaint()
+            mainLayout.addView(presenter.createRectanglePaint())
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             true
         }
 
-        tvRGBValue.setOnClickListener {
+        tvRgbValue.setOnClickListener {
             selectedCustomRectangleView?.let { selectedView -> presenter.changeColor(selectedView) }
         }
 
@@ -67,14 +67,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
         })
-    }
-
-    override fun drawRectangle(rectView: RectView) {
-        mainLayout.addView(rectView)
-
     }
 
     override fun drawBorder(rectView: RectView?) {

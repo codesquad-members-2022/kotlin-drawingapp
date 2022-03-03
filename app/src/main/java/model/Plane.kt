@@ -1,12 +1,14 @@
 package model
 
 import android.content.Context
+import view.RectView
 
 class Plane(private val context: Context) {
     private val customRectangleList: ArrayList<RectView> = arrayListOf()
 
-    fun createRectanglePaint(rect: Rect): RectView {
-        val rectView = RectView(context, rect)
+    fun createRectanglePaint(): RectView {
+        val rect = RectFactory.makeRect()
+        val rectView = RectView(context,rect)
         customRectangleList.add(rectView)
         return rectView
     }

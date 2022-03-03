@@ -1,7 +1,6 @@
 import model.Plane
 import android.content.Context
-import model.RectFactory
-import model.RectView
+import view.RectView
 import view.MainContract
 
 class MainPresenter(
@@ -28,9 +27,8 @@ class MainPresenter(
         plane.changeOpacity(rectView, opacity)
     }
 
-    override fun createRectanglePaint() {
-        val rectPaint = plane.createRectanglePaint(RectFactory.makeRect())
-        view.drawRectangle(rectPaint)
+    override fun createRectanglePaint(): RectView {
+        return plane.createRectanglePaint()
     }
 
 }
