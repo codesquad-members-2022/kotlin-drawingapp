@@ -10,7 +10,7 @@ interface TaskContract {
     }
 
     interface Presenter {
-        fun onCreateView(context: Context): TaskPresenter.CustomView
+//        fun onCreateView(context: Context): TaskPresenter.CustomView
     }
 
 }
