@@ -5,11 +5,11 @@ import com.example.kotlin_drawingapp.model.Rectangle
 
 class MainContract {
     interface View {
-        fun showRectangle(rectangle: Rectangle)
+        fun showRectangle(rectangles: List<Rectangle>)
 
         fun showRectangleInfo(color: Color, alpha: Int)
 
-        fun showRectangleBorder(border: Rectangle)
+        fun showRectangleBorder(border: Rectangle?)
 
         fun setRectangleAlpha(index: Int, alpha: Int)
     }
