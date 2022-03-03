@@ -5,64 +5,78 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    android:background="@color/purple_200"
+    tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/image_container"
+    <com.example.kotlin_drawingapp.DrawView
+        android:id="@+id/drawView"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="100dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/controller"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/controller"
-        android:layout_width="130dp"
-        android:layout_height="match_parent"
-        android:background="@color/purple_200"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/tv_background_color_string"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="@string/background_string"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/image_container"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:text="배경색"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_background_color"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/tv_background_color_string"
 
-        <TextView
-            android:id="@+id/tv_background_color"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/white" />
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:text="투명도" />
+    <TextView
+        android:id="@+id/tv_alpha_string"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/alpha_string"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/tv_background_color" />
 
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="10"/>
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/tv_alpha_string" />
 
-        <Button
-            android:id="@+id/btn_generate_rect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사각형" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/btn_generate_rect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/rectangle_string"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
