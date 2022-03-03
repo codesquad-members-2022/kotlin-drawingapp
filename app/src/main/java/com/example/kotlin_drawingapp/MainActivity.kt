@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun showRectangleInfo(color: Color, alpha: Int) {
-
+        tvRgb.text = String.format("%X", color.getRgb())
+        seekBarAlpha.progress = alpha
     }
 
     override fun showRectangleBorder(border: Rectangle?) {
