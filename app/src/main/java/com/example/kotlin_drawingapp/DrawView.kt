@@ -1,10 +1,13 @@
 package com.example.kotlin_drawingapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import com.example.kotlin_drawingapp.model.Rectangle
 import com.example.kotlin_drawingapp.model.RectangleBorder
@@ -41,6 +44,16 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         super.onDraw(canvas)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                drawViewTouchListener?.onClick(PointF(event.x, event.y))
+            }
+        }
+        return super.onTouchEvent(event)
     }
 
     private fun setRectanglePaint(rect: Rectangle): Paint {
