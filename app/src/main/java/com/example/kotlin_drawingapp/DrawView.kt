@@ -36,13 +36,22 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 drawRect(
                     rect.point.x.toFloat(),
                     rect.point.y.toFloat(),
-                    rect.size.width.toFloat(),
-                    rect.size.height.toFloat(),
+                    rect.point.x.toFloat() + rect.size.width.toFloat(),
+                    rect.point.y.toFloat() + rect.size.height.toFloat(),
                     paint
                 )
             }
         }
 
+        for (border in drawnRectangleBorderList) {
+            canvas?.drawRect(
+                border.point.x.toFloat(),
+                border.point.y.toFloat(),
+                border.point.x.toFloat() + border.size.width.toFloat(),
+                border.point.y.toFloat() + border.size.height.toFloat(),
+                border.paint
+            )
+        }
         super.onDraw(canvas)
     }
 
@@ -63,5 +72,10 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = Color.argb(alpha, rect.rgb.r, rect.rgb.g, rect.rgb.b)
 
         return paint
+    }
+
+    fun drawRectangleBorder(rectangleBorderList: List<RectangleBorder>) {
+        drawnRectangleBorderList = rectangleBorderList
+        invalidate()
     }
 }
