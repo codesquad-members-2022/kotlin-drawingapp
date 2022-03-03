@@ -1,11 +1,10 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.util.Log
-import android.widget.ImageView
-import com.codesquad_han.kotlin_drawingapp.model.Plane
-import com.codesquad_han.kotlin_drawingapp.model.RectangleImageviewData
+import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
+import com.codesquad_han.kotlin_drawingapp.model.Rectangle
 
-class RectanglePresenter(val plane: Plane, val rectangleView: RectangleContract.View) :
+class RectanglePresenter(val rectangleRepository: RectangleRepository, val rectangleView: RectangleContract.View) :
     RectangleContract.Presenter {
 
     init {
@@ -13,24 +12,15 @@ class RectanglePresenter(val plane: Plane, val rectangleView: RectangleContract.
     }
 
     override fun start() {
-        generateRectangle()
+        addRectangle()
     }
 
-    override fun generateRectangle() {
-        val rectangle = plane.generateRectangle()
+    override fun addRectangle() {  // 사각형 추가만 하기
+        rectangleRepository.addRectangle()
+    }
 
-        val red = rectangle.getBackgroundColor().r
-        val green = rectangle.getBackgroundColor().g
-        val blue = rectangle.getBackgroundColor().b
-        val transparency = rectangle.getTransparency().transparency
-
-        rectangleView.showRectangle(
-            rectangle.getSize().width,
-            rectangle.getSize().height,
-            rectangle.getPoint().x,
-            rectangle.getPoint().y,
-            getColorString(transparency, red, green, blue)
-        )
+    override fun getRectangleList(){ // 사각형 추가한 리스트 전달
+        rectangleView.showRectangle(rectangleRepository.getRectangleList())
     }
 
     fun getColorString(alpha: Int, r: Int, g: Int, b: Int): String {  // 수정하기 형식에 안맞게 나오는 경우도 존재!!
@@ -61,16 +51,6 @@ class RectanglePresenter(val plane: Plane, val rectangleView: RectangleContract.
         return "${alphaStr}${red}${green}${blue}"
     }
 
-    override fun saveImageView(imageView: ImageView) {
-        plane.saveImageView(imageView)
-    }
 
-    override fun selectRectangleImageView(imageView: ImageView) {
-        getRectangleImageViewList(plane.selectImageView(imageView))
-    }
-
-    override fun getRectangleImageViewList(rectangleList: ArrayList<RectangleImageviewData>) {
-        rectangleView.showSelectedRectangle(rectangleList)
-    }
 
 }

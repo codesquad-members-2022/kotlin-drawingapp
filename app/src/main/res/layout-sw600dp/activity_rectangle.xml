@@ -7,17 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".rectangle.RectangleActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutDraw"
+    <com.codesquad_han.kotlin_drawingapp.rectangle.RectangleDrawingView
+        android:id="@+id/rectangleDrawingView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.75">
-
-
-    </FrameLayout>
+        app:layout_constraintWidth_percent="0.75"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutRightSide"
