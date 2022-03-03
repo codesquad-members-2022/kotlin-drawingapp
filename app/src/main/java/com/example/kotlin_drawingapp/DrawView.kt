@@ -9,10 +9,9 @@ import android.view.View
 import com.example.kotlin_drawingapp.model.Rectangle
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-    private val drawnRectangleList = mutableListOf<Rectangle>()
-
-    fun drawRectangle(rectangle: Rectangle) {
-        drawnRectangleList.add(rectangle)
+    private var drawnRectangleList = listOf<Rectangle>()
+    fun drawRectangle(rectangles: List<Rectangle>) {
+        drawnRectangleList = rectangles
         invalidate()
     }
 

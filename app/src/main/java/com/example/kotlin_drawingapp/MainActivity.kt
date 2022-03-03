@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
-    override fun showRectangle(rectangle: Rectangle) {
-        drawView.drawRectangle(rectangle)
+    override fun showRectangle(rectangles: List<Rectangle>) {
+        drawView.drawRectangle(rectangles)
     }
 
     override fun showRectangleInfo(color: Color, alpha: Int) {
