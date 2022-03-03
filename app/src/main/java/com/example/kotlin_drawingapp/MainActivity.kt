@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity(), Listener {
         Log.d("Rect4", squareModelFactory.createLogMessage())
 
         val customView = CustomView(this, this)
-        binding.frameLayout.addView(customView)
+        binding.constraintLayout.addView(customView)
     }
 
     override fun check(flag: Boolean, color: Int){
