@@ -10,10 +10,12 @@ class Plane {
         return rectangleList.size
     }
 
-    fun createRectangle(): Rectangle {
-        val rect = RectangleFactory.create()
-        rectangleList.add(rect)
-        return rect
+    fun createRectangle() {
+        rectangleList.add(RectangleFactory.create())
+    }
+
+    fun getAllRectangle(): List<Rectangle> {
+        return rectangleList.toList()
     }
 
     fun modifyRectangle(index: Int, rectangle: Rectangle) {
