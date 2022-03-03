@@ -2,6 +2,7 @@ package com.example.kotlin_drawingapp
 
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.RectangleBorder
 
 class MainContract {
     interface View {
@@ -9,7 +10,7 @@ class MainContract {
 
         fun showRectangleInfo(color: Color, alpha: Int)
 
-        fun showRectangleBorder(border: Rectangle?)
+        fun showRectangleBorder(rectangleBorderList: List<RectangleBorder>)
 
         fun setRectangleAlpha(index: Int, alpha: Int)
     }
