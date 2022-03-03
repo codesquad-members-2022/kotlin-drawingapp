@@ -1,10 +1,12 @@
 package com.example.kotlin_drawingapp
 
 import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.RectangleBorder
 import com.example.kotlin_drawingapp.model.RectangleFactory
 
 class Plane {
     private val rectangleList = mutableListOf<Rectangle>()
+    private val rectangleBorderList = mutableListOf<RectangleBorder>()
 
     fun getRectangleCount(): Int {
         return rectangleList.size
@@ -14,8 +16,23 @@ class Plane {
         rectangleList.add(RectangleFactory.create())
     }
 
+    fun createRectangleBorder(rectangle: Rectangle) {
+        val border = RectangleBorder(rectangle.size, rectangle.point)
+        if (!rectangleBorderList.contains(border)) {
+            rectangleBorderList.add(border)
+        }
+    }
+
+    fun clearRectangleBorder() {
+        rectangleBorderList.clear()
+    }
+
     fun getAllRectangle(): List<Rectangle> {
         return rectangleList.toList()
+    }
+
+    fun getAllRectangleBorder(): List<RectangleBorder> {
+        return rectangleBorderList.toList()
     }
 
     fun modifyRectangle(index: Int, rectangle: Rectangle) {
