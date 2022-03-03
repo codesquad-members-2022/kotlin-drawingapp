@@ -2,7 +2,6 @@ package com.example.kotlindrawingapp
 
 import android.content.Context
 import android.graphics.*
-import android.util.AttributeSet
 import android.view.View
 import com.example.kotlindrawingapp.square.Square
 

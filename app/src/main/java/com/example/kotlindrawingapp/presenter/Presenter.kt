@@ -31,8 +31,9 @@ class Presenter(
         deselect()
         if (idx != -1) {
             canvasList[idx].selectRectangle()
-            val rgb = squares[idx].rgb.decimalToHex()
-            view.updateBoard(rgb, squares[idx].alpha.alpha)
+            val square = plane.findSquare(idx)
+            val rgb = square.rgb.decimalToHex()
+            view.updateBoard(rgb, square.alpha.alpha)
         }
     }
 

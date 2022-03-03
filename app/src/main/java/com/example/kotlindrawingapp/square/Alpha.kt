@@ -1,6 +1,6 @@
 package com.example.kotlindrawingapp.square
 
-data class Alpha(val alpha: Int) {
+data class Alpha(var alpha: Int) {
 
     init {
         check(isRange(alpha)) { OUT_OF_RANGE_MESSAGE }
