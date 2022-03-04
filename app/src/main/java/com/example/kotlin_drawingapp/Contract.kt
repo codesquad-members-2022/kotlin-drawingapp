@@ -10,5 +10,8 @@ interface Contract {
         fun makeRect(left: Int, right: Int, top: Int, bottom: Int): Rect {
             return Rect(left, right, top, bottom)
         }
+        fun decideAlpha(alphaList: MutableList<Int>): MutableList<Int> {
+            return alphaList
+        }
     }
 }
