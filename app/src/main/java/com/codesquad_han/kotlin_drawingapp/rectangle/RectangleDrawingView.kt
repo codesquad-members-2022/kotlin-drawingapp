@@ -96,16 +96,33 @@ class RectangleDrawingView @JvmOverloads constructor(
             ) {
                 selectedRectangle = rectangleList[i]
                 selected = true
+
+                selectedRectangle?.let { // 액티비티에서 선택한 사각형 색상, 투명도 나타내기
+                    clickListener.clickDrawingView(getColorStr(it), it.transparency.transparency, true, it.id)
+                }
                 break
             }
         }
 
         if(!selected){
             selectedRectangle = null
+            clickListener.clickDrawingView("", -1, false, "")
         }
 
         invalidate()
     }
 
+    fun getColorStr(selectedRectangle: Rectangle): String{
+        var red = Integer.toHexString(selectedRectangle.backgroundColor.r)
+        var green = Integer.toHexString(selectedRectangle.backgroundColor.g)
+        var blue = Integer.toHexString(selectedRectangle.backgroundColor.b)
+
+        if(red.length == 1) red = "0" + red
+        if(green.length == 1) green = "0" + green
+        if(blue.length == 1) blue = "0" + blue
+
+        Log.d("AppTest", "selected rectangle color : #${red}${green}${blue}")
+        return "#${red}${green}${blue}"
+    }
 
 }

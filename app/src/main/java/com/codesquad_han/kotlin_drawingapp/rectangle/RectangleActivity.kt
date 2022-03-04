@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewTreeObserver
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
@@ -85,9 +86,26 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
     }
 
-    override fun clickDrawingView() {
-        // 드로잉 커스텀뷰 부분 터치 시
+    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String) {
+        if(selected){
+            binding.constraintLayoutControl?.let{
+                it.visibility = View.VISIBLE
+            }
+            binding.tvBackgroundColor?.let{
+                it.text = color
+            }
+            binding.sliderTransparency?.let{
+                it.value = alpha.toFloat()
+            }
 
+            // id 값을 활용해 현재 선택된 사각형 투명도 데이터 업데이트 후 뷰에 반영시키기
+
+        }
+        else{
+            binding.constraintLayoutControl?.let {
+                it.visibility = View.INVISIBLE
+            }
+        }
     }
 
     fun ConvertDPtoPX(context: Context, dp: Int): Int {
