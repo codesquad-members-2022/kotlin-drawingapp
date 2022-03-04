@@ -11,8 +11,6 @@ class MainContract {
         fun showRectangleInfo(color: Color, alpha: Int)
 
         fun showRectangleBorder(rectangleBorderList: List<RectangleBorder>)
-
-        fun setRectangleAlpha(index: Int, alpha: Int)
     }
 
     interface Presenter {
@@ -20,8 +18,6 @@ class MainContract {
 
         fun selectRectangle(x: Float, y: Float)
 
-        fun setRectangleAlpha(index: Int, alpha: Int)
-
-        fun getRectangleInfo(index: Int)
+        fun setCurrentSelectedRectangleAlpha(alpha: Int)
     }
 }

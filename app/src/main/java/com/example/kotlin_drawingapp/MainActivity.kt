@@ -50,8 +50,4 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun showRectangleBorder(rectangleBorderList: List<RectangleBorder>) {
         drawView.drawRectangleBorder(rectangleBorderList)
     }
-
-    override fun setRectangleAlpha(index: Int, alpha: Int) {
-
-    }
 }

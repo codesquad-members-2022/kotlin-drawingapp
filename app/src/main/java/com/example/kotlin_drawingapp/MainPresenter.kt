@@ -25,11 +25,7 @@ class MainPresenter(
         }
     }
 
-    override fun setRectangleAlpha(index: Int, alpha: Int) {
-
-    }
-
-    override fun getRectangleInfo(index: Int) {
+    override fun setCurrentSelectedRectangleAlpha(alpha: Int) {
 
     }
 }
