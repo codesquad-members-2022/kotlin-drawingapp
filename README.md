@@ -17,5 +17,12 @@
 
 ***
 
-## 사각형 랜덤 위치 생성
-![image](https://user-images.githubusercontent.com/69443895/156312309-a484c70d-1858-4ad9-b5c0-302bae4c59fc.png)
+## 사각형 랜덤 위치 생성, 선택 시 테두리 처리, 투명도 변경, 배경 선택 시 사각형 선택 비활성화
+![image](https://user-images.githubusercontent.com/69443895/156705889-6db11b25-b2c0-41bb-9125-8f4bb67c99db.png)
+
+![image](https://user-images.githubusercontent.com/69443895/156705968-5f72b77e-bb92-4bbc-ba20-f91cc8b0c4e9.png)
+
+![image](https://user-images.githubusercontent.com/69443895/156706009-e09f69cc-ea6f-4119-9b3c-7bf7967ac7a7.png)
+
+![image](https://user-images.githubusercontent.com/69443895/156706051-052f1df0-4e53-463a-99a5-a88d21013977.png)
+
