@@ -14,7 +14,7 @@ class MainContract {
     }
 
     interface Presenter {
-        fun drawRectangle()
+        fun createRectangle()
 
         fun selectRectangle(x: Float, y: Float)
 

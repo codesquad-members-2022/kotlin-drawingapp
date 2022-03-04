@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         seekBarAlpha = findViewById(R.id.seekBar)
         val btnGenerateRectangle = findViewById<Button>(R.id.btn_generate_rect)
         btnGenerateRectangle.setOnClickListener {
-            presenter.drawRectangle()
+            presenter.createRectangle()
         }
 
         drawView.setOnRectangleClickListener(object : DrawView.SetOnDrawViewTouchListener {

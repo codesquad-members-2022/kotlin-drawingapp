@@ -8,7 +8,7 @@ class MainPresenter(
 
     private val plane = Plane()
     private var currentSelectedRectangle: Rectangle? = null
-    override fun drawRectangle() {
+    override fun createRectangle() {
         plane.createRectangle()
         mainView.showRectangle(plane.getAllRectangle())
     }
