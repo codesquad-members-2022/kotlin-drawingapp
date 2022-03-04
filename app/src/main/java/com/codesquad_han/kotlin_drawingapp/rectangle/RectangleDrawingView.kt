@@ -81,11 +81,13 @@ class RectangleDrawingView @JvmOverloads constructor(
         strokePaint.color = ContextCompat.getColor(context, R.color.selected)
     }
 
+    // 사각형 추가 혹은 선택된 사각형 투명도 변경 시 호출
     fun drawRectangle(updatedRectangleList: MutableList<Rectangle>) {
         rectangleList = updatedRectangleList
         invalidate()
     }
 
+    // 선택 좌표에 사각형이 여러 개 있는 경우 가장 최근에 생성된 사각형을 선택
     fun checkTouchPoint(touchX: Float, touchY: Float) {
         var selected = false
         for (i in rectangleList.size - 1 downTo 0) {

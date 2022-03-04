@@ -10,4 +10,14 @@ class Plane(rectangleFactory: RectangleFactory) {
     }
 
     fun returnRectangleList() = rectangleList
+
+    fun updateTransparency(id: String, transparency: Int) {
+        rectangleList.forEach {
+            if (it.id == id) {
+                it.transparency.transparency = transparency
+            }
+        }
+    }
+
+    fun returnRectangleCount() = rectangleList.size
 }

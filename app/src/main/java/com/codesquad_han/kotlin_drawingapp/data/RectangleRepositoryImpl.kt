@@ -9,4 +9,8 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
     }
 
     override fun getRectangleList() = plane.returnRectangleList()
+
+    override fun updateTransparency(id: String, transparency: Int) {
+        plane.updateTransparency(id, transparency)
+    }
 }

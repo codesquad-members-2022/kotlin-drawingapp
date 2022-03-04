@@ -7,4 +7,6 @@ interface RectangleRepository {
     fun addRectangle()
 
     fun getRectangleList() : MutableList<Rectangle>
+
+    fun updateTransparency(id: String, transparency: Int)
 }

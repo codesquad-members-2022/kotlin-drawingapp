@@ -12,6 +12,7 @@ import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.Rectangle
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
+import com.google.android.material.slider.Slider
 
 class RectangleActivity : AppCompatActivity(), RectangleContract.View, RectangleViewClickInterface {
 
@@ -23,6 +24,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
     private var RECTANGLE_WIDTH = 0
     private var RECTANGLE_HEIGHT = 0
+
+    private lateinit var SELECTED_RECTANGLE_ID: String
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +65,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
 
         setBtnMakeRectangle()
+        setTransparencySlider()
     }
 
     // presenter 초기화
@@ -77,31 +81,29 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     }
 
     // 만든 사각형 커스텀 뷰에 추가로 그리기
-    override fun showRectangle(updatedRectangleList : MutableList<Rectangle>) {
+    override fun showRectangle(updatedRectangleList: MutableList<Rectangle>) {
         Log.d("AppTest", "update rectangle list size : ${updatedRectangleList.size}")
-        binding.rectangleDrawingView?.drawRectangle(updatedRectangleList)
+        binding.rectangleDrawingView?.let {
+            it.drawRectangle(updatedRectangleList)
+        }
     }
 
-    override fun showSelectedRectangle() {
-
-    }
 
     override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String) {
-        if(selected){
-            binding.constraintLayoutControl?.let{
+        if (selected) {
+            binding.constraintLayoutControl?.let {
                 it.visibility = View.VISIBLE
             }
-            binding.tvBackgroundColor?.let{
+            binding.tvBackgroundColor?.let {
                 it.text = color
             }
-            binding.sliderTransparency?.let{
+            binding.sliderTransparency?.let {
                 it.value = alpha.toFloat()
             }
 
             // id 값을 활용해 현재 선택된 사각형 투명도 데이터 업데이트 후 뷰에 반영시키기
-
-        }
-        else{
+            SELECTED_RECTANGLE_ID = id
+        } else {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.INVISIBLE
             }
@@ -111,6 +113,24 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     fun ConvertDPtoPX(context: Context, dp: Int): Int {
         val density = context.resources.displayMetrics.density
         return Math.round(dp.toFloat() * density)
+    }
+
+    fun setTransparencySlider() {
+        binding.sliderTransparency?.let {
+            it.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                @SuppressLint("RestrictedApi")
+                override fun onStartTrackingTouch(slider: Slider) {
+
+                }
+
+                @SuppressLint("RestrictedApi")
+                override fun onStopTrackingTouch(slider: Slider) {
+                    presenter.updateTransparency(SELECTED_RECTANGLE_ID, slider.value.toInt())
+                    presenter.getRectangleList()
+                }
+
+            })
+        }
     }
 
 }
