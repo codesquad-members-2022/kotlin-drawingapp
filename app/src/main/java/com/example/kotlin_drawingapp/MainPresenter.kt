@@ -30,12 +30,12 @@ class MainPresenter(
     }
 
     override fun setCurrentSelectedRectangleAlpha(alpha: Int) {
-        val _currentSelectedRectangle = currentSelectedRectangle
-        _currentSelectedRectangle?.let {
-            val replacement = _currentSelectedRectangle.copy()
+        val tmpCurrentSelectedRectangle = currentSelectedRectangle
+        tmpCurrentSelectedRectangle?.let {
+            val replacement = tmpCurrentSelectedRectangle.copy()
             replacement.alpha = alpha
             currentSelectedRectangle = replacement
-            plane.modifyRectangle(_currentSelectedRectangle, replacement)
+            plane.modifyRectangle(tmpCurrentSelectedRectangle, replacement)
             mainView.showRectangle(plane.getAllRectangle())
         }
     }
