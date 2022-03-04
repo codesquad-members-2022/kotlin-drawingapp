@@ -36,6 +36,16 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 presenter.selectRectangle(point.x, point.y)
             }
         })
+
+        seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (progress > 0) {
+                    presenter.setCurrentSelectedRectangleAlpha(progress)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     override fun showRectangle(rectangles: List<Rectangle>) {

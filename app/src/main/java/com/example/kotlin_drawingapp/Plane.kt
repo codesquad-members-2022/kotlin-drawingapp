@@ -35,8 +35,13 @@ class Plane {
         return rectangleBorderList.toList()
     }
 
-    fun modifyRectangle(index: Int, rectangle: Rectangle) {
-        rectangleList[index] = rectangle
+    fun modifyRectangle(target: Rectangle, replacement: Rectangle) {
+        for (index in 0 until rectangleList.size) {
+            if (rectangleList[index] == target) {
+                rectangleList[index] = replacement
+                return
+            }
+        }
     }
 
     fun getRectangleByIndex(index: Int): Rectangle {

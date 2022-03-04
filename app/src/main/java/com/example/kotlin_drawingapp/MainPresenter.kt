@@ -1,10 +1,13 @@
 package com.example.kotlin_drawingapp
 
+import com.example.kotlin_drawingapp.model.Rectangle
+
 class MainPresenter(
     private val mainView: MainContract.View
 ) : MainContract.Presenter {
 
     private val plane = Plane()
+    private var currentSelectedRectangle: Rectangle? = null
     override fun drawRectangle() {
         plane.createRectangle()
         mainView.showRectangle(plane.getAllRectangle())
@@ -18,6 +21,7 @@ class MainPresenter(
             plane.createRectangleBorder(rect)
         }
 
+        currentSelectedRectangle = rect
         val borderList = plane.getAllRectangleBorder()
         mainView.showRectangleBorder(borderList)
         rect?.let {
@@ -26,6 +30,13 @@ class MainPresenter(
     }
 
     override fun setCurrentSelectedRectangleAlpha(alpha: Int) {
-
+        val _currentSelectedRectangle = currentSelectedRectangle
+        _currentSelectedRectangle?.let {
+            val replacement = _currentSelectedRectangle.copy()
+            replacement.alpha = alpha
+            currentSelectedRectangle = replacement
+            plane.modifyRectangle(_currentSelectedRectangle, replacement)
+            mainView.showRectangle(plane.getAllRectangle())
+        }
     }
 }
