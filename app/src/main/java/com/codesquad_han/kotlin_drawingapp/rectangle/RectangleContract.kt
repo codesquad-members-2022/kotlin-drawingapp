@@ -1,6 +1,7 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.BasePresenter
 import com.codesquad_han.kotlin_drawingapp.BaseView
 import com.codesquad_han.kotlin_drawingapp.model.Rectangle
@@ -13,6 +14,8 @@ interface RectangleContract {
     }
 
     interface Presenter : BasePresenter {
+        var liveRectangleList : MutableLiveData<MutableList<Rectangle>>
+
         fun addRectangle() // 사각형 생성
 
         fun getRectangleList()

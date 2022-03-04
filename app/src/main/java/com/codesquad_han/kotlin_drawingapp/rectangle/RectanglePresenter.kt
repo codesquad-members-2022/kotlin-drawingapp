@@ -1,12 +1,16 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
+import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
+import com.codesquad_han.kotlin_drawingapp.model.Rectangle
 
 class RectanglePresenter(
     val rectangleRepository: RectangleRepository,
     val rectangleView: RectangleContract.View
 ) :
     RectangleContract.Presenter {
+
+    override var liveRectangleList = MutableLiveData<MutableList<Rectangle>>()
 
     init {
         rectangleView.presenter = this
@@ -16,17 +20,19 @@ class RectanglePresenter(
         addRectangle()
     }
 
-    override fun addRectangle() {  // 사각형 추가만 하기
+    override fun addRectangle() {  // 사각형 추가 후 라이브데이터 갱신
         rectangleRepository.addRectangle()
+        liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 
-    override fun getRectangleList() { // 사각형 추가, 투명도 갱신한 리스트 전달
+    override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신
+        rectangleRepository.updateTransparency(id, transparency)
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    override fun getRectangleList() { // 사각형 추가, 투명도 갱신한 리스트 전달, 라이브데이터 도입 전에 변화된 사각형 리스트를 가져오기 위한 함수
         rectangleView.showRectangle(rectangleRepository.getRectangleList())
     }
-
-    override fun updateTransparency(id: String, transparency: Int) {
-        rectangleRepository.updateTransparency(id, transparency)
-    }
-
-
 }

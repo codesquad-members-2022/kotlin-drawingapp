@@ -66,17 +66,20 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
         setBtnMakeRectangle()
         setTransparencySlider()
+
     }
 
-    // presenter 초기화
+    // presenter 초기화 및 livedata 옵저버 등록
     fun initPresenter(rectangleFactory: RectangleFactory) {
         presenter = RectanglePresenter(RectangleRepositoryImpl(Plane(rectangleFactory)), this)
+        presenter.liveRectangleList.observe(this) {
+            showRectangle(it)
+        }
     }
 
     fun setBtnMakeRectangle() {
         binding.btnGenerateRectangle?.setOnClickListener {
             presenter.start()
-            presenter.getRectangleList()
         }
     }
 
@@ -126,7 +129,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                 @SuppressLint("RestrictedApi")
                 override fun onStopTrackingTouch(slider: Slider) {
                     presenter.updateTransparency(SELECTED_RECTANGLE_ID, slider.value.toInt())
-                    presenter.getRectangleList()
                 }
 
             })
