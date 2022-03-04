@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
+import model.Rect
 
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
-            presenter.selectRectangle(motionEvent.x, motionEvent.y)
+            this.selectedCustomRectangleView= presenter.selectRectangle(motionEvent.x, motionEvent.y)
             true
         }
 
@@ -106,14 +107,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
 
-    override fun displayAttribute(rectView: RectView) {
+    override fun displayRectAttribute(rgbInfo:String, opacity:Int, rect:Rect) {
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-        rgbValueTextView.text = rectView.rect.backGroundColor.value?.getRGBHexValue()
-        rectView.rect.opacity.value?.let {
-            opacitySeekBar.progress = it
-        }
-        rectView.rect.backGroundColor.observe(this, backgroundObserver)
-        rectView.rect.opacity.observe(this, opacityObserver)
+        rgbValueTextView.text = rgbInfo
+        opacitySeekBar.progress = (opacity/25.5).toInt()
+        rect.backGroundColor.observe(this, backgroundObserver)
+        rect.opacity.observe(this, opacityObserver)
     }
+
+
 }

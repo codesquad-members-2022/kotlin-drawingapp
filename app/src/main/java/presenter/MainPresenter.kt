@@ -11,32 +11,37 @@ class MainPresenter(
 
     private val plane = Plane(context)
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
-    override fun selectRectangle(xPos: Float, yPos: Float) {
+    override fun selectRectangle(xPos: Float, yPos: Float) : RectView? {
         customRectangleViewList.map{
             it.eraseBorder()
         }
         val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
-        val selectedRectangleView = customRectangleViewList.find{it.rect==selectedRectangle}
-        selectedRectangleView?.let{
-            it.drawBorder()
-            view.displayAttribute(it)
+        val selectedRectangleView = customRectangleViewList.find{it.rectId==selectedRectangle?.rectId }
+        selectedRectangleView?.let{rectView->
+            rectView.drawBorder()
+            selectedRectangle?.let {
+                view.displayRectAttribute(rectView.backGroundRGB, rectView.alpha, selectedRectangle)
+            }
         }
+
+        return selectedRectangleView
 
     }
 
     override fun changeColor(rectView: RectView) {
-        plane.changeColor(rectView.rect)
+        if(rectView.photoId=="") {
+            plane.changeColor(rectView.rectId)
+        }
     }
 
     override fun changeOpacity(rectView: RectView, opacity: Int) {
-        plane.changeOpacity(rectView.rect, opacity)
+        plane.changeOpacity(rectView.rectId, opacity)
     }
 
     override fun createRectanglePaint(): RectView {
         val rectView = RectView(context)
         val rect = plane.createRectanglePaint()
-        rectView.rect= rect
-        rectView.drawRectangle()
+        rectView.drawRectangle(rect)
         customRectangleViewList.add(rectView)
         return rectView
     }
@@ -44,8 +49,7 @@ class MainPresenter(
     override fun createPhotoPaint(image: Bitmap):RectView {
         val photo = plane.createPhotoPaint(image)
         val rectView = RectView(context)
-        rectView.photo= photo
-        rectView.drawPhoto(image)
+        rectView.drawPhoto(image,photo)
         customRectangleViewList.add(rectView)
         return rectView
     }

@@ -26,6 +26,7 @@ class RectFactory {
 
         private fun makeNewPhoto():Photo{
             return Photo(
+                randomPhotoId(),
                 randomRectId(),
                 makeRandomPoint(),
                 makeSize(),
@@ -59,6 +60,15 @@ class RectFactory {
 
         private fun randomRectId(): String {
             val targetLength = 3
+            return "${getRandomString(targetLength)}-$${getRandomString(targetLength)}-${
+                getRandomString(
+                    targetLength
+                )
+            }"
+        }
+
+        private fun randomPhotoId(): String {
+            val targetLength = 4
             return "${getRandomString(targetLength)}-$${getRandomString(targetLength)}-${
                 getRandomString(
                     targetLength

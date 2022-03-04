@@ -9,11 +9,15 @@ import model.Rect
 
 
 class RectView(context: Context) : View(context) {
-
-    private lateinit var rectF:RectF
-    private var bitmap: Bitmap?= null
-    lateinit var rect:Rect
-    lateinit var photo: Photo
+    private var bitmap: Bitmap? = null
+    var rectId = ""
+    var photoId = ""
+    private var left = 0.0F
+    private var right = 0.0F
+    private var top = 0.0F
+    private var bottom = 0.0F
+    var alpha = 0
+    var backGroundRGB:String=""
     private var selectedFlag = false
     private val rectanglePaint = Paint()
     private val borderPaint = Paint().apply {
@@ -26,46 +30,59 @@ class RectView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (selectedFlag) {
-            canvas.drawRect(rectF, borderPaint)
+            canvas.drawRect(left, top, right, bottom, borderPaint)
         }
-        bitmap?.let{
-            canvas.drawBitmap(it, photo.point.xPos.toFloat(), photo.point.yPos.toFloat(), null)
+        bitmap?.let {
+            val paint = Paint()
+            paint.alpha = this.alpha
+            canvas.drawBitmap(it, left, top, paint)
             return
         }
-        canvas.drawRect(rectF, rectanglePaint)
+        rectanglePaint.alpha = this.alpha
+        canvas.drawRect(left, top, right, bottom, rectanglePaint)
 
     }
 
-    fun drawRectangle():RectView{
-        val left = rect.point.xPos.toFloat()
-        val right = (rect.point.xPos + rect.size.width).toFloat()
-        val top = rect.point.yPos.toFloat()
-        val bottom = (rect.point.yPos + rect.size.height).toFloat()
-        this.rectF = RectF(left,top,right,bottom)
-        val backGroundColor = rect.backGroundColor.value?.getBackGroundColor()
-        val opacity = ((rect.opacity.value?.times(25.5))?.toInt())
-        backGroundColor?.let{
-            this.rectanglePaint.color=it
-        }
-        opacity?.let{
-            this.rectanglePaint.alpha=it
+    fun drawRectangle(rect: Rect): RectView {
+        rect.let {
+            rectId = rect.rectId
+            left = it.point.xPos.toFloat()
+            right = (it.point.xPos + it.size.width).toFloat()
+            top = it.point.yPos.toFloat()
+            bottom = (it.point.yPos + it.size.height).toFloat()
+            this.backGroundRGB= it.backGroundColor.value?.getRGBHexValue().toString()
+            val backGroundColor = it.backGroundColor.value?.getBackGroundColor()
+            val opacity = ((it.opacity.value?.times(25.5))?.toInt())
+            backGroundColor?.let { color ->
+                this.rectanglePaint.color = color
+
+            }
+            opacity?.let { op ->
+                this.alpha = op
+            }
         }
         return this
     }
 
-    fun drawPhoto(image: Bitmap):RectView{
-        val left = photo.point.xPos.toFloat()
-        val right = (photo.point.xPos + photo.size.width).toFloat()
-        val top = photo.point.yPos.toFloat()
-        val bottom = (photo.point.yPos + photo.size.height).toFloat()
-        this.rectF = RectF(left,top,right,bottom)
-        this.rectanglePaint.isFilterBitmap=true
-        this.bitmap= resizeBitmap(image)
+    fun drawPhoto(image: Bitmap, photo: Photo): RectView {
+        photo.let {
+            rectId= photo.rectId
+            photoId = photo.photoId
+            left = it.point.xPos.toFloat()
+            right = (it.point.xPos + it.size.width).toFloat()
+            top = it.point.yPos.toFloat()
+            bottom = (it.point.yPos + it.size.height).toFloat()
+            it.opacity.value?.let { alpha ->
+                this.alpha = (alpha * 25.5).toInt()
+            }
+        }
+        this.backGroundRGB ="No Color"
+        this.bitmap = resizeBitmap(image, photo)
         return this
     }
 
-    private fun resizeBitmap(image: Bitmap):Bitmap{
-        val width =  photo.size.width // 축소시킬 너비
+    private fun resizeBitmap(image: Bitmap, photo: Photo): Bitmap {
+        val width = photo.size.width // 축소시킬 너비
         val height = photo.size.height // 축소시킬 높이
         var bmpWidth = image.width.toFloat()
         var bmpHeight = image.height.toFloat()
@@ -87,6 +104,7 @@ class RectView(context: Context) : View(context) {
             image,
             bmpWidth.toInt(), bmpHeight.toInt(), true
         )
+
     }
 
     fun drawBorder() {
@@ -105,7 +123,7 @@ class RectView(context: Context) : View(context) {
     }
 
     fun opacityChange(opacity: Int) {
-        this.rectanglePaint.alpha = (opacity * 25.5).toInt()
+        this.alpha = (opacity * 25.5).toInt()
         invalidate()
     }
 

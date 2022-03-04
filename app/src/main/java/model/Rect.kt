@@ -3,7 +3,7 @@ package model
 import androidx.lifecycle.MutableLiveData
 
 open class Rect(
-    private val rectId: String,
+    val rectId: String,
     val point: Point,
     val size: Size,
     var backGroundColor: MutableLiveData<BackGroundColor>,

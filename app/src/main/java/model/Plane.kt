@@ -1,30 +1,31 @@
 package model
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import view.RectView
 import java.io.ByteArrayOutputStream
 
 class Plane(private val context: Context) {
     private val customRectangleList: ArrayList<Rect> = arrayListOf()
 
     fun createRectanglePaint(): Rect {
-        val rect = RectFactory.makeRect()
+        var rect = RectFactory.makeRect()
+        while(customRectangleList.count{it.rectId==rect.rectId }!=0)
+        {
+            rect= RectFactory.makeRect()
+        }
         customRectangleList.add(rect)
         return rect
     }
 
-    fun createPhotoPaint(image: Bitmap):Photo{
-        val photo= RectFactory.makePhoto()
-        val imageInfo= image
+    fun createPhotoPaint(image: Bitmap): Photo {
+        var photo = RectFactory.makePhoto()
+        while (customRectangleList.count { it.rectId == photo.rectId } != 0) {
+            photo = RectFactory.makePhoto()
+        }
         val byteArrayStream = ByteArrayOutputStream()
-        imageInfo.compress(Bitmap.CompressFormat.PNG, 100, byteArrayStream)
-        val imageBytes= byteArrayStream.toByteArray()
-        photo.imageInfo= imageBytes
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayStream)
+        val imageBytes = byteArrayStream.toByteArray()
+        photo.imageInfo = imageBytes
         customRectangleList.add(photo)
         return photo
     }
@@ -57,13 +58,13 @@ class Plane(private val context: Context) {
         return customRectangleList[index]
     }
 
-    fun changeColor(rect: Rect){
+    fun changeColor(rectId:String){
         val randomColor = BackGroundColor((0..255).random(), (0..255).random(), (0..255).random())
-        customRectangleList.find { it == rect }?.backGroundColor?.value = randomColor
+        customRectangleList.find { it.rectId == rectId }?.backGroundColor?.value = randomColor
     }
 
-    fun changeOpacity(rect: Rect, opacity: Int) {
-        customRectangleList.find { it == rect }?.opacity?.value = opacity
+    fun changeOpacity(rectId:String, opacity: Int) {
+        customRectangleList.find {  it.rectId == rectId  }?.opacity?.value = opacity
 
     }
 
