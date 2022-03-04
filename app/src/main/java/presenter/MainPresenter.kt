@@ -10,26 +10,14 @@ class MainPresenter(
 ) : MainContract.Presenter {
 
     private val plane = Plane(context)
-    private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
-    override fun selectRectangle(xPos: Float, yPos: Float) : RectView? {
-        customRectangleViewList.map{
-            it.eraseBorder()
-        }
-        val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
-        val selectedRectangleView = customRectangleViewList.find{it.rectId==selectedRectangle?.rectId }
-        selectedRectangleView?.let{rectView->
-            rectView.drawBorder()
-            selectedRectangle?.let {
-                view.displayRectAttribute(rectView.backGroundRGB, rectView.alpha, selectedRectangle)
-            }
-        }
-
-        return selectedRectangleView
+    override fun selectRectangle(xPos: Float, yPos: Float) {
+        plane.getCustomRectangleByPosition(xPos, yPos)
+            ?.let { view.displaySelectedRectAttribute(it) }
 
     }
 
     override fun changeColor(rectView: RectView) {
-        if(rectView.photoId=="") {
+        if (rectView.photoId == "") {
             plane.changeColor(rectView.rectId)
         }
     }
@@ -38,20 +26,12 @@ class MainPresenter(
         plane.changeOpacity(rectView.rectId, opacity)
     }
 
-    override fun createRectanglePaint(): RectView {
-        val rectView = RectView(context)
-        val rect = plane.createRectanglePaint()
-        rectView.drawRectangle(rect)
-        customRectangleViewList.add(rectView)
-        return rectView
+    override fun createRectanglePaint() {
+        view.drawRectangle(plane.createRectanglePaint())
     }
 
-    override fun createPhotoPaint(image: Bitmap):RectView {
-        val photo = plane.createPhotoPaint(image)
-        val rectView = RectView(context)
-        rectView.drawPhoto(image,photo)
-        customRectangleViewList.add(rectView)
-        return rectView
+    override fun createPhotoPaint(image: Bitmap) {
+        view.drawPhoto(plane.createPhotoPaint(image))
     }
 
 }

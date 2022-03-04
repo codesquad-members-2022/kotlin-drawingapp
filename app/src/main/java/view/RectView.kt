@@ -43,7 +43,7 @@ class RectView(context: Context) : View(context) {
 
     }
 
-    fun drawRectangle(rect: Rect): RectView {
+    fun drawRectangle(rect: Rect) {
         rect.let {
             rectId = rect.rectId
             left = it.point.xPos.toFloat()
@@ -61,10 +61,9 @@ class RectView(context: Context) : View(context) {
                 this.alpha = op
             }
         }
-        return this
     }
 
-    fun drawPhoto(image: Bitmap, photo: Photo): RectView {
+    fun drawPhoto(image: Bitmap, photo: Photo) {
         photo.let {
             rectId= photo.rectId
             photoId = photo.photoId
@@ -78,7 +77,6 @@ class RectView(context: Context) : View(context) {
         }
         this.backGroundRGB ="No Color"
         this.bitmap = resizeBitmap(image, photo)
-        return this
     }
 
     private fun resizeBitmap(image: Bitmap, photo: Photo): Bitmap {
@@ -117,12 +115,12 @@ class RectView(context: Context) : View(context) {
         invalidate()
     }
 
-    fun colorChange(color: BackGroundColor) {
+    fun changeColor(color: BackGroundColor) {
         this.rectanglePaint.color = color.getBackGroundColor()
         invalidate()
     }
 
-    fun opacityChange(opacity: Int) {
+    fun changeOpacity(opacity: Int) {
         this.alpha = (opacity * 25.5).toInt()
         invalidate()
     }

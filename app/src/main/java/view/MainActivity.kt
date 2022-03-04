@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
+import model.Photo
 import model.Rect
 
 
@@ -30,12 +32,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private var selectedCustomRectangleView: RectView? = null
     private lateinit var tvRgbValue: TextView
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
-        selectedCustomRectangleView?.colorChange(colorValue)
+        selectedCustomRectangleView?.changeColor(colorValue)
         tvRgbValue.text = colorValue.getRGBHexValue()
     }
     private val opacityObserver = Observer<Int> { opacity ->
-        selectedCustomRectangleView?.opacityChange(opacity)
+        selectedCustomRectangleView?.changeOpacity(opacity)
     }
+    private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
+    private var selectedRectangle:Rect?=null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
 
         btnMakeRectangle.setOnClickListener {
-            mainLayout.addView(presenter.createRectanglePaint())
+            presenter.createRectanglePaint()
         }
 
         btnMakePhotoView.setOnClickListener {
@@ -72,8 +76,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
 
         mainLayout.setOnTouchListener { _, motionEvent ->
-            this.selectedCustomRectangleView =
-                presenter.selectRectangle(motionEvent.x, motionEvent.y)
+            customRectangleViewList.map{
+                it.eraseBorder()
+            }
+            selectedRectangle?.opacity?.removeObserver(opacityObserver)
+            selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
+            presenter.selectRectangle(motionEvent.x, motionEvent.y)
             true
         }
 
@@ -135,7 +143,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                                 ImageDecoder.createSource(this.contentResolver, currentImageUri)
                             bitmap = ImageDecoder.decodeBitmap(source)
                         }
-                        mainLayout.addView(presenter.createPhotoPaint(bitmap))
+                        presenter.createPhotoPaint(bitmap)
                     }
 
                 } catch (e: Exception) {
@@ -146,13 +154,46 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
 
-    override fun displayRectAttribute(rgbInfo: String, opacity: Int, rect: Rect) {
+    override fun displaySelectedRectAttribute(rect: Rect) {
+
+        this.selectedCustomRectangleView = customRectangleViewList.find{it.rectId==rect.rectId}
+        this.selectedRectangle = rect
+        selectedCustomRectangleView?.drawBorder()
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-        rgbValueTextView.text = rgbInfo
-        opacitySeekBar.progress = (opacity / 25.5).toInt()
-        rect.backGroundColor.observe(this, backgroundObserver)
-        rect.opacity.observe(this, opacityObserver)
+        if(selectedCustomRectangleView?.photoId == ""){
+            rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
+            rect.opacity.value?.let{
+                opacitySeekBar.progress = it
+            }
+            rect.backGroundColor.observe(this, backgroundObserver)
+            rect.opacity.observe(this, opacityObserver)
+        }
+        else{
+            rgbValueTextView.text = "No Color"
+            rect.opacity.value?.let{
+                opacitySeekBar.progress = it
+            }
+            rect.opacity.observe(this, opacityObserver)
+        }
+
+
+    }
+
+    override fun drawRectangle(rect: Rect) {
+        val rectView = RectView(this)
+        rectView.drawRectangle(rect)
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+
+    }
+
+    override fun drawPhoto(photo: Photo) {
+        val rectView = RectView(this)
+        val image= BitmapFactory.decodeByteArray(photo.imageInfo, 0, photo.imageInfo.size)
+        rectView.drawPhoto(image, photo)
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
     }
 
 
