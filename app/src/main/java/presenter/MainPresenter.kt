@@ -1,4 +1,5 @@
 import android.content.Context
+import android.graphics.Bitmap
 import model.Plane
 import view.MainContract
 import view.RectView
@@ -36,6 +37,15 @@ class MainPresenter(
         val rect = plane.createRectanglePaint()
         rectView.rect= rect
         rectView.drawRectangle()
+        customRectangleViewList.add(rectView)
+        return rectView
+    }
+
+    override fun createPhotoPaint(image: Bitmap):RectView {
+        val photo = plane.createPhotoPaint(image)
+        val rectView = RectView(context)
+        rectView.photo= photo
+        rectView.drawPhoto(image)
         customRectangleViewList.add(rectView)
         return rectView
     }

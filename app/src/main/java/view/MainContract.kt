@@ -1,6 +1,7 @@
 package view
 
-import model.Rect
+import android.graphics.Bitmap
+
 
 interface MainContract {
     interface View {
@@ -12,6 +13,6 @@ interface MainContract {
         fun changeColor(rectView: RectView)
         fun changeOpacity(rectView: RectView, opacity: Int)
         fun createRectanglePaint(): RectView
-
+        fun createPhotoPaint(image: Bitmap):RectView
     }
 }

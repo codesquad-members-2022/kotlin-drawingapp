@@ -2,16 +2,19 @@ package view
 
 import MainPresenter
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.SeekBar
-import android.widget.TextView
+import android.provider.MediaStore
+import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
-import model.Rect
 
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -35,10 +38,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout = findViewById(R.id.image_container)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
+        val btnMakePhotoView = findViewById<Button>(R.id.btn_addPhoto)
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
 
         btnMakeRectangle.setOnClickListener {
             mainLayout.addView(presenter.createRectanglePaint())
+        }
+
+        btnMakePhotoView.setOnClickListener {
+            getPhotoFromGallery()
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
@@ -62,6 +70,42 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         })
     }
 
+    private fun getPhotoFromGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        getPhoto.launch(intent)
+    }
+
+    private val getPhoto: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+            if (it.resultCode == RESULT_OK && it.data != null) {
+                val currentImageUri = it.data?.data
+                lateinit var bitmap: Bitmap
+                try {
+                    currentImageUri?.let {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                            bitmap = MediaStore.Images.Media.getBitmap(
+                                this.contentResolver,
+                                currentImageUri
+                            )
+                        } else {
+                            val source =
+                                ImageDecoder.createSource(this.contentResolver, currentImageUri)
+                            bitmap = ImageDecoder.decodeBitmap(source)
+                        }
+                        mainLayout.addView(presenter.createPhotoPaint(bitmap))
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        }
+
+
     override fun displayAttribute(rectView: RectView) {
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
@@ -72,5 +116,4 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         rectView.rect.backGroundColor.observe(this, backgroundObserver)
         rectView.rect.opacity.observe(this, opacityObserver)
     }
-
 }

@@ -2,7 +2,7 @@ package model
 
 import androidx.lifecycle.MutableLiveData
 
-class Rect(
+open class Rect(
     private val rectId: String,
     val point: Point,
     val size: Size,
