@@ -44,9 +44,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             it.viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    binding.rectangleDrawingView!!.viewTreeObserver.removeOnGlobalLayoutListener(
-                        this
-                    )
                     val width = binding.rectangleDrawingView!!.width - RECTANGLE_WIDTH
                     val height = binding.rectangleDrawingView!!.height - RECTANGLE_HEIGHT
 
@@ -54,6 +51,9 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     Log.d("AppTest", "width:$width, height:$height")
 
                     initPresenter(rectangleFactory)
+
+                    // 리스너 해제
+                    it.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             })
         }
