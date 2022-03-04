@@ -2,9 +2,7 @@ package com.example.kotlin_drawingapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
-import com.example.kotlin_drawingapp.square.SquareFactory
 
 class MainActivity : AppCompatActivity(), Contract.View {
     private lateinit var binding: ActivityMainBinding
@@ -13,13 +11,10 @@ class MainActivity : AppCompatActivity(), Contract.View {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("Rect1", SquareFactory.createSquare().toString())
-        Log.d("Rect2", SquareFactory.createSquare().toString())
-        Log.d("Rect3", SquareFactory.createSquare().toString())
-        Log.d("Rect4", SquareFactory.createSquare().toString())
-
-        val customView = Canvas(this, this)
-        binding.constraintLayout.addView(customView)
+        binding.button.setOnClickListener{
+            val customView = Canvas(this, this)
+            binding.constraintLayout.addView(customView)
+        }
     }
 
     override fun showInfo(flag: Boolean, color: Int) {
