@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             presenter.createRectangle()
         }
 
-        drawView.setOnRectangleClickListener(object : DrawView.SetOnDrawViewTouchListener {
+        drawView.setOnTouchListener(object : DrawView.OnTouchListener {
             override fun onClick(point: PointF) {
                 presenter.selectRectangle(point.x, point.y)
             }

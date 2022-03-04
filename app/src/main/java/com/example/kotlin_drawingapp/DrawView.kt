@@ -13,13 +13,13 @@ import com.example.kotlin_drawingapp.model.Rectangle
 import com.example.kotlin_drawingapp.model.RectangleBorder
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-    interface SetOnDrawViewTouchListener {
+    interface OnTouchListener {
         fun onClick(point: PointF)
     }
 
-    private var drawViewTouchListener: SetOnDrawViewTouchListener? = null
-    fun setOnRectangleClickListener(listener: SetOnDrawViewTouchListener) {
-        drawViewTouchListener = listener
+    private var touchListener: OnTouchListener? = null
+    fun setOnTouchListener(listener: OnTouchListener) {
+        touchListener = listener
     }
 
     private var drawnRectangleBorderList = listOf<RectangleBorder>()
@@ -59,7 +59,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
-                drawViewTouchListener?.onClick(PointF(event.x, event.y))
+                touchListener?.onClick(PointF(event.x, event.y))
             }
         }
         return super.onTouchEvent(event)
