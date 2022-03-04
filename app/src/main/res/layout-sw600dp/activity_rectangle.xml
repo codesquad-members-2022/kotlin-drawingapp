@@ -124,7 +124,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenGallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateRectangle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/teal_200"
+            android:text="사진 가져오기"
+            android:enabled="false"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGenerateRectangle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
