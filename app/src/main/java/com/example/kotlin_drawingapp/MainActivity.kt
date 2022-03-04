@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setContentView(binding.root)
 
         binding.button.setOnClickListener{
+            binding.constraintLayout.removeAllViewsInLayout()
             val customView = Canvas(this, this)
             binding.constraintLayout.addView(customView)
         }
