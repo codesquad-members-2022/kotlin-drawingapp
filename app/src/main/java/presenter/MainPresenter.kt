@@ -9,26 +9,35 @@ class MainPresenter(
 ) : MainContract.Presenter {
 
     private val plane = Plane(context)
-
+    private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
     override fun selectRectangle(xPos: Float, yPos: Float) {
-        val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
-        val selectedRectangleView = plane.getCustomRectangleViewByPosition(xPos, yPos)
-        view.drawBorder(selectedRectangleView)
-        selectedRectangle?.let {
-            view.displayAttribute(selectedRectangle)
+        customRectangleViewList.map{
+            it.eraseBorder()
         }
+        val selectedRectangle = plane.getCustomRectangleByPosition(xPos, yPos)
+        val selectedRectangleView = customRectangleViewList.find{it.rect==selectedRectangle}
+        selectedRectangleView?.let{
+            it.drawBorder()
+            view.displayAttribute(it)
+        }
+
     }
 
     override fun changeColor(rectView: RectView) {
-        val randomColor = plane.changeColor(rectView)
+        plane.changeColor(rectView.rect)
     }
 
     override fun changeOpacity(rectView: RectView, opacity: Int) {
-        plane.changeOpacity(rectView, opacity)
+        plane.changeOpacity(rectView.rect, opacity)
     }
 
     override fun createRectanglePaint(): RectView {
-        return plane.createRectanglePaint()
+        val rectView = RectView(context)
+        val rect = plane.createRectanglePaint()
+        rectView.rect= rect
+        rectView.drawRectangle()
+        customRectangleViewList.add(rectView)
+        return rectView
     }
 
 }

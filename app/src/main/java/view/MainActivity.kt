@@ -42,23 +42,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         mainLayout.setOnTouchListener { _, motionEvent ->
-            if (selectedCustomRectangleView == null) {
-                presenter.selectRectangle(motionEvent.x, motionEvent.y)
-            } else {
-                selectedCustomRectangleView?.let {
-                    it.rect.opacity.removeObserver(opacityObserver)
-                    it.rect.backGroundColor.removeObserver(backgroundObserver)
-                    it.eraseBorder()
-                    presenter.selectRectangle(motionEvent.x, motionEvent.y)
-                }
-            }
+            presenter.selectRectangle(motionEvent.x, motionEvent.y)
             true
         }
 
         tvRgbValue.setOnClickListener {
             selectedCustomRectangleView?.let { selectedView -> presenter.changeColor(selectedView) }
         }
-
 
         opacitySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, opacity: Int, fromUser: Boolean) {
@@ -72,20 +62,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         })
     }
 
-    override fun drawBorder(rectView: RectView?) {
-        this.selectedCustomRectangleView = rectView
-        rectView?.drawBorder()
-    }
-
-    override fun displayAttribute(rect: Rect) {
+    override fun displayAttribute(rectView: RectView) {
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-        rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
-        rect.opacity.value?.let {
+        rgbValueTextView.text = rectView.rect.backGroundColor.value?.getRGBHexValue()
+        rectView.rect.opacity.value?.let {
             opacitySeekBar.progress = it
         }
-        rect.backGroundColor.observe(this, backgroundObserver)
-        rect.opacity.observe(this, opacityObserver)
+        rectView.rect.backGroundColor.observe(this, backgroundObserver)
+        rectView.rect.opacity.observe(this, opacityObserver)
     }
 
 }

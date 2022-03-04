@@ -4,8 +4,7 @@ import model.Rect
 
 interface MainContract {
     interface View {
-        fun drawBorder(rectView: RectView?)
-        fun displayAttribute(rect: Rect)
+        fun displayAttribute(rectView: RectView)
     }
 
     interface Presenter {

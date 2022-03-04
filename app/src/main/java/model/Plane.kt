@@ -4,13 +4,12 @@ import android.content.Context
 import view.RectView
 
 class Plane(private val context: Context) {
-    private val customRectangleList: ArrayList<RectView> = arrayListOf()
+    private val customRectangleList: ArrayList<Rect> = arrayListOf()
 
-    fun createRectanglePaint(): RectView {
+    fun createRectanglePaint(): Rect {
         val rect = RectFactory.makeRect()
-        val rectView = RectView(context, rect)
-        customRectangleList.add(rectView)
-        return rectView
+        customRectangleList.add(rect)
+        return rect
     }
 
     fun getRectCount(): Int {
@@ -22,23 +21,14 @@ class Plane(private val context: Context) {
         return if (indexOfRectangle == -1) {
             null
         } else {
-            customRectangleList[indexOfRectangle].rect
-        }
-    }
-
-    fun getCustomRectangleViewByPosition(x: Float, y: Float): RectView? {
-        val indexOfRectangle = checkIsInCustomRectangleArea(x, y)
-        return if (indexOfRectangle == -1) {
-            null
-        } else {
             customRectangleList[indexOfRectangle]
         }
     }
 
     fun checkIsInCustomRectangleArea(x: Float, y: Float): Int {
         customRectangleList.map {
-            if (it.rect.point.xPos <= x && it.rect.point.xPos + it.rect.size.width >= x) {
-                if (it.rect.point.yPos <= y && it.rect.point.yPos + it.rect.size.height > y) {
+            if (it.point.xPos <= x && it.point.xPos + it.size.width >= x) {
+                if (it.point.yPos <= y && it.point.yPos + it.size.height > y) {
                     return customRectangleList.indexOf(it)
                 }
             }
@@ -47,17 +37,16 @@ class Plane(private val context: Context) {
     }
 
     fun getRectByIndex(index: Int): Rect {
-        return customRectangleList[index].rect
+        return customRectangleList[index]
     }
 
-    fun changeColor(rectView: RectView): BackGroundColor {
+    fun changeColor(rect: Rect){
         val randomColor = BackGroundColor((0..255).random(), (0..255).random(), (0..255).random())
-        customRectangleList.find { it == rectView }?.rect?.backGroundColor?.value = randomColor
-        return randomColor
+        customRectangleList.find { it == rect }?.backGroundColor?.value = randomColor
     }
 
-    fun changeOpacity(rectView: RectView, opacity: Int) {
-        customRectangleList.find { it == rectView }?.rect?.opacity?.value = opacity
+    fun changeOpacity(rect: Rect, opacity: Int) {
+        customRectangleList.find { it == rect }?.opacity?.value = opacity
 
     }
 }
