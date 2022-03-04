@@ -102,7 +102,7 @@ class Canvas(context: Context?, private val contract: Contract.View) : View(cont
         return flag
     }
 
-    override fun decideAlpha(alphaList: MutableList<Int>): MutableList<Int> {
-        return alphaList
+    override fun decideAlpha(alpha: Int): Int {
+        return alpha
     }
 }

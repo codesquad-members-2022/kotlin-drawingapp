@@ -3,8 +3,10 @@ package com.example.kotlin_drawingapp
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.SeekBar
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity(), Contract.View {
     private lateinit var binding: ActivityMainBinding
@@ -21,11 +23,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
         binding.seekBar.setOnSeekBarChangeListener(seekBarListener)
     }
 
-    val seekBarProgress = mutableListOf<Int>()
+    var seekBarProgress = 0
     private val seekBarListener = @SuppressLint("AppCompatCustomView")
     object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            seekBarProgress.add(progress)
+            seekBarProgress = progress
+            Log.d("seekbar", seekBarProgress.toString())
         }
         override fun onStartTrackingTouch(p0: SeekBar?) {
         }
