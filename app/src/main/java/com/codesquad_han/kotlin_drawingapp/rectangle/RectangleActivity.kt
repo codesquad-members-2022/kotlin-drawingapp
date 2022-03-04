@@ -32,7 +32,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
         RECTANGLE_WIDTH = ConvertDPtoPX(this, 150)
         RECTANGLE_HEIGHT = ConvertDPtoPX(this, 120)
-
         Log.d("AppTest", "${this.window.decorView.height}")
         Log.d("AppTest", "MainActivity/ ${RECTANGLE_WIDTH}, ${RECTANGLE_HEIGHT}")
 
@@ -53,6 +52,12 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     initPresenter(rectangleFactory)
                 }
             })
+        }
+
+        // 커스텀뷰 에서 터치이벤트 전달 & 테두리 페인트 초기화
+        binding.rectangleDrawingView?.let {
+            it.drawingViewInit()
+            it.setClickListener(this)
         }
 
         setBtnMakeRectangle()

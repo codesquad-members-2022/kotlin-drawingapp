@@ -4,10 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.model.Rectangle
 
 class RectangleDrawingView @JvmOverloads constructor(
@@ -18,6 +21,12 @@ class RectangleDrawingView @JvmOverloads constructor(
     private var rectangleList = mutableListOf<Rectangle>()
 
     private var paint = Paint()
+    private var strokePaint = Paint()
+    private lateinit var clickListener: RectangleViewClickInterface
+
+    fun setClickListener(listener: RectangleViewClickInterface) {
+        this.clickListener = listener
+    }
 
     override fun onDraw(canvas: Canvas) {
         rectangleList.forEach { rectangle ->
@@ -37,23 +46,66 @@ class RectangleDrawingView @JvmOverloads constructor(
                 paint
             )
 
+            selectedRectangle?.let {
+                if (rectangle.id == it.id) {
+                    canvas.drawRect(
+                        rectangle.point.x.toFloat(),
+                        rectangle.point.y.toFloat(),
+                        (rectangle.point.x + rectangle.size.width).toFloat(),
+                        (rectangle.point.y + rectangle.size.height).toFloat(),
+                        strokePaint
+                    )
+                }
+            }
+
             Log.d("AppTest", "RectangleDrawingView/ ${rectangle.toString()}")
         }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val currentPoint = PointF(event.x, event.y)
 
         // 클릭 리스너 사용해서 액티비티 연결하기
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                checkTouchPoint(currentPoint.x, currentPoint.y)
+            }
+        }
 
         return true
     }
 
-    fun drawRectangle(updatedRectangleList : MutableList<Rectangle>){
+    fun drawingViewInit() {
+        strokePaint.strokeWidth = 10f
+        strokePaint.style = Paint.Style.STROKE
+        strokePaint.color = ContextCompat.getColor(context, R.color.selected)
+    }
+
+    fun drawRectangle(updatedRectangleList: MutableList<Rectangle>) {
         rectangleList = updatedRectangleList
         invalidate()
     }
 
+    fun checkTouchPoint(touchX: Float, touchY: Float) {
+        var selected = false
+        for (i in rectangleList.size - 1 downTo 0) {
+            if (touchX >= rectangleList[i].point.x
+                && touchX <= rectangleList[i].point.x + rectangleList[i].size.width
+                && touchY >= rectangleList[i].point.y
+                && touchY <= rectangleList[i].point.y + rectangleList[i].size.height
+            ) {
+                selectedRectangle = rectangleList[i]
+                selected = true
+                break
+            }
+        }
 
+        if(!selected){
+            selectedRectangle = null
+        }
+
+        invalidate()
+    }
 
 
 }
