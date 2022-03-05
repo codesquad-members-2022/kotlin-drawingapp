@@ -1,15 +1,11 @@
 package com.codesquard.kotlin_drawingapp
 
-class Plane : RectangleListener {
+class Plane(private val listener: RectangleListener) {
+    private val rectangleFactory = RectangleFactory()
     private val rectangleList = mutableListOf<Rectangle>()
 
-    override fun onCreateRectangle(newRect: Rectangle) {
-        rectangleList.add(newRect)
+    fun createNewRectangle() {
+        rectangleList.add(rectangleFactory.getInstance())
+        listener.onCreateRectangle(rectangleList[rectangleList.size - 1])
     }
-
-    fun getNewRect(): Rectangle {
-        RectangleModel(this).createNewRectangle()
-        return rectangleList[rectangleList.size - 1]
-    }
-
 }
