@@ -7,20 +7,33 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 
-class CustomView(context: Context, attr:AttributeSet) : View(context, attr) {
+class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
+
+    private val rectangleList = mutableListOf<Rectangle>()
+
+    fun addNewRect(newRect: Rectangle) {
+        rectangleList.add(newRect)
+    }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        drawRectangle(rectangleList, canvas)
+    }
 
-        val paint = Paint()
-        val alpha = rectangle.getAlpha()
-        val r = rectangle.getColor()[0]
-        val g = rectangle.getColor()[1]
-        val b = rectangle.getColor()[2]
-        paint.color = Color.argb(alpha, r, g, b)
+    private fun drawRectangle(rectangleList: MutableList<Rectangle>, canvas: Canvas?) {
+        rectangleList.forEach {
+            val paint = Paint()
+            val alpha = it.getAlpha()
+            val r = it.getColor()[0]
+            val g = it.getColor()[1]
+            val b = it.getColor()[2]
+            paint.color = Color.argb(alpha, r, g, b)
 
-        val x = rectangle.getPoint()[0]
-        val y = rectangle.getPoint()[1]
-        canvas?.drawRect(x, y, 150f + x, 120f + y, paint)
+            val x = it.getPoint()[0]
+            val y = it.getPoint()[1]
+            val width = it.getSize()[0] + x
+            val height = it.getSize()[1] + y
+            canvas?.drawRect(x, y, width, height, paint)
+        }
     }
 }

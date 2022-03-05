@@ -15,8 +15,8 @@ class RectangleFactory {
     }
 
     private fun setRectanglePoint() {
-        val pointX = (300..900).random().toFloat()
-        val pointY = (300..900).random().toFloat()
+        val pointX = (0..1500).random().toFloat()
+        val pointY = (100..1200).random().toFloat()
         rectangle.setPoint(pointX, pointY)
     }
 
