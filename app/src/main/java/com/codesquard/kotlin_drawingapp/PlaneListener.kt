@@ -6,6 +6,6 @@ interface PlaneListener {
         fun onTasksLoaded()
     }
 
-    fun onCreateRectangle(): RectangleViewModel
+    fun onCreateRectangle(): Rectangle
 
 }
