@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 
 class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
@@ -34,6 +35,14 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
             val width = it.getSize()[0] + x
             val height = it.getSize()[1] + y
             canvas?.drawRect(x, y, width, height, paint)
+
+            if (it.getStatus()) {
+                val strokePaint = Paint()
+                strokePaint.style = Paint.Style.STROKE
+                strokePaint.color = Color.rgb(r, g, b)
+                strokePaint.strokeWidth = 10f
+                canvas?.drawRect(x, y, width, height, strokePaint)
+            }
         }
     }
 }

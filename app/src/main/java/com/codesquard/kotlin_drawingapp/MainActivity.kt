@@ -1,6 +1,8 @@
 package com.codesquard.kotlin_drawingapp
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +32,21 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     override fun showRectangle(newRect: Rectangle) {
         customView.addNewRect((newRect))
         customView.invalidate()
+    }
+
+    override fun showSelectedRectangle() {
+        customView.invalidate()
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val x = event?.x ?:0f
+        val y = event?.y ?:0f
+
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            presenter.selectRectangle(x, y)
+        }
+
+        return super.onTouchEvent(event)
     }
 
 }

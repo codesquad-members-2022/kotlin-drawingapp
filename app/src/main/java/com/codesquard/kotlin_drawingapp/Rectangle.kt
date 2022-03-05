@@ -64,6 +64,7 @@ class Rectangle {
     private lateinit var point: Array<Float>
     private lateinit var size: Array<Int>
     private lateinit var color: Array<Int>
+    private var isSelected: Boolean = false
     private var alpha: Int = 0
 
     fun setPoint(x: Float, y: Float) {
@@ -93,6 +94,12 @@ class Rectangle {
     fun setID(id: String) {
         this.id = id
     }
+
+    fun isSelected(boolean: Boolean = false) {
+        this.isSelected = boolean
+    }
+
+    fun getStatus() = isSelected
 
     fun getID() = id
 
