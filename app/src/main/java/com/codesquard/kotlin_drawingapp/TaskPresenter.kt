@@ -4,6 +4,7 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     RectangleListener {
 
     private val plane = Plane(this)
+    private var selectedRectIndex = -1
 
     override fun addNewRectangle() {
         plane.createNewRectangle()
@@ -26,14 +27,35 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     }
 
     override fun onSelectRectangle(index: Int) {
-        taskView.showSelectedRectangle(index)
+        selectedRectIndex = index
         if (index > -1) {
             taskView.updateRect()
         }
+        getRectAlpha()
+        getRectColor()
+        taskView.showSelectedRectangle()
     }
 
     override fun onUpdateRectangle() {
-        taskView.showUpdatedRect()
+        getRectColor()
+        taskView.showSelectedRectangle()
+    }
+
+    private fun getRectColor() {
+        if (selectedRectIndex == -1) {
+            return taskView.showRectColor()
+        }
+        val color = plane.getRectangle(selectedRectIndex).getColor()
+        val colorText = "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
+        return taskView.showRectColor(colorText)
+    }
+
+    private fun getRectAlpha() {
+        if (selectedRectIndex == -1) {
+            return taskView.showRectAlpha()
+        }
+        val alpha = plane.getRectangle(selectedRectIndex).getAlpha() / 25
+        return taskView.showRectAlpha(alpha.toFloat())
     }
 
 }

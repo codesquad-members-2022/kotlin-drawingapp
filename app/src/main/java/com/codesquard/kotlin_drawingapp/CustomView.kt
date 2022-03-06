@@ -5,13 +5,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 
 class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
 
     private val rectangleList = mutableListOf<Rectangle>()
-    private var selectedRectIndex = -1
 
     fun addNewRect(newRect: Rectangle) {
         rectangleList.add(newRect)
@@ -46,27 +44,4 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
             }
         }
     }
-
-    fun getSelectedRect() = selectedRectIndex
-
-    fun setSelectedRect(index: Int = -1) {
-        selectedRectIndex = index
-    }
-
-    fun getRectColor(): String {
-        if (selectedRectIndex == -1) {
-            return ""
-        }
-        val color = rectangleList[selectedRectIndex].getColor()
-        return "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
-    }
-
-    fun getRectAlpha(): Float {
-        if (selectedRectIndex == -1) {
-            return 0f
-        }
-        val alpha = rectangleList[selectedRectIndex].getAlpha() / 25
-        return alpha.toFloat()
-    }
-
 }

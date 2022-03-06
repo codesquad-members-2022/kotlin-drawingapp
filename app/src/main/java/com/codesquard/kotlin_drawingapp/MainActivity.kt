@@ -1,7 +1,6 @@
 package com.codesquard.kotlin_drawingapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -57,30 +56,21 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView.invalidate()
     }
 
-    override fun showSelectedRectangle(index: Int) {
-        customView.setSelectedRect(index)
-        showUpdatedRect()
+    override fun showSelectedRectangle() {
+        customView.invalidate()
     }
 
-    private fun showRectColor() {
-        val color = customView.getRectColor()
+    override fun showRectColor(color: String) {
         backgroundBtn.text = color
     }
 
-    private fun showRectAlpha() {
-        val alpha = customView.getRectAlpha()
+    override fun showRectAlpha(alpha: Float) {
         alphaSlider.value = alpha
     }
 
     override fun updateRect() {
         onClickColorBtn()
         onSlideAlpha()
-    }
-
-    override fun showUpdatedRect() {
-        showRectAlpha()
-        showRectColor()
-        customView.invalidate()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

@@ -5,11 +5,13 @@ interface TaskContract {
     interface TaskView {
         fun showRectangle(newRect: Rectangle)
 
-        fun showSelectedRectangle(index: Int = -1)
-
-        fun showUpdatedRect()
+        fun showSelectedRectangle()
 
         fun updateRect()
+
+        fun showRectColor(color: String = "")
+
+        fun showRectAlpha(alpha: Float = 0f)
 
     }
 
