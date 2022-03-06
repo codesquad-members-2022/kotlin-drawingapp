@@ -1,7 +1,5 @@
 package com.example.kotlindrawingapp.square
 
-import android.util.Log
-
 data class RGB(
     val red: Int,
     val green: Int,

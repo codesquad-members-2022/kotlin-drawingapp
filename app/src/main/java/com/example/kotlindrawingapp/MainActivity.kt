@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
     private lateinit var presenter: Presenter
     private lateinit var colorTextView: TextView
     private lateinit var seekBar: SeekBar
-    private lateinit var container: CustomCanvas
+    private lateinit var customView: CustomCanvas
     private lateinit var button: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,14 +22,23 @@ class MainActivity : AppCompatActivity(), Contract.View {
         setContentView(R.layout.activity_main)
 
         button = findViewById(R.id.btn_square)
-        container = findViewById(R.id.container_canvas)
+        customView = findViewById(R.id.container_canvas)
         colorTextView = findViewById(R.id.tv_color)
         seekBar = findViewById(R.id.seekBar_alpha)
         val repository = SquareRepository()
-        presenter = Presenter(this, repository, container)
+        presenter = Presenter(this, repository)
+
+        presenter.plane.observe(this) {
+            customView.drawRectangle(it)
+        }
+
+        presenter.selectedSquare.observe(this) {
+            colorTextView.text = it?.rgb?.decimalToHex() ?: "NONE"
+            seekBar.progress = it?.alpha?.alpha ?: 0
+        }
 
         button.setOnClickListener {
-            presenter.drawRectangle()
+            presenter.loadRectangle()
         }
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -41,10 +50,5 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-    }
-
-    override fun updateBoard(color: String, alpha: Int) {
-        colorTextView.text = color
-        seekBar.progress = alpha
     }
 }
