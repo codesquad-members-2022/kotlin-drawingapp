@@ -14,17 +14,32 @@ class Plane(private val listener: RectangleListener) {
         val reversedRectList = rectangleList.reversed()
         reversedRectList.forEach {
             it.isSelected()
-            listener.onSelectNoRectangle()
+            listener.onSelectRectangle()
         }
         reversedRectList.forEachIndexed { index, rect ->
             val rectFirstX = rect.getPoint()[0] + 44
             val rectFirstY = rect.getPoint()[1] + 7
             val rectSecondX = rectFirstX + rect.getSize()[0]
             val rectSecondY = rectFirstY + rect.getSize()[1]
+            val notReversedIndex = reversedRectList.size - 1 - index
 
             if ((x in rectFirstX..rectSecondX) && (y in rectFirstY..rectSecondY)) {
                 rect.isSelected(true)
-                listener.onSelectRectangle(index)
+                listener.onSelectRectangle(notReversedIndex)
+                return
+            } else {
+                listener.onSelectRectangle()
+            }
+        }
+    }
+
+    fun getRectangle(index: Int) = rectangleList[index]
+
+    fun updateAlpha(value: Float) {
+        rectangleList.forEach {
+            if (it.getStatus()) {
+                it.setAlpha((value * 25).toInt())
+                listener.onUpdateRectangle()
                 return
             }
         }

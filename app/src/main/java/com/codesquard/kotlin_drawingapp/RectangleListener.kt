@@ -4,8 +4,8 @@ interface RectangleListener {
 
     fun onCreateRectangle(newRect: Rectangle)
 
-    fun onSelectRectangle(index: Int)
+    fun onSelectRectangle(index: Int = -1)
 
-    fun onSelectNoRectangle()
+    fun onUpdateRectangle()
 
 }

@@ -11,6 +11,7 @@ import android.view.View
 class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
 
     private val rectangleList = mutableListOf<Rectangle>()
+    private var selectedRectIndex = -1
 
     fun addNewRect(newRect: Rectangle) {
         rectangleList.add(newRect)
@@ -46,19 +47,26 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
         }
     }
 
-    fun getRectColor(index: Int = -1): String {
-        if (index == -1) {
+    fun getSelectedRect() = selectedRectIndex
+
+    fun setSelectedRect(index: Int = -1) {
+        selectedRectIndex = index
+    }
+
+    fun getRectColor(): String {
+        if (selectedRectIndex == -1) {
             return ""
         }
-        val color = rectangleList[index].getColor()
+        val color = rectangleList[selectedRectIndex].getColor()
         return "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
     }
 
-    fun getRectAlpha(index: Int = -1): Float {
-        if (index == -1) {
+    fun getRectAlpha(): Float {
+        if (selectedRectIndex == -1) {
             return 0f
         }
-        val alpha = rectangleList[index].getAlpha() / 25
+        val alpha = rectangleList[selectedRectIndex].getAlpha() / 25
         return alpha.toFloat()
     }
+
 }

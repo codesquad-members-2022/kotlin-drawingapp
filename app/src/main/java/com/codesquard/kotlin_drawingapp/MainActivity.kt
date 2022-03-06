@@ -1,6 +1,7 @@
 package com.codesquard.kotlin_drawingapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,15 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onClickRectBtn()
     }
 
+    private fun onSlideAlpha() {
+        alphaSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {}
+            override fun onStopTrackingTouch(slider: Slider) {
+                presenter.changeAlphaValue(slider.value)
+            }
+        })
+    }
+
     private fun onClickRectBtn() {
         firstBtn = findViewById(R.id.create_btn)
         firstBtn.setOnClickListener {
@@ -41,18 +51,29 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView.invalidate()
     }
 
-    override fun showSelectedRectangleOrNoRectangle() {
+    override fun showSelectedRectangle(index: Int) {
+        customView.setSelectedRect(index)
+        showRectAlpha()
+        showRectColor()
         customView.invalidate()
     }
 
-    override fun showRectColor(index: Int) {
-        val color = customView.getRectColor(index)
+    private fun showRectColor() {
+        val color = customView.getRectColor()
         backgroundBtn.text = color
     }
 
-    override fun showRectAlpha(index: Int) {
-        val alpha = customView.getRectAlpha(index)
+    private fun showRectAlpha() {
+        val alpha = customView.getRectAlpha()
         alphaSlider.value = alpha
+    }
+
+    override fun updateRect() {
+        onSlideAlpha()
+    }
+
+    override fun showUpdatedRect() {
+        customView.invalidate()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

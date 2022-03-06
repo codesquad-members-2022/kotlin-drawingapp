@@ -1,6 +1,6 @@
 package com.codesquard.kotlin_drawingapp
 
-class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presenter,
+class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.Presenter,
     RectangleListener {
 
     private val plane = Plane(this)
@@ -13,20 +13,23 @@ class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presente
         plane.selectRectangle(x, y)
     }
 
+    override fun changeAlphaValue(value: Float) {
+        plane.updateAlpha(value)
+    }
+
     override fun onCreateRectangle(newRect: Rectangle) {
         taskView.showRectangle(newRect)
     }
 
     override fun onSelectRectangle(index: Int) {
-        taskView.showSelectedRectangleOrNoRectangle()
-        taskView.showRectColor(index)
-        taskView.showRectAlpha(index)
+        taskView.showSelectedRectangle(index)
+        if (index > -1) {
+            taskView.updateRect()
+        }
     }
 
-    override fun onSelectNoRectangle() {
-        taskView.showSelectedRectangleOrNoRectangle()
-        taskView.showRectColor()
-        taskView.showRectAlpha()
+    override fun onUpdateRectangle() {
+        taskView.showUpdatedRect()
     }
 
 }
