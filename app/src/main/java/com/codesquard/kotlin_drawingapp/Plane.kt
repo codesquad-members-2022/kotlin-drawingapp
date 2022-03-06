@@ -10,6 +10,10 @@ class Plane(private val listener: RectangleListener) {
         listener.onCreateRectangle(newRect)
     }
 
+    fun getRectangle(index: Int) = rectangleList[index]
+
+    fun countRectangle() = rectangleList.size
+
     fun selectRectangle(x: Float, y: Float) {
         val reversedRectList = rectangleList.reversed()
         reversedRectList.forEach {
@@ -32,8 +36,6 @@ class Plane(private val listener: RectangleListener) {
             }
         }
     }
-
-    fun getRectangle(index: Int) = rectangleList[index]
 
     fun updateAlpha(value: Float) {
         rectangleList.forEach {
