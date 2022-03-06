@@ -7,7 +7,9 @@ interface TaskContract {
 
         fun showSelectedRectangleOrNoRectangle()
 
-        fun showBackgroundColor(index: Int = -1)
+        fun showRectColor(index: Int = -1)
+
+        fun showRectAlpha(index: Int = -1)
     }
 
     interface Presenter {

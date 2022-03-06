@@ -40,7 +40,7 @@ class RectangleFactory {
     }
 
     fun setRectangleAlpha() {
-        val alpha = (100..1000).random()
+        val alpha = (0..255).random()
         rectangle.setAlpha(alpha)
     }
 

@@ -5,12 +5,14 @@ import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.slider.Slider
 
 class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private lateinit var firstBtn: Button
     private lateinit var mainLayout: ConstraintLayout
     private lateinit var backgroundBtn: Button
+    private lateinit var alphaSlider: Slider
     private lateinit var presenter: TaskContract.Presenter
     private lateinit var customView: CustomView
 
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         mainLayout = findViewById(R.id.main_layout)
         customView = findViewById(R.id.customView)
         backgroundBtn = findViewById(R.id.button_background)
+        alphaSlider = findViewById(R.id.slider_alpha)
         presenter = TaskPresenter(this)
 
         onClickRectBtn()
@@ -42,9 +45,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView.invalidate()
     }
 
-    override fun showBackgroundColor(index: Int) {
-        val color = customView.getBackgroundColor(index)
+    override fun showRectColor(index: Int) {
+        val color = customView.getRectColor(index)
         backgroundBtn.text = color
+    }
+
+    override fun showRectAlpha(index: Int) {
+        val alpha = customView.getRectAlpha(index)
+        alphaSlider.value = alpha
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
