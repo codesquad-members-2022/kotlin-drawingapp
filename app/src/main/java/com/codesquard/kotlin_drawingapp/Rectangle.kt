@@ -32,14 +32,14 @@ class RectangleFactory {
         rectangle.setSize(width, height)
     }
 
-    fun setRectangleColor() {
+    private fun setRectangleColor() {
         val r = (0..255).random()
         val g = (0..255).random()
         val b = (0..255).random()
         rectangle.setColor(r, g, b)
     }
 
-    fun setRectangleAlpha() {
+    private fun setRectangleAlpha() {
         val alpha = (0..255).random()
         rectangle.setAlpha(alpha)
     }
