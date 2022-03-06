@@ -5,7 +5,7 @@ interface TaskContract {
     interface TaskView {
         fun showRectangle(newRect: Rectangle)
 
-        fun showSelectedRectangle()
+        fun showSelectedRectangleOrNoRectangle()
     }
 
     interface Presenter {

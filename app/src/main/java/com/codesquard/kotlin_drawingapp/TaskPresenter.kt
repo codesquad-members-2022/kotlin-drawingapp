@@ -1,8 +1,5 @@
 package com.codesquard.kotlin_drawingapp
 
-import android.os.Build.VERSION_CODES.P
-import android.util.Log
-
 class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presenter,
     RectangleListener {
 
@@ -21,7 +18,11 @@ class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presente
     }
 
     override fun onSelectRectangle() {
-        taskView.showSelectedRectangle()
+        taskView.showSelectedRectangleOrNoRectangle()
+    }
+
+    override fun onSelectNoRectangle() {
+        taskView.showSelectedRectangleOrNoRectangle()
     }
 
 }

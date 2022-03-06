@@ -50,7 +50,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="32dp"
       android:layout_marginStart="16dp"
-      android:text="배경색"
+      android:text="@string/배경색"
       app:layout_constraintBottom_toTopOf="@+id/button_background"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
@@ -60,7 +60,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="15dp"
       android:layout_marginStart="16dp"
-      android:text="투명도"
+      android:text="@string/투명도"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/button_background"/>
     <com.google.android.material.slider.Slider

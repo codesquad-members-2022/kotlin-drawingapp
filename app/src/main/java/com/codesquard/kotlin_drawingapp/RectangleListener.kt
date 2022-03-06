@@ -6,4 +6,6 @@ interface RectangleListener {
 
     fun onSelectRectangle()
 
+    fun onSelectNoRectangle()
+
 }

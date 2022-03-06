@@ -14,6 +14,7 @@ class Plane(private val listener: RectangleListener) {
         val reversedRectList = rectangleList.reversed()
         reversedRectList.forEach {
             it.isSelected()
+            listener.onSelectNoRectangle()
         }
         reversedRectList.forEach {
             val rectFirstX = it.getPoint()[0] + 44
