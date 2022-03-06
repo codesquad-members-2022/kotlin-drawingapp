@@ -10,8 +10,9 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private lateinit var firstBtn: Button
     private lateinit var mainLayout: ConstraintLayout
-    lateinit var presenter: TaskContract.Presenter
-    lateinit var customView: CustomView
+    private lateinit var backgroundBtn: Button
+    private lateinit var presenter: TaskContract.Presenter
+    private lateinit var customView: CustomView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +20,13 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
         mainLayout = findViewById(R.id.main_layout)
         customView = findViewById(R.id.customView)
+        backgroundBtn = findViewById(R.id.button_background)
         presenter = TaskPresenter(this)
 
-        onClickButton()
+        onClickRectBtn()
     }
 
-    private fun onClickButton() {
+    private fun onClickRectBtn() {
         firstBtn = findViewById(R.id.create_btn)
         firstBtn.setOnClickListener {
             presenter.addNewRectangle()
@@ -38,6 +40,11 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     override fun showSelectedRectangleOrNoRectangle() {
         customView.invalidate()
+    }
+
+    override fun showBackgroundColor(index: Int) {
+        val color = customView.getBackgroundColor(index)
+        backgroundBtn.text = color
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

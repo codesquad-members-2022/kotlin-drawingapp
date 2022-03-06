@@ -17,12 +17,14 @@ class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presente
         taskView.showRectangle(newRect)
     }
 
-    override fun onSelectRectangle() {
+    override fun onSelectRectangle(index: Int) {
         taskView.showSelectedRectangleOrNoRectangle()
+        taskView.showBackgroundColor(index)
     }
 
     override fun onSelectNoRectangle() {
         taskView.showSelectedRectangleOrNoRectangle()
+        taskView.showBackgroundColor()
     }
 
 }

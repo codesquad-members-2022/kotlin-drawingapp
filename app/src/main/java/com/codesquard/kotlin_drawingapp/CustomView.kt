@@ -45,4 +45,12 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
             }
         }
     }
+
+    fun getBackgroundColor(index: Int = -1): String {
+        if (index == -1) {
+            return ""
+        }
+        val color = rectangleList[index].getColor()
+        return "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
+    }
 }

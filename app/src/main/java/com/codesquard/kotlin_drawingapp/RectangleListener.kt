@@ -4,7 +4,7 @@ interface RectangleListener {
 
     fun onCreateRectangle(newRect: Rectangle)
 
-    fun onSelectRectangle()
+    fun onSelectRectangle(index: Int)
 
     fun onSelectNoRectangle()
 
