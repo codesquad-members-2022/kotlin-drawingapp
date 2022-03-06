@@ -44,4 +44,17 @@ class Plane(private val listener: RectangleListener) {
             }
         }
     }
+
+    fun updateColor() {
+        val r = (0..255).random()
+        val g = (0..255).random()
+        val b = (0..255).random()
+        rectangleList.forEach {
+            if (it.getStatus()) {
+                it.setColor(r, g, b)
+                listener.onUpdateRectangle()
+                return
+            }
+        }
+    }
 }

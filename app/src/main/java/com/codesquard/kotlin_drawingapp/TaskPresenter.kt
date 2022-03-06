@@ -17,6 +17,10 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         plane.updateAlpha(value)
     }
 
+    override fun changeColor() {
+        plane.updateColor()
+    }
+
     override fun onCreateRectangle(newRect: Rectangle) {
         taskView.showRectangle(newRect)
     }

@@ -20,6 +20,8 @@ interface TaskContract {
 
         fun changeAlphaValue(value: Float)
 
+        fun changeColor()
+
     }
 
 }

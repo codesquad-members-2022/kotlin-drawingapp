@@ -30,6 +30,12 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onClickRectBtn()
     }
 
+    private fun onClickColorBtn() {
+        backgroundBtn.setOnClickListener {
+            presenter.changeColor()
+        }
+    }
+
     private fun onSlideAlpha() {
         alphaSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {}
@@ -53,9 +59,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     override fun showSelectedRectangle(index: Int) {
         customView.setSelectedRect(index)
-        showRectAlpha()
-        showRectColor()
-        customView.invalidate()
+        showUpdatedRect()
     }
 
     private fun showRectColor() {
@@ -69,10 +73,13 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     override fun updateRect() {
+        onClickColorBtn()
         onSlideAlpha()
     }
 
     override fun showUpdatedRect() {
+        showRectAlpha()
+        showRectColor()
         customView.invalidate()
     }
 
