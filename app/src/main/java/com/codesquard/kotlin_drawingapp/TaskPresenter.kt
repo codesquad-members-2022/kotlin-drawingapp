@@ -6,35 +6,22 @@ import android.util.Log
 class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presenter,
     RectangleListener {
 
-    private val rectangleList = mutableListOf<Rectangle>()
-
     private val plane = Plane(this)
 
     override fun addNewRectangle() {
-        val newRect = getNewRectangle()
-        taskView.showRectangle(newRect)
+        plane.createNewRectangle()
     }
 
     override fun selectRectangle(x: Float, y: Float) {
-        getSelectedRect(x, y)
-        taskView.showSelectedRectangle()
+        plane.selectRectangle(x, y)
     }
 
     override fun onCreateRectangle(newRect: Rectangle) {
-        rectangleList.add(newRect)
+        taskView.showRectangle(newRect)
     }
 
     override fun onSelectRectangle() {
         taskView.showSelectedRectangle()
-    }
-
-    private fun getNewRectangle(): Rectangle {
-        plane.createNewRectangle()
-        return rectangleList[rectangleList.size - 1]
-    }
-
-    private fun getSelectedRect(x: Float, y: Float) {
-        plane.selectRectangle(x, y)
     }
 
 }

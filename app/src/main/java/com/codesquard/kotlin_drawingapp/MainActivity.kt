@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     override fun showRectangle(newRect: Rectangle) {
-        customView.addNewRect((newRect))
+        customView.addNewRect(newRect)
         customView.invalidate()
     }
 

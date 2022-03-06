@@ -1,8 +1,7 @@
 package com.codesquard.kotlin_drawingapp
 
-import android.util.Log
-
 class Plane(private val listener: RectangleListener) {
+
     private val rectangleList = mutableListOf<Rectangle>()
 
     fun createNewRectangle() {
