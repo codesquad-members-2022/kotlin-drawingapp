@@ -1,41 +1,48 @@
-package com.example.kotlin_drawingapp
+package com.example.kotlin_drawingapp.model.source
 
 import com.example.kotlin_drawingapp.model.Rectangle
 import com.example.kotlin_drawingapp.model.RectangleBorder
-import com.example.kotlin_drawingapp.model.RectangleFactory
 
-class Plane {
+class DefaultPlaneRepository : PlaneRepository {
     private val rectangleList = mutableListOf<Rectangle>()
     private val rectangleBorderList = mutableListOf<RectangleBorder>()
+    private var currentSelectedRectangle: Rectangle? = null
 
-    fun getRectangleCount(): Int {
+    override fun getCurrentSelectedRectangle(): Rectangle? {
+        return currentSelectedRectangle
+    }
+
+    override fun getRectangleCount(): Int {
         return rectangleList.size
     }
 
-    fun createRectangle() {
-        rectangleList.add(RectangleFactory.create())
+    override fun saveCurrentSelectedRectangle(rectangle: Rectangle?) {
+        currentSelectedRectangle = rectangle
     }
 
-    fun createRectangleBorder(rectangle: Rectangle) {
-        val border = RectangleBorder(rectangle.size, rectangle.point)
+    override fun saveRectangle(rectangle: Rectangle) {
+        rectangleList.add(rectangle)
+    }
+
+    override fun saveRectangleBorder(border: RectangleBorder) {
         if (!rectangleBorderList.contains(border)) {
             rectangleBorderList.add(border)
         }
     }
 
-    fun clearRectangleBorder() {
+    override fun clearRectangleBorder() {
         rectangleBorderList.clear()
     }
 
-    fun getAllRectangle(): List<Rectangle> {
+    override fun getAllRectangles(): List<Rectangle> {
         return rectangleList.toList()
     }
 
-    fun getAllRectangleBorder(): List<RectangleBorder> {
+    override fun getAllRectangleBorders(): List<RectangleBorder> {
         return rectangleBorderList.toList()
     }
 
-    fun modifyRectangle(target: Rectangle, replacement: Rectangle) {
+    override fun modifyRectangle(target: Rectangle, replacement: Rectangle) {
         for (index in 0 until rectangleList.size) {
             if (rectangleList[index] == target) {
                 rectangleList[index] = replacement
@@ -44,11 +51,11 @@ class Plane {
         }
     }
 
-    fun getRectangleByIndex(index: Int): Rectangle {
+    override fun getRectangleByIndex(index: Int): Rectangle {
         return rectangleList[index]
     }
 
-    fun getRectangleByPosition(x: Int, y: Int): Rectangle? {
+    override fun getRectangleByPosition(x: Int, y: Int): Rectangle? {
         for (index in rectangleList.size-1 downTo 0) {
             if (rectangleList[index].point.x <= x && rectangleList[index].point.x + rectangleList[index].size.width >= x &&
                 rectangleList[index].point.y <= y && rectangleList[index].point.y + rectangleList[index].size.height >= y

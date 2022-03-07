@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.Rectangle
 import com.example.kotlin_drawingapp.model.RectangleBorder
+import com.example.kotlin_drawingapp.model.source.DefaultPlaneRepository
 
 private const val TAG = "MainActivity"
 
@@ -22,7 +23,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        presenter = MainPresenter(this)
+        val planeRepository = DefaultPlaneRepository()
+        presenter = MainPresenter(planeRepository, this)
         drawView = findViewById(R.id.drawView)
         tvRgb = findViewById(R.id.tv_background_color)
         seekBarAlpha = findViewById(R.id.seekBar)

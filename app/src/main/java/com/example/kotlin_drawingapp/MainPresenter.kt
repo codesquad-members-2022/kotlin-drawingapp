@@ -1,28 +1,29 @@
 package com.example.kotlin_drawingapp
 
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.RectangleBorder
+import com.example.kotlin_drawingapp.model.RectangleFactory
+import com.example.kotlin_drawingapp.model.source.PlaneRepository
 
 class MainPresenter(
+    private val planeRepository: PlaneRepository,
     private val mainView: MainContract.View
 ) : MainContract.Presenter {
 
-    private val plane = Plane()
-    private var currentSelectedRectangle: Rectangle? = null
     override fun createRectangle() {
-        plane.createRectangle()
-        mainView.showRectangle(plane.getAllRectangle())
+        planeRepository.saveRectangle(RectangleFactory.create())
+        mainView.showRectangle(planeRepository.getAllRectangles())
     }
 
     override fun selectRectangle(x: Float, y: Float) {
-        val rect = plane.getRectangleByPosition(x.toInt(), y.toInt())
+        val rect = planeRepository.getRectangleByPosition(x.toInt(), y.toInt())
         if (rect == null) {
-            plane.clearRectangleBorder()
+            planeRepository.clearRectangleBorder()
         } else {
-            plane.createRectangleBorder(rect)
+            planeRepository.saveRectangleBorder(RectangleBorder(rect.size, rect.point))
         }
 
-        currentSelectedRectangle = rect
-        val borderList = plane.getAllRectangleBorder()
+        planeRepository.saveCurrentSelectedRectangle(rect)
+        val borderList = planeRepository.getAllRectangleBorders()
         mainView.showRectangleBorder(borderList)
         rect?.let {
             mainView.showRectangleInfo(rect.rgb, rect.alpha)
@@ -30,13 +31,13 @@ class MainPresenter(
     }
 
     override fun setCurrentSelectedRectangleAlpha(alpha: Int) {
-        val tmpCurrentSelectedRectangle = currentSelectedRectangle
+        val tmpCurrentSelectedRectangle = planeRepository.getCurrentSelectedRectangle()
         tmpCurrentSelectedRectangle?.let {
             val replacement = tmpCurrentSelectedRectangle.copy()
             replacement.alpha = alpha
-            currentSelectedRectangle = replacement
-            plane.modifyRectangle(tmpCurrentSelectedRectangle, replacement)
-            mainView.showRectangle(plane.getAllRectangle())
+            planeRepository.saveCurrentSelectedRectangle(replacement)
+            planeRepository.modifyRectangle(tmpCurrentSelectedRectangle, replacement)
+            mainView.showRectangle(planeRepository.getAllRectangles())
         }
     }
 }
