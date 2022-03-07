@@ -1,76 +1,38 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
-import android.util.Log
-import android.widget.ImageView
-import com.codesquad_han.kotlin_drawingapp.model.Plane
-import com.codesquad_han.kotlin_drawingapp.model.RectangleImageviewData
+import androidx.lifecycle.MutableLiveData
+import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
+import com.codesquad_han.kotlin_drawingapp.model.Rectangle
 
-class RectanglePresenter(val plane: Plane, val rectangleView: RectangleContract.View) :
+class RectanglePresenter(
+    val rectangleRepository: RectangleRepository,
+    val rectangleView: RectangleContract.View
+) :
     RectangleContract.Presenter {
+
+    override var liveRectangleList = MutableLiveData<MutableList<Rectangle>>()
 
     init {
         rectangleView.presenter = this
     }
 
     override fun start() {
-        generateRectangle()
+        addRectangle()
     }
 
-    override fun generateRectangle() {
-        val rectangle = plane.generateRectangle()
-
-        val red = rectangle.getBackgroundColor().r
-        val green = rectangle.getBackgroundColor().g
-        val blue = rectangle.getBackgroundColor().b
-        val transparency = rectangle.getTransparency().transparency
-
-        rectangleView.showRectangle(
-            rectangle.getSize().width,
-            rectangle.getSize().height,
-            rectangle.getPoint().x,
-            rectangle.getPoint().y,
-            getColorString(transparency, red, green, blue)
-        )
+    override fun addRectangle() {  // 사각형 추가 후 라이브데이터 갱신
+        rectangleRepository.addRectangle()
+        liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 
-    fun getColorString(alpha: Int, r: Int, g: Int, b: Int): String {  // 수정하기 형식에 안맞게 나오는 경우도 존재!!
-        var alphaStr = ""
-        when(alpha){ // 투명도 범위 10개로 나눔
-            0 -> alphaStr = "00"
-            1 -> alphaStr = "1A"
-            2 -> alphaStr = "33"
-            3 -> alphaStr = "4D"
-            4 -> alphaStr = "66"
-            5 -> alphaStr = "80"
-            6 -> alphaStr = "99"
-            7 -> alphaStr = "B3"
-            8 -> alphaStr = "CC"
-            9 -> alphaStr = "E6"
-            10 -> alphaStr = "FF"
-        }
-
-        var red = Integer.toHexString(r)
-        var green = Integer.toHexString(g)
-        var blue = Integer.toHexString(b)
-
-        if(red.length == 1) red = "0" + red
-        if(green.length == 1) green = "0" + green
-        if(blue.length == 1) blue = "0" + blue
-
-        Log.d("AppTest", "${alphaStr}${red}${green}${blue}")
-        return "${alphaStr}${red}${green}${blue}"
+    override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신
+        rectangleRepository.updateTransparency(id, transparency)
+        liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 
-    override fun saveImageView(imageView: ImageView) {
-        plane.saveImageView(imageView)
-    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun selectRectangleImageView(imageView: ImageView) {
-        getRectangleImageViewList(plane.selectImageView(imageView))
+    override fun getRectangleList() { // 사각형 추가, 투명도 갱신한 리스트 전달, 라이브데이터 도입 전에 변화된 사각형 리스트를 가져오기 위한 함수
+        rectangleView.showRectangle(rectangleRepository.getRectangleList())
     }
-
-    override fun getRectangleImageViewList(rectangleList: ArrayList<RectangleImageviewData>) {
-        rectangleView.showSelectedRectangle(rectangleList)
-    }
-
 }

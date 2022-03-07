@@ -7,17 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".rectangle.RectangleActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayoutDraw"
+    <com.codesquad_han.kotlin_drawingapp.rectangle.RectangleDrawingView
+        android:id="@+id/rectangleDrawingView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.75">
-
-
-    </FrameLayout>
+        app:layout_constraintWidth_percent="0.75"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutRightSide"
@@ -36,7 +33,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/gl_v_8"
@@ -126,7 +124,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenGallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.8"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateRectangle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/teal_200"
+            android:text="사진 가져오기"
+            android:enabled="false"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGenerateRectangle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

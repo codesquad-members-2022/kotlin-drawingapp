@@ -1,25 +1,23 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
-import android.widget.ImageView
-
 class Plane(rectangleFactory: RectangleFactory) {
-    private var rectangleArrayList = ArrayList<RectangleImageviewData>()
+    private var rectangleList = mutableListOf<Rectangle>()
     private var rectangleFactory = rectangleFactory
 
-    fun generateRectangle() : Rectangle{
+    fun generateRectangle() {
         val rectangle = rectangleFactory.generateRectangle()
-        rectangleArrayList.add(RectangleImageviewData(rectangle, null, false))
-        return rectangle
+        rectangleList.add(rectangle)
     }
 
-    fun saveImageView(imageView: ImageView){
-        rectangleArrayList[rectangleArrayList.size-1].imageView = imageView
-    }
+    fun returnRectangleList() = rectangleList
 
-    fun selectImageView(imageView: ImageView) : ArrayList<RectangleImageviewData>{
-        rectangleArrayList.forEach {
-            it.selected = it.imageView == imageView
+    fun updateTransparency(id: String, transparency: Int) {
+        rectangleList.forEach {
+            if (it.id == id) {
+                it.transparency.transparency = transparency
+            }
         }
-        return rectangleArrayList
     }
+
+    fun returnRectangleCount() = rectangleList.size
 }
