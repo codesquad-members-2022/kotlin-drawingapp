@@ -2,6 +2,7 @@ package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.provider.MediaStore
 import android.util.AttributeSet
 import android.util.Log
@@ -46,7 +47,14 @@ class RectangleDrawingView @JvmOverloads constructor(
 
             // 사각형에 할당된 이미지 uri가 있다면 그리도록 한다
             rectangle.imageUri?.let {
-                var bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                var bitmap : Bitmap
+                if(Build.VERSION.SDK_INT < 29 ){ //
+                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                }
+                else {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    bitmap = ImageDecoder.decodeBitmap(source)
+                }
                 canvas.drawBitmap(
                     bitmap, null, Rect(
                         rectangle.point.x,
