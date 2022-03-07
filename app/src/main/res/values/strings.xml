@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">DrawingApp</string>
     <string name="rectangle">사각형</string>
+    <string name="background_color">배경색</string>
+    <string name="visibility">투명도</string>
+    <string name="square_visibility">투명도</string>
+    <string name="make_square">사각형</string>
 </resources>

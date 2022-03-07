@@ -1,25 +1,39 @@
 package Data
 
-import Presenter.RandomRectGenerator
+import Presenter.GenerateRectangle
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 
-class RectFactory : RandomRectGenerator {
-    override fun makeRandomRect(): Rectangles {
+class RectFactory : GenerateRectangle {
+    override fun makeRandomRect(): Rectangle {
+        val squareWidth = 150.toFloat()
+        val squareHeight = 150.toFloat()
         val charA = (97..122).random().toChar()
         val charB = (97..122).random().toChar()
         val charC = (97..122).random().toChar()
         val randomID = "$charA$charB$charC"
-        val x = (10..600).random().toFloat()
-        val y = (90..500).random().toFloat()
-        val w = 150.toFloat()
-        val h = 120.toFloat()
+        val x = (0..1000).random().toFloat()
+        val y = (0..1000).random().toFloat()
+        val w = x + squareWidth
+        val h = y + squareHeight
         val r = (0..255).random()
         val g = (0..255).random()
         val b = (0..255).random()
-        val a = (0..255).random()
+        val a = (200..255).random()
         val paint = Paint()
         paint.setARGB(r, g, b, a)
-        return Rectangles(randomID, RectF(x, y, w, h), paint)
+        return Rectangle(randomID, RectF(x, y, w, h), paint)
+    }
+
+    override fun makeRectangleStrokesList(rectangle: Rectangle): Rectangle {
+        val bottom = rectangle.rectangles.bottom
+        val left = rectangle.rectangles.left
+        val right = rectangle.rectangles.right
+        val top = rectangle.rectangles.top
+        val paint = Paint()
+        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.color = Color.WHITE
+        return Rectangle("Stroke", RectF(left, top, right, bottom), paint)
     }
 }
