@@ -1,4 +1,4 @@
-package com.example.kotlin_drawingapp.shapemodel
+package com.example.kotlin_drawingapp.model
 
 import android.graphics.Point
 import android.util.Size
@@ -6,9 +6,9 @@ import android.util.Size
 data class Rectangle(
     val id: String,
     val size: Size,
-    val point: Point,
+    var point: Point,
     val rgb: Color,
-    val alpha: Int
+    var alpha: Int
 ) {
     init {
         if (alpha !in 1..10) throw Exception("1~10사이만 가능합니다.")

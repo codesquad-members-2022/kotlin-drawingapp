@@ -1,4 +1,4 @@
-package com.example.kotlin_drawingapp.shapemodel
+package com.example.kotlin_drawingapp.model
 
 data class Color(val r: Int, val g: Int, val b: Int) {
     init {
