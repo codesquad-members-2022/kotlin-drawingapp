@@ -37,21 +37,23 @@ class RectangleDrawingView @JvmOverloads constructor(
                     rectangle.backgroundColor.b
                 )
             )
-            canvas.drawRect(
-                rectangle.point.x.toFloat(),
-                rectangle.point.y.toFloat(),
-                (rectangle.point.x + rectangle.size.width).toFloat(),
-                (rectangle.point.y + rectangle.size.height).toFloat(),
-                paint
-            )
+
+            if (rectangle.imageUri == null) {
+                canvas.drawRect(
+                    rectangle.point.x.toFloat(),
+                    rectangle.point.y.toFloat(),
+                    (rectangle.point.x + rectangle.size.width).toFloat(),
+                    (rectangle.point.y + rectangle.size.height).toFloat(),
+                    paint
+                )
+            }
 
             // 사각형에 할당된 이미지 uri가 있다면 그리도록 한다
             rectangle.imageUri?.let {
-                var bitmap : Bitmap
-                if(Build.VERSION.SDK_INT < 29 ){ //
+                var bitmap: Bitmap
+                if (Build.VERSION.SDK_INT < 29) { //
                     bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                }
-                else {
+                } else {
                     val source = ImageDecoder.createSource(context.contentResolver, it)
                     bitmap = ImageDecoder.decodeBitmap(source)
                 }

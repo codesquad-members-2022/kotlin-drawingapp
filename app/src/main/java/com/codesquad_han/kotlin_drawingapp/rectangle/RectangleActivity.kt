@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
@@ -69,7 +70,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
 
         setBtnMakeRectangle()
-        setTransparencySlider()
+        setTransparencySeekBar()
         setBtnGallery()
     }
 
@@ -96,7 +97,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     }
 
 
-    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String) {
+    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String) { // 커스텀 뷰 터치 시 호출
         if (selected) {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.VISIBLE
@@ -104,8 +105,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             binding.tvBackgroundColor?.let {
                 it.text = color
             }
-            binding.sliderTransparency?.let {
-                it.value = alpha.toFloat()
+            binding.seekBarTransparency?.let {
+                it.progress = alpha
             }
             binding.btnOpenGallery?.let {
                 it.isEnabled = true
@@ -128,50 +129,49 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         return Math.round(dp.toFloat() * density)
     }
 
-    fun setTransparencySlider() {
-        binding.sliderTransparency?.let {
-            it.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                @SuppressLint("RestrictedApi")
-                override fun onStartTrackingTouch(slider: Slider) {
-
+    fun setTransparencySeekBar() {
+        binding.seekBarTransparency?.let {
+            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekbar: SeekBar?, progress: Int, fromUser: Boolean) {
                 }
 
-                @SuppressLint("RestrictedApi")
-                override fun onStopTrackingTouch(slider: Slider) {
-                    presenter.updateTransparency(SELECTED_RECTANGLE_ID, slider.value.toInt())
+                override fun onStartTrackingTouch(seekbar: SeekBar) {
                 }
 
+                override fun onStopTrackingTouch(seekbar: SeekBar) {
+                    presenter.updateTransparency(SELECTED_RECTANGLE_ID, seekbar.progress)
+                }
             })
         }
     }
 
+
     fun setBtnGallery() {
-        val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            if(it.resultCode == RESULT_OK){
-                Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
-                // uri 전달하기!!!!
-                presenter.updateImageUri(SELECTED_RECTANGLE_ID, it.data?.data)
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
+                    // uri 전달하기!!!!
+                    presenter.updateImageUri(SELECTED_RECTANGLE_ID, it.data?.data)
+                } else {
+                    Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
+                }
             }
-            else{
-                Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
-            }
-        }
 
         val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-                isGranted: Boolean ->
-                if(isGranted){
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
                     val intent = Intent(Intent.ACTION_PICK)
                     intent.type = "image/*"
                     getContent.launch(Intent.createChooser(intent, "Gallery"))
-                }
-                else{
-                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT).show()
+                } else {
+                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT)
+                        .show()
                 }
             }
 
         binding.btnOpenGallery?.let {
-           it.setOnClickListener {
+            it.setOnClickListener {
                 // 갤러리 열고 uri 가져오기 구현하기
                 requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
