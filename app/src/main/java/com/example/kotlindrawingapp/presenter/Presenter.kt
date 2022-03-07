@@ -1,43 +1,20 @@
 package com.example.kotlindrawingapp.presenter
 
-import android.util.Log
-import com.example.kotlindrawingapp.CustomCanvas
-import com.example.kotlindrawingapp.plane.Plane
-import com.example.kotlindrawingapp.square.*
+import com.example.kotlindrawingapp.repository.SquareRepository
 
 class Presenter(
-    private val view: Contract.View
+    private val view: Contract.View,
+    private val repository: SquareRepository,
 ) : Contract.Presenter {
 
-    private var index = 0
-    private val canvasList = mutableListOf<CustomCanvas>()
-    private val squares = listOf<Square>(
-        SquareFactory.createSquare(Point(10, 200), Size(), RGB(245, 0, 245), Alpha(9)),
-        SquareFactory.createSquare(Point(110, 180), Size(), RGB(43, 124, 95), Alpha(5)),
-        SquareFactory.createSquare(Point(590, 90), Size(), RGB(98, 244, 15), Alpha(7)),
-        SquareFactory.createSquare(Point(330, 450), Size(), RGB(125, 39, 99), Alpha(1))
-    )
-    private val plane = Plane.of(listOf())
+    val selectedSquare = repository.selectedSquare
+    val plane = repository.plane
 
-    override fun drawRectangle(canvas: CustomCanvas) {
-        canvasList.add(canvas)
-        val square = squares[index++]
-        plane.addSquare(square)
-        canvas.drawRectangle(square)
+    override fun loadRectangle() {
+        repository.addSquare()
     }
 
-    override fun selectRectangle(x: Float, y: Float) {
-        val idx = plane.contain(x, y - 185)
-        deselect()
-        if (idx != -1) {
-            canvasList[idx].selectRectangle()
-            val square = plane.findSquare(idx)
-            val rgb = square.rgb.decimalToHex()
-            view.updateBoard(rgb, square.alpha.alpha)
-        }
-    }
-
-    private fun deselect() {
-        canvasList.forEachIndexed { index, canvas -> canvas.removeStroke() }
+    override fun editRectangleAlpha(alpha: Int) {
+        repository.updateSquare(alpha)
     }
 }
