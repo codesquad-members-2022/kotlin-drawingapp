@@ -55,13 +55,16 @@ class RectangleDrawingView @JvmOverloads constructor(
                     val source = ImageDecoder.createSource(context.contentResolver, it)
                     bitmap = ImageDecoder.decodeBitmap(source)
                 }
+
+                var imagePaint = Paint()
+                imagePaint.alpha = rectangle.transparency.transparency * 255 / 10
                 canvas.drawBitmap(
                     bitmap, null, Rect(
                         rectangle.point.x,
                         rectangle.point.y,
                         (rectangle.point.x + rectangle.size.width),
                         (rectangle.point.y + rectangle.size.height)
-                    ), null
+                    ), imagePaint
                 )
             }
 
