@@ -1,5 +1,6 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
 import com.codesquad_han.kotlin_drawingapp.model.Rectangle
@@ -27,6 +28,11 @@ class RectanglePresenter(
 
     override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신
         rectangleRepository.updateTransparency(id, transparency)
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updateImageUri(id: String, imageUri: Uri?) { // 선택한 사각형에 갤러리에서 선택한 이미지 삽입 시 데이터 변경 후 라이브데이터 갱신
+        rectangleRepository.updateImageUri(id, imageUri)
         liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 

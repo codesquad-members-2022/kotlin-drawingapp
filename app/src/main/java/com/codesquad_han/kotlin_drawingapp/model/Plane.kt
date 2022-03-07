@@ -1,5 +1,7 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
+import android.net.Uri
+
 class Plane(rectangleFactory: RectangleFactory) {
     private var rectangleList = mutableListOf<Rectangle>()
     private var rectangleFactory = rectangleFactory
@@ -15,6 +17,14 @@ class Plane(rectangleFactory: RectangleFactory) {
         rectangleList.forEach {
             if (it.id == id) {
                 it.transparency.transparency = transparency
+            }
+        }
+    }
+
+    fun updateImageUri(id: String, imageUri: Uri?) {
+        rectangleList.forEach {
+            if(it.id == id){
+                it.imageUri = imageUri
             }
         }
     }

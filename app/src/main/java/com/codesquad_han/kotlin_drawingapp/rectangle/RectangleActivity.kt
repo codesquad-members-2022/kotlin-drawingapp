@@ -150,7 +150,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             if(it.resultCode == RESULT_OK){
                 Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
                 // uri 전달하기!!!!
-
+                presenter.updateImageUri(SELECTED_RECTANGLE_ID, it.data?.data)
             }
             else{
                 Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()

@@ -1,5 +1,6 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
+import android.net.Uri
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.BasePresenter
@@ -21,5 +22,7 @@ interface RectangleContract {
         fun getRectangleList()
 
         fun updateTransparency(id: String, transparency: Int) // 선택한 사각형 투명도 변경
+
+        fun updateImageUri(id: String, imageUri: Uri?) // 선택한 사각형 이미지 uri 업데이트
     }
 }
