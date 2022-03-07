@@ -81,5 +81,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/btn_addPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="30dp"
+        android:paddingBottom="10dp"
+        android:text="⬜\n사진"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
 
+        app:layout_constraintStart_toEndOf="@id/btn_addRectangle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

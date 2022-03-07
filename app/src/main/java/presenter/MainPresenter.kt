@@ -1,41 +1,37 @@
-package presenter
-
-import Plane
 import android.content.Context
-import android.widget.ImageView
-import android.widget.TextView
-import model.RectFactory
+import android.graphics.Bitmap
+import model.Plane
 import view.MainContract
+import view.RectView
 
 class MainPresenter(
     private val view: MainContract.View,
-    private val context: Context,
-    private val density: Float
+    private val context: Context
 ) : MainContract.Presenter {
 
-    private val plane= Plane(context,density)
-    override fun createRectangle(): ImageView {
-        return plane.create(RectFactory.makeRect())
+    private val plane = Plane(context)
+    override fun selectRectangle(xPos: Float, yPos: Float) {
+        plane.getCustomRectangleByPosition(xPos, yPos)
+            ?.let { view.displaySelectedRectAttribute(it) }
+
     }
 
-    override fun selectRectangle(xPos: Float, yPos: Float) {
-        val selectedRectangle = plane.getRectangleByPosition(xPos, yPos)
-        selectedRectangle?.let {
-            val selectedRectangleView = plane.getRectangleView(selectedRectangle)
-            val imageBorder = plane.makeImageBorder(xPos, yPos)
-            view.showSelected(selectedRectangle, selectedRectangleView, imageBorder)
+    override fun changeColor(rectView: RectView) {
+        if (rectView.photoId == "") {
+            plane.changeColor(rectView.rectId)
         }
     }
 
-    override fun changeColor(rectView: ImageView, colorValueView: TextView) {
-        val randomColor = plane.changeColor(rectView)
-        view.showColorChange(rectView, randomColor, colorValueView )
+    override fun changeOpacity(rectView: RectView, opacity: Int) {
+        plane.changeOpacity(rectView.rectId, opacity)
     }
 
-    override fun changeOpacity(rectView: ImageView, opacity: Int) {
-        plane.changeOpacity(rectView,opacity)
-        view.showOpacityChange(rectView,opacity)
+    override fun createRectanglePaint() {
+        view.drawRectangle(plane.createRectanglePaint())
+    }
+
+    override fun createPhotoPaint(image: Bitmap) {
+        view.drawPhoto(plane.createPhotoPaint(image))
     }
 
 }
-

@@ -1,21 +1,22 @@
 package view
 
+import android.graphics.Bitmap
+import model.Photo
 import model.Rect
-import android.widget.ImageView
-import android.widget.TextView
-import model.BackGroundColor
+
 
 interface MainContract {
-    interface View{
-        fun showSelected(rect: Rect, rectView: ImageView?, border: ImageView?)
-        fun showColorChange(rectView: ImageView, color:BackGroundColor, colorValueView: TextView)
-        fun showOpacityChange(rectView: ImageView, opacity: Int)
+    interface View {
+        fun displaySelectedRectAttribute(rect:Rect)
+        fun drawRectangle(rect:Rect)
+        fun drawPhoto(photo: Photo)
     }
 
-    interface Presenter{
-        fun createRectangle():ImageView
-        fun selectRectangle(xPos:Float, yPos:Float)
-        fun changeColor(rectView:ImageView, colorValueView:TextView)
-        fun changeOpacity(rectView: ImageView, opacity:Int)
+    interface Presenter {
+        fun selectRectangle(xPos: Float, yPos: Float)
+        fun changeColor(rectView: RectView)
+        fun changeOpacity(rectView: RectView, opacity: Int)
+        fun createRectanglePaint()
+        fun createPhotoPaint(image: Bitmap)
     }
 }
