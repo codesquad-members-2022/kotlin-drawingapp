@@ -2,18 +2,159 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".rectangle.RectangleActivity"
-    android:id="@+id/constraintLayout">
+    tools:context=".rectangle.RectangleActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutControlContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#B9E1E6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutControl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.65"
+            android:visibility="invisible">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_h_5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_v_5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_v_95"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <TextView
+                android:id="@+id/tvBackgroundColorDescription"
+                style="@style/tv_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="배경색"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintStart_toStartOf="@id/gl_v_5"
+                app:layout_constraintTop_toTopOf="@id/gl_h_5"
+                app:layout_constraintWidth_percent="0.2" />
+
+            <View
+                android:id="@+id/view_1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvBackgroundColorDescription"
+                app:layout_constraintStart_toEndOf="@id/tvBackgroundColorDescription"
+                app:layout_constraintTop_toTopOf="@id/tvBackgroundColorDescription"
+                app:layout_constraintWidth_percent="0.05" />
+
+            <TextView
+                android:id="@+id/tvBackgroundColor"
+                style="@style/tvBackgound"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/textview_background_1"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:text="#000000"
+                app:layout_constraintBottom_toBottomOf="@id/tvBackgroundColorDescription"
+                app:layout_constraintEnd_toEndOf="@id/gl_v_95"
+                app:layout_constraintStart_toEndOf="@id/view_1"
+                app:layout_constraintTop_toTopOf="@id/tvBackgroundColorDescription" />
+
+            <View
+                android:id="@+id/view_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.05"
+                app:layout_constraintTop_toBottomOf="@id/tvBackgroundColorDescription" />
+
+            <TextView
+                android:id="@+id/tvTransparencyDescription"
+                style="@style/tv_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="투명도"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintStart_toStartOf="@id/gl_v_5"
+                app:layout_constraintTop_toBottomOf="@id/view_2"
+                app:layout_constraintWidth_percent="0.2" />
+
+            <View
+                android:id="@+id/view_3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvTransparencyDescription"
+                app:layout_constraintStart_toEndOf="@id/tvTransparencyDescription"
+                app:layout_constraintTop_toTopOf="@id/tvTransparencyDescription"
+                app:layout_constraintWidth_percent="0.03" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekBarTransparency"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="10"
+                android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                app:layout_constraintBottom_toBottomOf="@id/view_3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/view_3"
+                app:layout_constraintTop_toTopOf="@id/view_3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenGallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/teal_200"
+            android:enabled="false"
+            android:text="사진 가져오기"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateRectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/constraintLayoutControl"
+             />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerateRectangle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#678CCC"
+            android:text="사각형 추가"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/constraintLayoutControl"
+           />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.codesquad_han.kotlin_drawingapp.rectangle.RectangleDrawingView
+        android:id="@+id/rectangleDrawingView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayoutControlContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
