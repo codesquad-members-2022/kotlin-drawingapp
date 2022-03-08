@@ -2,10 +2,7 @@ package com.example.kotlin_drawingapp.model.draw
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PointF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -36,6 +33,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
             when (drawObject) {
                 is DrawObject.Rectangle -> drawRectangle(canvas, drawObject)
+                is DrawObject.Image -> drawImage(canvas, drawObject)
             }
         }
 
@@ -54,14 +52,31 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         super.onDraw(canvas)
     }
 
+    private fun drawImage(canvas: Canvas?, image: DrawObject.Image) {
+        canvas?.apply {
+            val paint = Paint()
+            paint.isAntiAlias = true
+            val alpha = (255.0 * (image.alpha / 10.0)).toInt()
+            paint.alpha = alpha
+
+            val rect = Rect(
+                image.currentPoint.x,
+                image.currentPoint.y,
+                image.currentPoint.x + image.currentSize.width,
+                image.currentPoint.y + image.currentSize.height
+            )
+            drawBitmap(image.bitmap, null, rect, paint)
+        }
+    }
+
     private fun drawRectangle(canvas: Canvas?, rectangle: DrawObject.Rectangle) {
         canvas?.apply {
             val paint = setRectanglePaint(rectangle)
             drawRect(
-                rectangle.point.x.toFloat(),
-                rectangle.point.y.toFloat(),
-                rectangle.point.x.toFloat() + rectangle.size.width.toFloat(),
-                rectangle.point.y.toFloat() + rectangle.size.height.toFloat(),
+                rectangle.currentPoint.x.toFloat(),
+                rectangle.currentPoint.y.toFloat(),
+                rectangle.currentPoint.x.toFloat() + rectangle.currentSize.width.toFloat(),
+                rectangle.currentPoint.y.toFloat() + rectangle.currentSize.height.toFloat(),
                 paint
             )
         }
