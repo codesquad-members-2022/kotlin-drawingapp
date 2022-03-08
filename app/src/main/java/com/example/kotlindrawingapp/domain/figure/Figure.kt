@@ -2,7 +2,7 @@ package com.example.kotlindrawingapp.domain.figure
 
 abstract class Figure {
     abstract val id: ID
-    abstract val point: Point
+    abstract var point: Point
     abstract val size: Size
     abstract var alpha: Alpha
     abstract var rgb: RGB?
@@ -18,5 +18,9 @@ abstract class Figure {
 
     fun update(alpha: Alpha) {
         this.alpha = alpha
+    }
+
+    fun update(point: Point) {
+        this.point = point
     }
 }

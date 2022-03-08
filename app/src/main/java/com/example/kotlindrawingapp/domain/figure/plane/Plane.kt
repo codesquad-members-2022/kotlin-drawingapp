@@ -8,7 +8,7 @@ import com.example.kotlindrawingapp.domain.figure.Point
 import com.example.kotlindrawingapp.domain.figure.RGB
 import com.example.kotlindrawingapp.domain.figure.square.Square
 
-class Plane private constructor(private var _squares: List<Figure>) {
+class Plane private constructor(private val _squares: MutableList<Figure>) {
 
     private var item: Figure? = null
     private val _selectedSquare = MutableLiveData<Figure?>()
@@ -18,8 +18,12 @@ class Plane private constructor(private var _squares: List<Figure>) {
     val squares: List<Figure>
         get() = _squares
 
-    fun addFigure(figure: Figure) {
-        _squares = _squares + figure
+    fun addFigure(figure: Figure?) {
+        figure?.let { _squares.add(it) }
+    }
+
+    fun removeFigure(figure: Figure?) {
+        _squares.remove(figure)
     }
 
     fun count(): Int = _squares.size
@@ -38,6 +42,9 @@ class Plane private constructor(private var _squares: List<Figure>) {
         selected(point)?.let {
             item = it
             _selectedSquare.value = item
+        } ?: run {
+            item = null
+            _selectedSquare.value = item
         }
     }
 
@@ -47,9 +54,12 @@ class Plane private constructor(private var _squares: List<Figure>) {
     }
 
     fun updateAlpha(alpha: Alpha) {
-        item?.update(alpha)
-        _squares.find { it == item }?.alpha = alpha
-        _selectedSquare.value = item
+        item?.let {
+            it.update(alpha)
+            val index = _squares.indexOf(it)
+            _squares[index].update(alpha)
+            _selectedSquare.value = it
+        }
     }
 
     fun findByIndex(idx: Int): Figure {
@@ -58,7 +68,7 @@ class Plane private constructor(private var _squares: List<Figure>) {
 
     companion object {
         fun of(squares: List<Square>): Plane {
-            return Plane(squares)
+            return Plane(squares.toMutableList())
         }
     }
 }

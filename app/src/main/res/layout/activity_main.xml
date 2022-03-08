@@ -71,13 +71,22 @@
             android:paddingTop="5dp"
             android:paddingRight="18dp"
             android:paddingBottom="5dp"
-            android:text="NONE" />
+            android:text="@string/label_textview_none" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/label_textview_alpha"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_alpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="end"
+            android:text="5"
             android:textStyle="bold" />
 
         <SeekBar

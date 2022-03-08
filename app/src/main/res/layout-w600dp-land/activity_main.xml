@@ -10,10 +10,10 @@
         android:id="@+id/container_canvas"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/view_board"/>
+        app:layout_constraintEnd_toStartOf="@id/view_board"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_square"
@@ -22,10 +22,10 @@
         android:background="@drawable/background_btn"
         android:drawableTop="@drawable/ic_baseline_crop_square_24"
         android:paddingTop="10dp"
-        android:text="사각형"
+        android:text="@string/label_button_square"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintEnd_toStartOf="@id/btn_picture"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -35,11 +35,10 @@
         android:background="@drawable/background_btn"
         android:drawableTop="@drawable/ic_image"
         android:paddingTop="24dp"
-        android:text="사진"
+        android:text="@string/label_button_picture"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_square"
         app:layout_constraintEnd_toStartOf="@id/view_board"
-        />
+        app:layout_constraintStart_toEndOf="@id/btn_square" />
 
     <LinearLayout
         android:id="@+id/view_board"
@@ -72,13 +71,22 @@
             android:paddingTop="5dp"
             android:paddingRight="18dp"
             android:paddingBottom="5dp"
-            android:text="NONE" />
+            android:text="@string/label_textview_none" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/label_textview_alpha"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_alpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="end"
+            android:text="5"
             android:textStyle="bold" />
 
         <SeekBar
