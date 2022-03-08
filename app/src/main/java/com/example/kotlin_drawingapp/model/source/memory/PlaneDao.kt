@@ -1,8 +1,8 @@
-package com.example.kotlin_drawingapp.model.source
+package com.example.kotlin_drawingapp.model.source.memory
 
 import com.example.kotlin_drawingapp.model.Rectangle
 
-interface PlaneRepository {
+interface PlaneDao {
 
     fun getRectangleCount(): Int
 
@@ -11,10 +11,6 @@ interface PlaneRepository {
     fun getRectangleByIndex(index: Int): Rectangle
 
     fun getRectangleByPosition(x: Int, y: Int): Rectangle?
-
-    fun getCurrentSelectedRectangle(): Rectangle?
-
-    fun saveCurrentSelectedRectangle(rectangle: Rectangle?)
 
     fun saveRectangle(rectangle: Rectangle)
 

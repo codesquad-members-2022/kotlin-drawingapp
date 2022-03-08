@@ -1,21 +1,12 @@
-package com.example.kotlin_drawingapp.model.source
+package com.example.kotlin_drawingapp.model.source.memory
 
 import com.example.kotlin_drawingapp.model.Rectangle
 
-class DefaultPlaneRepository : PlaneRepository {
+class Plane : PlaneDao {
     private val rectangleList = mutableListOf<Rectangle>()
-    private var currentSelectedRectangle: Rectangle? = null
-
-    override fun getCurrentSelectedRectangle(): Rectangle? {
-        return currentSelectedRectangle
-    }
 
     override fun getRectangleCount(): Int {
         return rectangleList.size
-    }
-
-    override fun saveCurrentSelectedRectangle(rectangle: Rectangle?) {
-        currentSelectedRectangle = rectangle
     }
 
     override fun saveRectangle(rectangle: Rectangle) {

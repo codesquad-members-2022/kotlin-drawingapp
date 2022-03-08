@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.Rectangle
-import com.example.kotlin_drawingapp.model.source.DefaultPlaneRepository
+import com.example.kotlin_drawingapp.model.source.memory.PlaneDataSource
+import com.example.kotlin_drawingapp.model.source.DrawingRepository
 
 private const val TAG = "MainActivity"
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val planeRepository = DefaultPlaneRepository()
+        val planeRepository = DrawingRepository(PlaneDataSource())
         presenter = MainPresenter(planeRepository, this)
         drawView = findViewById(R.id.drawView)
         tvRgb = findViewById(R.id.tv_background_color)
