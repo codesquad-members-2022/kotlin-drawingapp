@@ -7,9 +7,11 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.MotionEvent
 import android.widget.Button
 import android.widget.FrameLayout
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
     private var selectedRectangle: Rect? = null
     var temp: RectView? = null
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,28 +62,24 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnMakePhotoView.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(
+                when {
+                    ContextCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    getPhotoFromGallery()
-                } else {
-                    if (shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        showContextPopupPermission()
-                    } else {
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        getPhotoFromGallery()
+                    }
+                    else -> {
                         requestPermissions(
                             arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                            1000
-                        )
+                            1000)
                     }
                 }
-            } else {
-                getPhotoFromGallery()
             }
+
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
-            if(motionEvent.action==MotionEvent.ACTION_DOWN) {
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 customRectangleViewList.map { it.eraseBorder() }
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
@@ -111,17 +110,31 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1000-> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    getPhotoFromGallery()
+                } else {
+                    showContextPopupPermission()
+                }
+                return
+            }
+        }
+    }
+
 
     private fun showContextPopupPermission() {
         AlertDialog.Builder(this).setTitle("권한이 필요합니다")
-            .setMessage("사진을 불러오기 위해 권한이 필요합니다")
-            .setPositiveButton("동의하기") { _, _ ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        1000
-                    )
-                }
+            .setMessage("사진을 불러오기 위해 권한설정이 필요합니다")
+            .setPositiveButton("설정하러가기") { _, _ ->
+                val intent= Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .setData(Uri.parse("package:$packageName"));
+                startActivity(intent)
             }
             .setNegativeButton("취소하기") { _, _ -> }
             .create()
@@ -196,7 +209,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     mainLayout.addView(temp)
                 }
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
-                selectedCustomRectangleView?.let{
+                selectedCustomRectangleView?.let {
                     it.onTouch(motionEvent)
                     presenter.changePosition(it)
                 }
