@@ -43,19 +43,22 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
 
     private fun getRectColor() {
         if (selectedRectIndex == -1) {
-            return taskView.showRectColor()
+            taskView.showRectColor()
+        } else {
+            val color = plane.getRectangle(selectedRectIndex).getColor()
+            val colorText =
+                "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
+            taskView.showRectColor(colorText)
         }
-        val color = plane.getRectangle(selectedRectIndex).getColor()
-        val colorText = "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
-        return taskView.showRectColor(colorText)
     }
 
     private fun getRectAlpha() {
         if (selectedRectIndex == -1) {
-            return taskView.showRectAlpha()
+            taskView.showRectAlpha()
+        } else {
+            val alpha = plane.getRectangle(selectedRectIndex).getAlpha() / 25
+            taskView.showRectAlpha(alpha.toFloat())
         }
-        val alpha = plane.getRectangle(selectedRectIndex).getAlpha() / 25
-        return taskView.showRectAlpha(alpha.toFloat())
     }
 
 }

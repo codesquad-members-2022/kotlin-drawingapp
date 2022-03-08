@@ -1,8 +1,6 @@
 <resources>
   <string name="app_name">kotlin-drawingapp</string>
-  <string name="사각형">사각형</string>
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
-  <string name="배경색">배경색</string>
-  <string name="투명도">투명도</string>
+  <string name="rectangle">사각형</string>
+  <string name="background">배경색</string>
+  <string name="alpha">투명도</string>
 </resources>
