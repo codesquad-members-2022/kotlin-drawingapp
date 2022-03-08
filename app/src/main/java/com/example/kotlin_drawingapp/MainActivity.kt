@@ -25,16 +25,49 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var drawView: DrawView
     private lateinit var tvRgb: TextView
     private lateinit var seekBarAlpha: SeekBar
+    private lateinit var btnGenerateRectangle: Button
+    private lateinit var btnGenerateImage: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val planeRepository = DrawingRepository(PlaneDataSource())
-        presenter = MainPresenter(planeRepository, this)
+        bindView()
+        setViewListener()
+        setGalleryIntentForBtnImage()
+    }
+
+    private fun setGalleryIntentForBtnImage() {
+        val galleryIntent = Intent()
+        galleryIntent.type = "image/*"
+        galleryIntent.action = Intent.ACTION_PICK
+        val selectImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data?.data
+                data?.let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        presenter.createImage(ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, it)))
+                    } else {
+                        presenter.createImage(MediaStore.Images.Media.getBitmap(contentResolver, it))
+                    }
+                }
+            }
+        }
+
+        btnGenerateImage.setOnClickListener {
+            selectImageResult.launch(galleryIntent)
+        }
+    }
+
+    private fun bindView() {
+        presenter = MainPresenter(DrawingRepository(PlaneDataSource()), this)
         drawView = findViewById(R.id.drawView)
         tvRgb = findViewById(R.id.tv_background_color)
         seekBarAlpha = findViewById(R.id.seekBar)
-        val btnGenerateRectangle = findViewById<Button>(R.id.btn_generate_rect)
+        btnGenerateRectangle = findViewById(R.id.btn_generate_rect)
+        btnGenerateImage = findViewById(R.id.btn_generate_image)
+    }
+
+    private fun setViewListener() {
         btnGenerateRectangle.setOnClickListener {
             presenter.createRectangle()
         }
@@ -54,27 +87,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-
-        val galleryIntent = Intent()
-        galleryIntent.type = "image/*"
-        galleryIntent.action = Intent.ACTION_PICK
-        val selectImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data = result.data?.data
-                data?.let {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        presenter.createImage(ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, it)))
-                    } else {
-                        presenter.createImage(MediaStore.Images.Media.getBitmap(contentResolver, it))
-                    }
-                }
-            }
-        }
-
-        val btnGenerateImage = findViewById<Button>(R.id.btn_generate_image)
-        btnGenerateImage.setOnClickListener {
-            selectImageResult.launch(galleryIntent)
-        }
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
