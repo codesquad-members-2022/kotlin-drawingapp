@@ -1,20 +1,20 @@
 package com.example.kotlin_drawingapp
 
 import com.example.kotlin_drawingapp.model.Color
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.draw.DrawObject
 
 class MainContract {
     interface View {
-        fun showRectangle(rectangles: List<Rectangle>)
+        fun showDrawObject(drawObject: List<DrawObject>)
 
-        fun showRectangleInfo(color: Color, alpha: Int)
+        fun showDrawObjectInfo(color: Color, alpha: Int)
     }
 
     interface Presenter {
-        fun createRectangle()
+        fun createDrawObject(category: DrawObject.Category)
 
-        fun selectRectangle(x: Float, y: Float)
+        fun selectDrawObject(x: Float, y: Float)
 
-        fun setCurrentSelectedRectangleAlpha(alpha: Int)
+        fun setCurrentSelectedDrawObjectAlpha(alpha: Int)
     }
 }

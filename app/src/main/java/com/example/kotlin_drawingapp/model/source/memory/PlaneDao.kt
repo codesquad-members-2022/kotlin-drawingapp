@@ -1,22 +1,22 @@
 package com.example.kotlin_drawingapp.model.source.memory
 
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.draw.DrawObject
 
 interface PlaneDao {
 
-    fun getRectangleCount(): Int
+    fun getDrawObjectCount(): Int
 
-    fun getAllRectangles(): List<Rectangle>
+    fun getAllDrawObject(): List<DrawObject>
 
-    fun getRectangleByIndex(index: Int): Rectangle
+    fun getDrawObjectByIndex(index: Int): DrawObject
 
-    fun getRectangleByPosition(x: Int, y: Int): Rectangle?
+    fun getDrawObjectByPosition(x: Int, y: Int): DrawObject?
 
-    fun saveRectangle(rectangle: Rectangle)
+    fun saveDrawObject(drawObject: DrawObject)
 
-    fun saveSelectedStatus(rectangle: Rectangle, selected: Boolean)
+    fun saveSelectedStatus(drawObject: DrawObject, selected: Boolean)
 
-    fun modifyRectangle(target: Rectangle, replacement: Rectangle)
+    fun modifyDrawObject(target: DrawObject, replacement: DrawObject)
 
-    fun clearRectangleBorder()
+    fun clearDrawObjectBorder()
 }

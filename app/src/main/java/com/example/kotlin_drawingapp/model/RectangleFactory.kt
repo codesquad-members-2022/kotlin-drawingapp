@@ -2,12 +2,13 @@ package com.example.kotlin_drawingapp.model
 
 import android.graphics.Point
 import android.util.Size
+import com.example.kotlin_drawingapp.model.draw.DrawObject
 import kotlin.random.Random
 
 class RectangleFactory {
     companion object {
-        fun create(): Rectangle {
-            return Rectangle(randomId(), randomSize(), randomPoint(), randomColor(), randomAlpha())
+        fun create(): DrawObject.Rectangle {
+            return DrawObject.Rectangle(randomId(), randomSize(), randomPoint(), randomColor(), randomAlpha())
         }
 
         private fun randomId(): String {

@@ -1,4 +1,4 @@
-package com.example.kotlin_drawingapp
+package com.example.kotlin_drawingapp.model.draw
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,6 @@ import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import com.example.kotlin_drawingapp.model.Rectangle
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     interface OnTouchListener {
@@ -21,45 +20,51 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         touchListener = listener
     }
 
-    private var drawnRectangleList = listOf<Rectangle>()
-    fun drawRectangle(rectangles: List<Rectangle>) {
-        drawnRectangleList = rectangles
+    private var drawnObjectList = listOf<DrawObject>()
+    fun draw(drawObjects: List<DrawObject>) {
+        drawnObjectList = drawObjects
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas?) {
-        val selectedRectangle = mutableListOf<Rectangle>()
+        val selectedDrawObject = mutableListOf<DrawObject>()
 
-        for (rect in drawnRectangleList) {
-            if (rect.selected) {
-                selectedRectangle.add(rect)
+        for (drawObject in drawnObjectList) {
+            if (drawObject.selected) {
+                selectedDrawObject.add(drawObject)
             }
 
-            canvas?.apply {
-                val paint = setRectanglePaint(rect)
-                drawRect(
-                    rect.point.x.toFloat(),
-                    rect.point.y.toFloat(),
-                    rect.point.x.toFloat() + rect.size.width.toFloat(),
-                    rect.point.y.toFloat() + rect.size.height.toFloat(),
-                    paint
-                )
+            when (drawObject) {
+                is DrawObject.Rectangle -> drawRectangle(canvas, drawObject)
             }
         }
 
-        for (rect in selectedRectangle) {
+        for (rect in selectedDrawObject) {
             canvas?.apply {
                 drawRect(
-                    rect.point.x.toFloat(),
-                    rect.point.y.toFloat(),
-                    rect.point.x.toFloat() + rect.size.width.toFloat(),
-                    rect.point.y.toFloat() + rect.size.height.toFloat(),
+                    rect.currentPoint.x.toFloat(),
+                    rect.currentPoint.y.toFloat(),
+                    rect.currentPoint.x.toFloat() + rect.currentSize.width.toFloat(),
+                    rect.currentPoint.y.toFloat() + rect.currentSize.height.toFloat(),
                     rect.borderPaint
                 )
             }
         }
 
         super.onDraw(canvas)
+    }
+
+    private fun drawRectangle(canvas: Canvas?, rectangle: DrawObject.Rectangle) {
+        canvas?.apply {
+            val paint = setRectanglePaint(rectangle)
+            drawRect(
+                rectangle.point.x.toFloat(),
+                rectangle.point.y.toFloat(),
+                rectangle.point.x.toFloat() + rectangle.size.width.toFloat(),
+                rectangle.point.y.toFloat() + rectangle.size.height.toFloat(),
+                paint
+            )
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,7 +77,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         return super.onTouchEvent(event)
     }
 
-    private fun setRectanglePaint(rect: Rectangle): Paint {
+    private fun setRectanglePaint(rect: DrawObject.Rectangle): Paint {
         val paint = Paint()
         paint.isAntiAlias = true
         val alpha = (255.0 * (rect.alpha / 10.0)).toInt()

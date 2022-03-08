@@ -7,7 +7,8 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.model.Color
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.draw.DrawObject
+import com.example.kotlin_drawingapp.model.draw.DrawView
 import com.example.kotlin_drawingapp.model.source.memory.PlaneDataSource
 import com.example.kotlin_drawingapp.model.source.DrawingRepository
 
@@ -30,19 +31,19 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         seekBarAlpha = findViewById(R.id.seekBar)
         val btnGenerateRectangle = findViewById<Button>(R.id.btn_generate_rect)
         btnGenerateRectangle.setOnClickListener {
-            presenter.createRectangle()
+            presenter.createDrawObject(DrawObject.Category.RECTANGLE)
         }
 
         drawView.setOnTouchListener(object : DrawView.OnTouchListener {
             override fun onClick(point: PointF) {
-                presenter.selectRectangle(point.x, point.y)
+                presenter.selectDrawObject(point.x, point.y)
             }
         })
 
         seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (progress > 0) {
-                    presenter.setCurrentSelectedRectangleAlpha(progress)
+                    presenter.setCurrentSelectedDrawObjectAlpha(progress)
                 }
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -50,11 +51,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         })
     }
 
-    override fun showRectangle(rectangles: List<Rectangle>) {
-        drawView.drawRectangle(rectangles)
+    override fun showDrawObject(drawObject: List<DrawObject>) {
+        drawView.draw(drawObject)
     }
 
-    override fun showRectangleInfo(color: Color, alpha: Int) {
+    override fun showDrawObjectInfo(color: Color, alpha: Int) {
         tvRgb.text = String.format("%X", color.getRgb())
         seekBarAlpha.progress = alpha
     }

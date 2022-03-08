@@ -1,51 +1,51 @@
 package com.example.kotlin_drawingapp.model.source
 
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.draw.DrawObject
 
 class DrawingRepository(private val drawingDataSource: DrawingDataSource) : DrawingDataSource {
-    private var currentSelectedRectangle: Rectangle? = null
+    private var currentSelectedRectangle: DrawObject? = null
 
-    override fun getRectangleCount(): Int {
-        return drawingDataSource.getRectangleCount()
+    override fun getDrawObjectCount(): Int {
+        return drawingDataSource.getDrawObjectCount()
     }
 
-    override fun getAllRectangles(): List<Rectangle> {
-        return drawingDataSource.getAllRectangles()
+    override fun getAllDrawObject(): List<DrawObject> {
+        return drawingDataSource.getAllDrawObject()
     }
 
-    override fun getRectangleByIndex(index: Int): Rectangle {
-        if (index < 0 || index >= getRectangleCount()) {
-            throw Exception("범위에서 벗어났습니다. (0~${getRectangleCount()})")
+    override fun getDrawObjectByIndex(index: Int): DrawObject {
+        if (index < 0 || index >= getDrawObjectCount()) {
+            throw Exception("범위에서 벗어났습니다. (0~${getDrawObjectCount()})")
         }
 
-        return drawingDataSource.getRectangleByIndex(index)
+        return drawingDataSource.getDrawObjectByIndex(index)
     }
 
-    override fun getRectangleByPosition(x: Int, y: Int): Rectangle? {
-        return drawingDataSource.getRectangleByPosition(x, y)
+    override fun getDrawObjectByPosition(x: Int, y: Int): DrawObject? {
+        return drawingDataSource.getDrawObjectByPosition(x, y)
     }
 
-    override fun getCurrentSelectedRectangle(): Rectangle? {
+    override fun getCurrentSelectedDrawObject(): DrawObject? {
         return currentSelectedRectangle
     }
 
-    override fun saveCurrentSelectedRectangle(rectangle: Rectangle?) {
-        currentSelectedRectangle = rectangle
+    override fun saveCurrentSelectedDrawObject(drawObject: DrawObject?) {
+        currentSelectedRectangle = drawObject
     }
 
-    override fun saveRectangle(rectangle: Rectangle) {
-        drawingDataSource.saveRectangle(rectangle)
+    override fun saveDrawObject(drawObject: DrawObject) {
+        drawingDataSource.saveDrawObject(drawObject)
     }
 
-    override fun saveSelectedStatus(rectangle: Rectangle, selected: Boolean) {
-        drawingDataSource.saveSelectedStatus(rectangle, selected)
+    override fun saveSelectedStatus(drawObject: DrawObject, selected: Boolean) {
+        drawingDataSource.saveSelectedStatus(drawObject, selected)
     }
 
-    override fun modifyRectangle(target: Rectangle, replacement: Rectangle) {
-        drawingDataSource.modifyRectangle(target, replacement)
+    override fun modifyDrawObject(target: DrawObject, replacement: DrawObject) {
+        drawingDataSource.modifyDrawObject(target, replacement)
     }
 
-    override fun clearRectangleBorder() {
-        drawingDataSource.clearRectangleBorder()
+    override fun clearDrawObjectBorder() {
+        drawingDataSource.clearDrawObjectBorder()
     }
 }

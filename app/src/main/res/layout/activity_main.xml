@@ -8,7 +8,7 @@
     android:background="@color/purple_200"
     tools:context=".MainActivity">
 
-    <com.example.kotlin_drawingapp.DrawView
+    <com.example.kotlin_drawingapp.model.draw.DrawView
         android:id="@+id/drawView"
         android:layout_width="0dp"
         android:layout_height="0dp"

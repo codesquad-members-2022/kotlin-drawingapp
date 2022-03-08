@@ -1,49 +1,49 @@
 package com.example.kotlin_drawingapp.model.source.memory
 
-import com.example.kotlin_drawingapp.model.Rectangle
+import com.example.kotlin_drawingapp.model.draw.DrawObject
 import com.example.kotlin_drawingapp.model.source.DrawingDataSource
 
 class PlaneDataSource : DrawingDataSource {
     private val planeDb = Plane()
 
-    override fun getRectangleCount(): Int {
-        return planeDb.getRectangleCount()
+    override fun getDrawObjectCount(): Int {
+        return planeDb.getDrawObjectCount()
     }
 
-    override fun getCurrentSelectedRectangle(): Rectangle? {
+    override fun getCurrentSelectedDrawObject(): DrawObject? {
         // Repository에 구현되어 있음
         return null
     }
 
-    override fun getAllRectangles(): List<Rectangle> {
-        return planeDb.getAllRectangles()
+    override fun getAllDrawObject(): List<DrawObject> {
+        return planeDb.getAllDrawObject()
     }
 
-    override fun getRectangleByIndex(index: Int): Rectangle {
-        return planeDb.getRectangleByIndex(index)
+    override fun getDrawObjectByIndex(index: Int): DrawObject {
+        return planeDb.getDrawObjectByIndex(index)
     }
 
-    override fun getRectangleByPosition(x: Int, y: Int): Rectangle? {
-        return planeDb.getRectangleByPosition(x, y)
+    override fun getDrawObjectByPosition(x: Int, y: Int): DrawObject? {
+        return planeDb.getDrawObjectByPosition(x, y)
     }
 
-    override fun saveCurrentSelectedRectangle(rectangle: Rectangle?) {
+    override fun saveCurrentSelectedDrawObject(drawObject: DrawObject?) {
         // Repository에 구현되어 있음
     }
 
-    override fun saveRectangle(rectangle: Rectangle) {
-        planeDb.saveRectangle(rectangle)
+    override fun saveDrawObject(drawObject: DrawObject) {
+        planeDb.saveDrawObject(drawObject)
     }
 
-    override fun saveSelectedStatus(rectangle: Rectangle, selected: Boolean) {
-        planeDb.saveSelectedStatus(rectangle, selected)
+    override fun saveSelectedStatus(drawObject: DrawObject, selected: Boolean) {
+        planeDb.saveSelectedStatus(drawObject, selected)
     }
 
-    override fun modifyRectangle(target: Rectangle, replacement: Rectangle) {
-        planeDb.modifyRectangle(target, replacement)
+    override fun modifyDrawObject(target: DrawObject, replacement: DrawObject) {
+        planeDb.modifyDrawObject(target, replacement)
     }
 
-    override fun clearRectangleBorder() {
-        planeDb.clearRectangleBorder()
+    override fun clearDrawObjectBorder() {
+        planeDb.clearDrawObjectBorder()
     }
 }
