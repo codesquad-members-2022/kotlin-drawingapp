@@ -1,11 +1,9 @@
 package com.example.kotlin_drawingapp.model.source
 
 import com.example.kotlin_drawingapp.model.Rectangle
-import com.example.kotlin_drawingapp.model.RectangleBorder
 
 class DefaultPlaneRepository : PlaneRepository {
     private val rectangleList = mutableListOf<Rectangle>()
-    private val rectangleBorderList = mutableListOf<RectangleBorder>()
     private var currentSelectedRectangle: Rectangle? = null
 
     override fun getCurrentSelectedRectangle(): Rectangle? {
@@ -24,22 +22,23 @@ class DefaultPlaneRepository : PlaneRepository {
         rectangleList.add(rectangle)
     }
 
-    override fun saveRectangleBorder(border: RectangleBorder) {
-        if (!rectangleBorderList.contains(border)) {
-            rectangleBorderList.add(border)
+    override fun saveSelectedStatus(rectangle: Rectangle, selected: Boolean) {
+        for (rect in rectangleList) {
+            if (rect == rectangle) {
+                rect.selected = selected
+                return
+            }
         }
     }
 
     override fun clearRectangleBorder() {
-        rectangleBorderList.clear()
+        for (rectangle in rectangleList) {
+            rectangle.selected = false
+        }
     }
 
     override fun getAllRectangles(): List<Rectangle> {
         return rectangleList.toList()
-    }
-
-    override fun getAllRectangleBorders(): List<RectangleBorder> {
-        return rectangleBorderList.toList()
     }
 
     override fun modifyRectangle(target: Rectangle, replacement: Rectangle) {

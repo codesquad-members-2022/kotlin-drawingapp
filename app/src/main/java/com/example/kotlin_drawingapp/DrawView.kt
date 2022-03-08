@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.example.kotlin_drawingapp.model.Rectangle
-import com.example.kotlin_drawingapp.model.RectangleBorder
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     interface OnTouchListener {
@@ -22,7 +21,6 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         touchListener = listener
     }
 
-    private var drawnRectangleBorderList = listOf<RectangleBorder>()
     private var drawnRectangleList = listOf<Rectangle>()
     fun drawRectangle(rectangles: List<Rectangle>) {
         drawnRectangleList = rectangles
@@ -30,7 +28,13 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun onDraw(canvas: Canvas?) {
+        val selectedRectangle = mutableListOf<Rectangle>()
+
         for (rect in drawnRectangleList) {
+            if (rect.selected) {
+                selectedRectangle.add(rect)
+            }
+
             canvas?.apply {
                 val paint = setRectanglePaint(rect)
                 drawRect(
@@ -43,15 +47,18 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
         }
 
-        for (border in drawnRectangleBorderList) {
-            canvas?.drawRect(
-                border.point.x.toFloat(),
-                border.point.y.toFloat(),
-                border.point.x.toFloat() + border.size.width.toFloat(),
-                border.point.y.toFloat() + border.size.height.toFloat(),
-                border.paint
-            )
+        for (rect in selectedRectangle) {
+            canvas?.apply {
+                drawRect(
+                    rect.point.x.toFloat(),
+                    rect.point.y.toFloat(),
+                    rect.point.x.toFloat() + rect.size.width.toFloat(),
+                    rect.point.y.toFloat() + rect.size.height.toFloat(),
+                    rect.borderPaint
+                )
+            }
         }
+
         super.onDraw(canvas)
     }
 
@@ -72,10 +79,5 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = Color.argb(alpha, rect.rgb.r, rect.rgb.g, rect.rgb.b)
 
         return paint
-    }
-
-    fun drawRectangleBorder(rectangleBorderList: List<RectangleBorder>) {
-        drawnRectangleBorderList = rectangleBorderList
-        invalidate()
     }
 }

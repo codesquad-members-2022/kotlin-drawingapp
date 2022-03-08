@@ -1,5 +1,6 @@
 package com.example.kotlin_drawingapp.model
 
+import android.graphics.Paint
 import android.graphics.Point
 import android.util.Size
 
@@ -8,10 +9,16 @@ data class Rectangle(
     val size: Size,
     var point: Point,
     val rgb: Color,
-    var alpha: Int
+    var alpha: Int,
+    var selected: Boolean = false
 ) {
+    val borderPaint = Paint()
     init {
         if (alpha !in 1..10) throw Exception("1~10사이만 가능합니다.")
+
+        borderPaint.strokeWidth = 5.0f
+        borderPaint.style = Paint.Style.STROKE
+        borderPaint.color = android.graphics.Color.BLUE
     }
 
     override fun toString(): String {

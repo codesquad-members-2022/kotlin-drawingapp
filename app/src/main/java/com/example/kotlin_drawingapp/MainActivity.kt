@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.Rectangle
-import com.example.kotlin_drawingapp.model.RectangleBorder
 import com.example.kotlin_drawingapp.model.source.DefaultPlaneRepository
 
 private const val TAG = "MainActivity"
@@ -57,9 +56,5 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun showRectangleInfo(color: Color, alpha: Int) {
         tvRgb.text = String.format("%X", color.getRgb())
         seekBarAlpha.progress = alpha
-    }
-
-    override fun showRectangleBorder(rectangleBorderList: List<RectangleBorder>) {
-        drawView.drawRectangleBorder(rectangleBorderList)
     }
 }

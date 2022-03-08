@@ -1,6 +1,5 @@
 package com.example.kotlin_drawingapp
 
-import com.example.kotlin_drawingapp.model.RectangleBorder
 import com.example.kotlin_drawingapp.model.RectangleFactory
 import com.example.kotlin_drawingapp.model.source.PlaneRepository
 
@@ -19,12 +18,11 @@ class MainPresenter(
         if (rect == null) {
             planeRepository.clearRectangleBorder()
         } else {
-            planeRepository.saveRectangleBorder(RectangleBorder(rect.size, rect.point))
+            planeRepository.saveSelectedStatus(rect, true)
         }
 
         planeRepository.saveCurrentSelectedRectangle(rect)
-        val borderList = planeRepository.getAllRectangleBorders()
-        mainView.showRectangleBorder(borderList)
+        mainView.showRectangle(planeRepository.getAllRectangles())
         rect?.let {
             mainView.showRectangleInfo(rect.rgb, rect.alpha)
         }

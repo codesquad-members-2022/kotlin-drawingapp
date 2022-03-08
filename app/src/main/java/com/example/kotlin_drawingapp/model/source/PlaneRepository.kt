@@ -1,15 +1,12 @@
 package com.example.kotlin_drawingapp.model.source
 
 import com.example.kotlin_drawingapp.model.Rectangle
-import com.example.kotlin_drawingapp.model.RectangleBorder
 
 interface PlaneRepository {
 
     fun getRectangleCount(): Int
 
     fun getAllRectangles(): List<Rectangle>
-
-    fun getAllRectangleBorders(): List<RectangleBorder>
 
     fun getRectangleByIndex(index: Int): Rectangle
 
@@ -19,9 +16,9 @@ interface PlaneRepository {
 
     fun saveCurrentSelectedRectangle(rectangle: Rectangle?)
 
-    fun saveRectangleBorder(border: RectangleBorder)
-
     fun saveRectangle(rectangle: Rectangle)
+
+    fun saveSelectedStatus(rectangle: Rectangle, selected: Boolean)
 
     fun modifyRectangle(target: Rectangle, replacement: Rectangle)
 
