@@ -1,5 +1,6 @@
 package com.example.kotlin_drawingapp
 
+import android.graphics.Bitmap
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.draw.DrawObject
 
@@ -11,7 +12,9 @@ class MainContract {
     }
 
     interface Presenter {
-        fun createDrawObject(category: DrawObject.Category)
+        fun createRectangle()
+
+        fun createImage(bitmap: Bitmap)
 
         fun selectDrawObject(x: Float, y: Float)
 
