@@ -26,6 +26,12 @@ class MainPresenter(
         plane.changeOpacity(rectView.rectId, opacity)
     }
 
+    override fun changePosition(rectView: RectView) {
+        plane.changePosition(rectView.rectId, rectView.left.toInt(), rectView.top.toInt())?.let{
+            view.redrawRectangle(it)
+        }
+    }
+
     override fun createRectanglePaint() {
         view.drawRectangle(plane.createRectanglePaint())
     }

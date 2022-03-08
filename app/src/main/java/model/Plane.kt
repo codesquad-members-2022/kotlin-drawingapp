@@ -68,6 +68,14 @@ class Plane(private val context: Context) {
 
     }
 
+    fun changePosition(rectId: String, x:Int, y:Int):Rect?{
+        val selectedRect =   customRectangleList.find {  it.rectId == rectId  }
+
+        selectedRect?.point?.xPos = x
+        selectedRect?.point?.yPos= y
+        return selectedRect
+    }
+
 
 
 
