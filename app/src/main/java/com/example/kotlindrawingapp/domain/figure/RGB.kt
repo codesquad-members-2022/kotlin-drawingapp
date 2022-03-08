@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp.square
+package com.example.kotlindrawingapp.domain.figure
 
 data class RGB(
     val red: Int,
@@ -28,5 +28,12 @@ data class RGB(
         private const val MINIMUM = 0
         private const val MAXIMUM = 255
         private const val OUT_OF_RANGE_MESSAGE = "범위에서 벗어났습니다."
+
+        fun generateRGB(): RGB {
+            val red = (0..255).random()
+            val green = (0..255).random()
+            val blue = (0..255).random()
+            return RGB(red, green, blue)
+        }
     }
 }

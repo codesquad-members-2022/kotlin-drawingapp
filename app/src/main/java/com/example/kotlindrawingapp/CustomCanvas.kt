@@ -3,13 +3,13 @@ package com.example.kotlindrawingapp
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import com.example.kotlindrawingapp.square.Plane
-import com.example.kotlindrawingapp.presenter.Presenter
-import com.example.kotlindrawingapp.square.Point
-import com.example.kotlindrawingapp.square.Square
+import com.example.kotlindrawingapp.domain.figure.picture.Picture
+import com.example.kotlindrawingapp.domain.figure.plane.Plane
+import com.example.kotlindrawingapp.domain.figure.Figure
+import com.example.kotlindrawingapp.domain.figure.Point
+import com.example.kotlindrawingapp.domain.figure.square.Square
 
 class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -20,13 +20,20 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas ?: return
-        plane.squares.forEach { square ->
-            val x = square.point.x
-            val y = square.point.y
-            val width = square.size.width
-            val height = square.size.height
-            canvas.drawRect(x, y, (x + width), (y + height), paintSquare(square))
-            if (plane.selectedSquare.value == square) {
+        plane.squares.forEach { figure ->
+            val x = figure.point.x
+            val y = figure.point.y
+            val width = figure.size.width
+            val height = figure.size.height
+            when (figure) {
+                is Square -> canvas.drawRect(x, y, (x + width), (y + height), paintSquare(figure))
+                is Picture -> {
+                    val bitmap = Picture.byteArrayToBitmap(figure.memory)
+                    val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+                    canvas.drawBitmap(newBitmap, x, y, paintSquare(figure))
+                }
+            }
+            if (plane.selectedSquare.value == figure) {
                 canvas.drawRect(x, y, (x + width), (y + height), selectRectangle())
             }
         }
@@ -37,12 +44,13 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
         invalidate()
     }
 
-    private fun paintSquare(square: Square): Paint {
+    private fun paintSquare(square: Figure): Paint {
         val alpha = square.alpha.alpha
-        val red = square.rgb.red
-        val green = square.rgb.green
-        val blue = square.rgb.blue
-        paint.color = Color.argb(alpha * 25, red, green, blue)
+        square.rgb?.let {
+            paint.color = Color.argb(alpha * 25, it.red, it.green, it.blue)
+        } ?: run {
+            paint.alpha = alpha * 25
+        }
         return paint
     }
 

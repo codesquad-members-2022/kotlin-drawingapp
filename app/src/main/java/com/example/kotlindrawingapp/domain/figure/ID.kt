@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp.square
+package com.example.kotlindrawingapp.domain.figure
 
 data class ID(val id: String) {
 
@@ -14,7 +14,7 @@ data class ID(val id: String) {
     companion object {
         private const val NOT_FORMAT_MESSAGE = "형식에 올바르지 않습니다."
 
-        fun generateID(): String {
+        fun generateID(): ID {
             var list = listOf<String>()
             val alphabet = ('a'..'z').toList()
             val number = ('0'..'9').toList()
@@ -22,7 +22,7 @@ data class ID(val id: String) {
             repeat(3) {
                 list = list + getRandomChar(3, randomList)
             }
-            return list.joinToString("-")
+            return ID(list.joinToString("-"))
         }
 
         private fun getRandomChar(count: Int, randomList: List<Char>): String {
