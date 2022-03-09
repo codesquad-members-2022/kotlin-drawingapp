@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.util.Size
 import android.view.MotionEvent
 import android.view.View
@@ -110,35 +111,29 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        super.onTouchEvent(event)
 
-        val touchPoint = event?.pointerCount ?: 0
-        when (event?.actionMasked) {
+        when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 drawViewTouchListener?.onClick(PointF(event.x, event.y))
             }
 
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                if (touchPoint == 2) {
+            MotionEvent.ACTION_MOVE -> {
+                if (temporaryDrawObject == null) {
                     temporaryDrawObject = copyForTemporaryDrawObject(currentSelectedDrawObject)
                     temporaryDrawObject?.let {
                         lastPosX = event.getX(0).toInt()
                         lastPosY = event.getY(0).toInt()
                     }
                 }
-            }
 
-            MotionEvent.ACTION_MOVE -> {
-                if (touchPoint == 2) {
-                    temporaryDrawObject?.apply {
-                        currentPoint.x += event.getX(0).toInt() - lastPosX
-                        currentPoint.y += event.getY(0).toInt() - lastPosY
+                temporaryDrawObject?.apply {
+                    currentPoint.x += event.getX(0).toInt() - lastPosX
+                    currentPoint.y += event.getY(0).toInt() - lastPosY
 
-                        lastPosX = event.getX(0).toInt()
-                        lastPosY = event.getY(0).toInt()
-                    }
-                    invalidate()
+                    lastPosX = event.getX(0).toInt()
+                    lastPosY = event.getY(0).toInt()
                 }
+                invalidate()
             }
 
             MotionEvent.ACTION_UP -> {
