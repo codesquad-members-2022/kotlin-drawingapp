@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
     private lateinit var presenter: Presenter
     private lateinit var colorTextView: TextView
+    private lateinit var alpha: TextView
     private lateinit var seekBar: SeekBar
     private lateinit var customView: CustomCanvas
     private lateinit var squareButton: Button
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         customView = findViewById(R.id.container_canvas)
         colorTextView = findViewById(R.id.tv_color)
         seekBar = findViewById(R.id.seekBar_alpha)
+        alpha = findViewById(R.id.tv_alpha)
         val repository = FigureRepository()
         presenter = Presenter(this, repository)
 
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
         presenter.selectedSquare.observe(this) {
             colorTextView.text = it?.rgb?.decimalToHex() ?: "NONE"
             seekBar.progress = it?.alpha?.alpha ?: 0
+            alpha.text = seekBar.progress.toString()
         }
 
         squareButton.setOnClickListener {
