@@ -8,13 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-    interface OnTouchListener {
+    interface OnDrawViewTouchListener {
         fun onClick(point: PointF)
     }
 
-    private var touchListener: OnTouchListener? = null
-    fun setOnTouchListener(listener: OnTouchListener) {
-        touchListener = listener
+    private var drawViewTouchListener: OnDrawViewTouchListener? = null
+    fun setOnDrawViewTouchListener(listenerDrawView: OnDrawViewTouchListener) {
+        drawViewTouchListener = listenerDrawView
     }
 
     private var drawnObjectList = listOf<DrawObject>()
@@ -86,7 +86,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
-                touchListener?.onClick(PointF(event.x, event.y))
+                drawViewTouchListener?.onClick(PointF(event.x, event.y))
             }
         }
         return super.onTouchEvent(event)
