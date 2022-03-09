@@ -36,6 +36,11 @@ class RectanglePresenter(
         liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 
+    override fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) {
+        rectangleRepository.updateSelctedRectanglePoint(id, newX, newY)
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun getRectangleList() { // 사각형 추가, 투명도 갱신한 리스트 전달, 라이브데이터 도입 전에 변화된 사각형 리스트를 가져오기 위한 함수

@@ -15,7 +15,7 @@ interface RectangleContract {
     }
 
     interface Presenter : BasePresenter {
-        var liveRectangleList : MutableLiveData<MutableList<Rectangle>>
+        var liveRectangleList: MutableLiveData<MutableList<Rectangle>>
 
         fun addRectangle() // 사각형 생성
 
@@ -24,5 +24,7 @@ interface RectangleContract {
         fun updateTransparency(id: String, transparency: Int) // 선택한 사각형 투명도 변경
 
         fun updateImageUri(id: String, imageUri: Uri?) // 선택한 사각형 이미지 uri 업데이트
+
+        fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) // 선택한 사각형 드래그 후 위치값 업데이트
     }
 }

@@ -124,6 +124,11 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    override fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) {
+        SELECTED_RECTANGLE_ID = id
+        presenter.updateSelectedRectanglePoint(id, newX, newY)
+    }
+
     fun ConvertDPtoPX(context: Context, dp: Int): Int {
         val density = context.resources.displayMetrics.density
         return Math.round(dp.toFloat() * density)

@@ -171,11 +171,13 @@ class RectangleDrawingView @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP -> {
                 if (isDoubleTouchExist) {
-                    selectedRectangle!!.point.x = tempRectangle!!.point.x
-                    selectedRectangle!!.point.y = tempRectangle!!.point.y  // 임시 사각형 뷰로 선택 사각형 위치 이동
+                    var newX = tempRectangle!!.point.x
+                    var newY = tempRectangle!!.point.y
                     tempRectangle = null
                     isDoubleTouchExist = false
-                    invalidate()
+
+                     // 임시 사각형 뷰로 선택 사각형 위치 이동
+                    clickListener.updateSelectedRectanglePoint(selectedRectangle!!.id, newX, newY)
                 }
             }
         }

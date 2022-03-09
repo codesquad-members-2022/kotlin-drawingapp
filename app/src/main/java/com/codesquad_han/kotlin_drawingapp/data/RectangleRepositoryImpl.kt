@@ -18,4 +18,8 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
     override fun updateImageUri(id: String, imageUri: Uri?) {
         plane.updateImageUri(id, imageUri)
     }
+
+    override fun updateSelctedRectanglePoint(id: String, newX: Int, newY: Int) {
+        plane.updateSelectedRectanglePoint(id, newX, newY)
+    }
 }

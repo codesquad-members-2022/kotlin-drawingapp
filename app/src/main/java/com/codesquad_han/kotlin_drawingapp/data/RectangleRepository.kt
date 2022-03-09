@@ -12,4 +12,6 @@ interface RectangleRepository {
     fun updateTransparency(id: String, transparency: Int)
 
     fun updateImageUri(id: String, imageUri: Uri?)
+
+    fun updateSelctedRectanglePoint(id: String, newX: Int, newY: Int)
 }

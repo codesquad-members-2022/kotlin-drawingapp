@@ -21,6 +21,15 @@ class Plane(rectangleFactory: RectangleFactory) {
         }
     }
 
+    fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int){
+        rectangleList.forEach {
+            if (it.id == id) {
+                it.point.x = newX
+                it.point.y = newY
+            }
+        }
+    }
+
     fun updateImageUri(id: String, imageUri: Uri?) {
         rectangleList.forEach {
             if(it.id == id){
