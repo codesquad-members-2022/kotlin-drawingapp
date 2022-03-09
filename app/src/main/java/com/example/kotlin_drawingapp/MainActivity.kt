@@ -7,9 +7,8 @@ import android.graphics.PointF
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
+import android.util.Size
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
@@ -89,9 +88,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         binding.drawView.draw(drawObject)
     }
 
-    override fun showDrawObjectInfo(color: Color, alpha: Int) {
+    override fun showDrawObjectInfo(color: Color, alpha: Int, point: Point, size: Size) {
         binding.tvBackgroundColor.text = String.format("%X", color.getRgb())
         binding.seekBar.progress = alpha
+        binding.textviewCurrentX.text = point.x.toString()
+        binding.textviewCurrentY.text = point.y.toString()
+        binding.textviewCurrentWidth.text = size.width.toString()
+        binding.textviewCurrentHeight.text = size.height.toString()
     }
 
     override fun setCurrentSelectedDrawObject(drawObject: DrawObject?) {
