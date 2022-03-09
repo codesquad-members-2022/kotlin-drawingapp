@@ -7,11 +7,6 @@ import android.util.Size
 import com.example.kotlin_drawingapp.model.Color
 
 sealed class DrawObject {
-    enum class Category {
-        RECTANGLE,
-        IMAGE
-    }
-
     var selected: Boolean = false
     val borderPaint = Paint().apply {
         strokeWidth = 5.0f
