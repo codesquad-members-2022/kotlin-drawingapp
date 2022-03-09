@@ -34,12 +34,7 @@ class MainPresenter(
         drawingRepository.saveCurrentSelectedDrawObject(drawObject)
         mainView.setCurrentSelectedDrawObject(drawObject)
         mainView.showDrawObject(drawingRepository.getAllDrawObject())
-        drawObject?.let {
-            when (drawObject) {
-                is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
-                is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
-            }
-        }
+        currentSelectedDrawObjectInfo(drawObject)
     }
 
     override fun setCurrentSelectedDrawObjectAlpha(alpha: Int) {
@@ -57,34 +52,42 @@ class MainPresenter(
     }
 
     override fun modifyDrawObjectPoint(target: DrawObject, point: Point) {
-        when (target) {
+        val newDrawObject = when (target) {
             is DrawObject.Rectangle -> {
-                drawingRepository.modifyDrawObject(
-                    target,
-                    DrawObject.Rectangle(
-                        target.id,
-                        target.currentSize,
-                        point,
-                        target.rgb,
-                        target.alpha
-                    )
+                DrawObject.Rectangle(
+                    target.id,
+                    target.currentSize,
+                    point,
+                    target.rgb,
+                    target.alpha
                 )
             }
 
             is DrawObject.Image -> {
-                drawingRepository.modifyDrawObject(
-                    target,
-                    DrawObject.Image(
-                        target.id,
-                        target.currentSize,
-                        point,
-                        target.alpha,
-                        target.bitmap
-                    )
+                DrawObject.Image(
+                    target.id,
+                    target.currentSize,
+                    point,
+                    target.alpha,
+                    target.bitmap
                 )
             }
         }
 
+        newDrawObject.selected = true
+        drawingRepository.modifyDrawObject(target, newDrawObject)
+        drawingRepository.saveCurrentSelectedDrawObject(newDrawObject)
+        mainView.setCurrentSelectedDrawObject(newDrawObject)
+        currentSelectedDrawObjectInfo(newDrawObject)
         mainView.showDrawObject(drawingRepository.getAllDrawObject())
+    }
+
+    private fun currentSelectedDrawObjectInfo(drawObject: DrawObject?) {
+        drawObject?.let {
+            when (drawObject) {
+                is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
+                is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
+            }
+        }
     }
 }

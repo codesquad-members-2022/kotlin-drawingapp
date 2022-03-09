@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.util.Size
 import android.view.MotionEvent
 import android.view.View
@@ -15,11 +14,16 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     interface OnDrawViewPointUpdateListener {
-        fun update(target: DrawObject, point: Point)
+        fun onUpdate(target: DrawObject, point: Point)
+    }
+
+    interface OnDrawViewMoveEventListener {
+        fun onUpdate(point: Point)
     }
 
     private var drawViewPointUpdateListener: OnDrawViewPointUpdateListener? = null
     private var drawViewTouchListener: OnDrawViewTouchListener? = null
+    private var drawViewMoveEventListener: OnDrawViewMoveEventListener? = null
     var currentSelectedDrawObject: DrawObject? = null
     private var temporaryDrawObject: DrawObject? = null
     private var lastPosX = 0
@@ -31,6 +35,10 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setOnDrawViewUpdateListener(listenerPoint: OnDrawViewPointUpdateListener) {
         drawViewPointUpdateListener = listenerPoint
+    }
+
+    fun setOnDrawViewMoveEventListener(listenerMoveEvent: OnDrawViewMoveEventListener) {
+        drawViewMoveEventListener = listenerMoveEvent
     }
 
     private var drawnObjectList = listOf<DrawObject>()
@@ -133,13 +141,16 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                     lastPosX = event.getX(0).toInt()
                     lastPosY = event.getY(0).toInt()
                 }
+                currentSelectedDrawObject?.let {
+                    drawViewMoveEventListener?.onUpdate(Point(event.x.toInt(), event.y.toInt()))
+                }
                 invalidate()
             }
 
             MotionEvent.ACTION_UP -> {
                 currentSelectedDrawObject?.let { current ->
                     temporaryDrawObject?.let { temp ->
-                        drawViewPointUpdateListener?.update(current, temp.currentPoint)
+                        drawViewPointUpdateListener?.onUpdate(current, temp.currentPoint)
                     }
                 }
                 temporaryDrawObject = null

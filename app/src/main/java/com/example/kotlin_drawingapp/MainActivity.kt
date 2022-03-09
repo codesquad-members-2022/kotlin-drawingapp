@@ -67,8 +67,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
         })
 
+        binding.drawView.setOnDrawViewMoveEventListener(object : DrawView.OnDrawViewMoveEventListener {
+            override fun onUpdate(point: Point) {
+                binding.textviewCurrentX.text = point.x.toString()
+                binding.textviewCurrentY.text = point.y.toString()
+            }
+        })
+
         binding.drawView.setOnDrawViewUpdateListener(object : DrawView.OnDrawViewPointUpdateListener{
-            override fun update(target: DrawObject, point: Point) {
+            override fun onUpdate(target: DrawObject, point: Point) {
                 presenter.modifyDrawObjectPoint(target, point)
             }
         })
