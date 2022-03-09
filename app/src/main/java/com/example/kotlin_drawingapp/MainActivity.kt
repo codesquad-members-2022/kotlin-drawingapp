@@ -12,6 +12,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.draw.DrawObject
 import com.example.kotlin_drawingapp.model.draw.DrawView
@@ -23,16 +24,13 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(), MainContract.View {
 
     private lateinit var presenter: MainContract.Presenter
-    private lateinit var drawView: DrawView
-    private lateinit var tvRgb: TextView
-    private lateinit var seekBarAlpha: SeekBar
-    private lateinit var btnGenerateRectangle: Button
-    private lateinit var btnGenerateImage: Button
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        bindView()
+        presenter = MainPresenter(DrawingRepository(PlaneDataSource()), this)
         setViewListener()
         setGalleryIntentForBtnImage()
     }
@@ -54,38 +52,29 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
         }
 
-        btnGenerateImage.setOnClickListener {
+        binding.btnGenerateImage.setOnClickListener {
             selectImageResult.launch(galleryIntent)
         }
     }
 
-    private fun bindView() {
-        presenter = MainPresenter(DrawingRepository(PlaneDataSource()), this)
-        drawView = findViewById(R.id.drawView)
-        tvRgb = findViewById(R.id.tv_background_color)
-        seekBarAlpha = findViewById(R.id.seekBar)
-        btnGenerateRectangle = findViewById(R.id.btn_generate_rect)
-        btnGenerateImage = findViewById(R.id.btn_generate_image)
-    }
-
     private fun setViewListener() {
-        btnGenerateRectangle.setOnClickListener {
+        binding.btnGenerateRect.setOnClickListener {
             presenter.createRectangle()
         }
 
-        drawView.setOnDrawViewTouchListener(object : DrawView.OnDrawViewTouchListener {
+        binding.drawView.setOnDrawViewTouchListener(object : DrawView.OnDrawViewTouchListener {
             override fun onClick(point: PointF) {
                 presenter.selectDrawObject(point.x, point.y)
             }
         })
 
-        drawView.setOnDrawViewUpdateListener(object : DrawView.OnDrawViewPointUpdateListener{
+        binding.drawView.setOnDrawViewUpdateListener(object : DrawView.OnDrawViewPointUpdateListener{
             override fun update(target: DrawObject, point: Point) {
                 presenter.modifyDrawObjectPoint(target, point)
             }
         })
 
-        seekBarAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (progress > 0) {
                     presenter.setCurrentSelectedDrawObjectAlpha(progress)
@@ -97,15 +86,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
-        drawView.draw(drawObject)
+        binding.drawView.draw(drawObject)
     }
 
     override fun showDrawObjectInfo(color: Color, alpha: Int) {
-        tvRgb.text = String.format("%X", color.getRgb())
-        seekBarAlpha.progress = alpha
+        binding.tvBackgroundColor.text = String.format("%X", color.getRgb())
+        binding.seekBar.progress = alpha
     }
 
     override fun setCurrentSelectedDrawObject(drawObject: DrawObject?) {
-        drawView.currentSelectedDrawObject = drawObject
+        binding.drawView.currentSelectedDrawObject = drawObject
     }
 }
