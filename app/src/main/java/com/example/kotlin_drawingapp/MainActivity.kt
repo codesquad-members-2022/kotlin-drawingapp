@@ -89,6 +89,30 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+
+        binding.btnCurrentXPlus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x + 1, it.currentPoint.y))
+            }
+        }
+
+        binding.btnCurrentXMinus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x - 1, it.currentPoint.y))
+            }
+        }
+
+        binding.btnCurrentYPlus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x, it.currentPoint.y + 1))
+            }
+        }
+
+        binding.btnCurrentYMinus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x, it.currentPoint.y - 1))
+            }
+        }
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
