@@ -30,4 +30,12 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
     override fun updatePointY(value: Int, id: String): Int {
         return plane.updatePointY(value, id)
     }
+
+    override fun updateSizeWidth(value: Int, id: String): Int {
+        return plane.updateSizeWidth(value, id)
+    }
+
+    override fun updateSizeHeight(value: Int, id: String): Int {
+        return plane.updateSizeHeight(value, id)
+    }
 }

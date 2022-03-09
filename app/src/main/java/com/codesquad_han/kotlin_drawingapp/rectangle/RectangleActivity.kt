@@ -75,6 +75,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
         setPointXchange()
         setPointYchange()
+        setSizeWchange()
+        setSizeHchange()
     }
 
     // presenter 초기화 및 livedata 옵저버 등록
@@ -117,6 +119,32 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    fun setSizeWchange(){
+        binding.ivSizeWup?.let {
+            it.setOnClickListener {
+                presenter.updateSizeWidth(1, SELECTED_RECTANGLE_ID)
+            }
+        }
+        binding.ivSizeWdown?.let {
+            it.setOnClickListener {
+                presenter.updateSizeWidth(-1, SELECTED_RECTANGLE_ID)
+            }
+        }
+    }
+
+    fun setSizeHchange(){
+        binding.ivSizeHup?.let {
+            it.setOnClickListener {
+                presenter.updateSizeHeight(1, SELECTED_RECTANGLE_ID)
+            }
+        }
+        binding.ivSizeHdown?.let {
+            it.setOnClickListener {
+                presenter.updateSizeHeight(-1, SELECTED_RECTANGLE_ID)
+            }
+        }
+    }
+
     // 만든 사각형 커스텀 뷰에 추가로 그리기
     override fun showRectangle(updatedRectangleList: MutableList<Rectangle>) {
         Log.d("AppTest", "update rectangle list size : ${updatedRectangleList.size}")
@@ -134,6 +162,18 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     override fun showPointY(newY: Int) {
         binding.tvPointY?.let{
             it.text = newY.toString()
+        }
+    }
+
+    override fun showSizeW(newW: Int) {
+        binding.tvSizeW?.let{
+            it.text = newW.toString()
+        }
+    }
+
+    override fun showSizeH(newH: Int) {
+        binding.tvSizeH?.let{
+            it.text = newH.toString()
         }
     }
 

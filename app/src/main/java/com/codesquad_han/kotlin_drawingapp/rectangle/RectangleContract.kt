@@ -16,6 +16,10 @@ interface RectangleContract {
         fun showPointX(newX: Int)
 
         fun showPointY(newY: Int)
+
+        fun showSizeW(newW: Int)
+
+        fun showSizeH(newH: Int)
     }
 
     interface Presenter : BasePresenter {
@@ -34,6 +38,10 @@ interface RectangleContract {
         fun updatePointX(value: Int, id: String)
 
         fun updatePointY(value: Int, id: String)
+
+        fun updateSizeWidth(value: Int, id: String)
+
+        fun updateSizeHeight(value: Int, id: String)
 
     }
 }

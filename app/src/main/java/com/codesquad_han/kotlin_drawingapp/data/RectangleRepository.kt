@@ -18,4 +18,8 @@ interface RectangleRepository {
     fun updatePointX(value: Int, id: String) : Int
 
     fun updatePointY(value: Int, id: String) : Int
+
+    fun updateSizeWidth(value: Int, id: String) : Int
+
+    fun updateSizeHeight(value: Int, id: String) : Int
 }
