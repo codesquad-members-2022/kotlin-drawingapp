@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Size
 import android.view.MotionEvent
 import android.view.View
 
@@ -12,11 +13,23 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         fun onClick(point: PointF)
     }
 
+    interface OnDrawViewPointUpdateListener {
+        fun update(target: DrawObject, point: Point)
+    }
+
+    private var drawViewPointUpdateListener: OnDrawViewPointUpdateListener? = null
     private var drawViewTouchListener: OnDrawViewTouchListener? = null
     var currentSelectedDrawObject: DrawObject? = null
+    private var temporaryDrawObject: DrawObject? = null
+    private var lastPosX = 0
+    private var lastPosY = 0
 
     fun setOnDrawViewTouchListener(listenerDrawView: OnDrawViewTouchListener) {
         drawViewTouchListener = listenerDrawView
+    }
+
+    fun setOnDrawViewUpdateListener(listenerPoint: OnDrawViewPointUpdateListener) {
+        drawViewPointUpdateListener = listenerPoint
     }
 
     private var drawnObjectList = listOf<DrawObject>()
@@ -51,7 +64,47 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
         }
 
+        drawTemporaryDrawObject(canvas)
         super.onDraw(canvas)
+    }
+
+    private fun drawTemporaryDrawObject(canvas: Canvas?) {
+        temporaryDrawObject?.let {
+            when (temporaryDrawObject) {
+                is DrawObject.Rectangle -> {
+                    val paint = setRectanglePaint(temporaryDrawObject as DrawObject.Rectangle)
+                    canvas?.drawRect(
+                        it.currentPoint.x.toFloat(),
+                        it.currentPoint.y.toFloat(),
+                        it.currentPoint.x.toFloat() + it.currentSize.width.toFloat(),
+                        it.currentPoint.y.toFloat() + it.currentSize.height.toFloat(),
+                        paint
+                    )
+                }
+
+                is DrawObject.Image -> {
+                    val image = temporaryDrawObject as DrawObject.Image
+                    canvas?.apply {
+                        val paint = Paint()
+                        paint.isAntiAlias = true
+                        val alpha = (255.0 * (image.alpha / 10.0)).toInt()
+                        paint.alpha = alpha
+
+                        val rect = Rect(
+                            image.currentPoint.x,
+                            image.currentPoint.y,
+                            image.currentPoint.x + image.currentSize.width,
+                            image.currentPoint.y + image.currentSize.height
+                        )
+                        drawBitmap(image.bitmap, null, rect, paint)
+                    }
+                }
+
+                else -> return
+            }
+
+
+        }
     }
 
     private fun drawImage(canvas: Canvas?, image: DrawObject.Image) {
@@ -86,12 +139,48 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
+        super.onTouchEvent(event)
+
+        val touchPoint = event?.pointerCount ?: 0
+        when (event?.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 drawViewTouchListener?.onClick(PointF(event.x, event.y))
             }
+
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                if (touchPoint == 2) {
+                    temporaryDrawObject = copyForTemporaryDrawObject(currentSelectedDrawObject)
+                    temporaryDrawObject?.let {
+                        lastPosX = event.getX(0).toInt()
+                        lastPosY = event.getY(0).toInt()
+                    }
+                }
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                if (touchPoint == 2) {
+                    temporaryDrawObject?.apply {
+                        currentPoint.x += event.getX(0).toInt() - lastPosX
+                        currentPoint.y += event.getY(0).toInt() - lastPosY
+
+                        lastPosX = event.getX(0).toInt()
+                        lastPosY = event.getY(0).toInt()
+                    }
+                    invalidate()
+                }
+            }
+
+            MotionEvent.ACTION_UP -> {
+                currentSelectedDrawObject?.let { current ->
+                    temporaryDrawObject?.let { temp ->
+                        drawViewPointUpdateListener?.update(current, temp.currentPoint)
+                    }
+                }
+                temporaryDrawObject = null
+                invalidate()
+            }
         }
-        return super.onTouchEvent(event)
+        return true
     }
 
     private fun setRectanglePaint(rect: DrawObject.Rectangle): Paint {

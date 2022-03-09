@@ -2,6 +2,7 @@ package com.example.kotlin_drawingapp
 
 import android.content.Intent
 import android.graphics.ImageDecoder
+import android.graphics.Point
 import android.graphics.PointF
 import android.os.Build
 import android.os.Bundle
@@ -75,6 +76,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         drawView.setOnDrawViewTouchListener(object : DrawView.OnDrawViewTouchListener {
             override fun onClick(point: PointF) {
                 presenter.selectDrawObject(point.x, point.y)
+            }
+        })
+
+        drawView.setOnDrawViewUpdateListener(object : DrawView.OnDrawViewPointUpdateListener{
+            override fun update(target: DrawObject, point: Point) {
+                presenter.modifyDrawObjectPoint(target, point)
             }
         })
 

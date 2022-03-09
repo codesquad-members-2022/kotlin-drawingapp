@@ -1,6 +1,7 @@
 package com.example.kotlin_drawingapp
 
 import android.graphics.Bitmap
+import android.graphics.Point
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.draw.DrawObject
 
@@ -21,5 +22,7 @@ class MainContract {
         fun selectDrawObject(x: Float, y: Float)
 
         fun setCurrentSelectedDrawObjectAlpha(alpha: Int)
+
+        fun modifyDrawObjectPoint(target: DrawObject, point: Point)
     }
 }

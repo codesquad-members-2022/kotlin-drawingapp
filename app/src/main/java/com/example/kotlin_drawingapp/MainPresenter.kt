@@ -2,7 +2,6 @@ package com.example.kotlin_drawingapp
 
 import android.graphics.Bitmap
 import android.graphics.Point
-import android.util.Size
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.ImageFactory
 import com.example.kotlin_drawingapp.model.RectangleFactory
@@ -55,5 +54,37 @@ class MainPresenter(
             drawingRepository.modifyDrawObject(tmpCurrentSelectedDrawObject, replacement)
             mainView.showDrawObject(drawingRepository.getAllDrawObject())
         }
+    }
+
+    override fun modifyDrawObjectPoint(target: DrawObject, point: Point) {
+        when (target) {
+            is DrawObject.Rectangle -> {
+                drawingRepository.modifyDrawObject(
+                    target,
+                    DrawObject.Rectangle(
+                        target.id,
+                        target.currentSize,
+                        point,
+                        target.rgb,
+                        target.alpha
+                    )
+                )
+            }
+
+            is DrawObject.Image -> {
+                drawingRepository.modifyDrawObject(
+                    target,
+                    DrawObject.Image(
+                        target.id,
+                        target.currentSize,
+                        point,
+                        target.alpha,
+                        target.bitmap
+                    )
+                )
+            }
+        }
+
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
     }
 }
