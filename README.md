@@ -1,5 +1,10 @@
 # kotlin-drawingapp
-- 요구사항 파악
-- 구현 완료 후 자신의 github 아이디에 해당하는 브랜치에 PR을 통해 코드 리뷰 요청
-- 코드 리뷰 피드백에 대한 개선 작업 후 push
-- 모든 피드백 완료 후 다음 단계를 도전하고 이전 과정 반복
+## 권한 설정 테스트
+* 허용클릭시
+![allow](https://user-images.githubusercontent.com/58967292/157374059-7a13ba50-74a9-43d1-ad12-4ec1f107b7da.gif)
+
+* 비허용 클릭시 -> 안내 메시지 출력 -> 앱설정화면 이동기능 
+![dont allow](https://user-images.githubusercontent.com/58967292/157374064-7872de4a-bff8-483a-b891-cd4f2c78652f.gif)
+
+* 드래그 테스트
+![drag test](https://user-images.githubusercontent.com/58967292/157374128-707f157c-e57a-4c68-9cb4-883fda11c962.gif)
