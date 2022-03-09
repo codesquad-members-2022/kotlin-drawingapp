@@ -71,39 +71,10 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun drawTemporaryDrawObject(canvas: Canvas?) {
         temporaryDrawObject?.let {
             when (temporaryDrawObject) {
-                is DrawObject.Rectangle -> {
-                    val paint = setRectanglePaint(temporaryDrawObject as DrawObject.Rectangle)
-                    canvas?.drawRect(
-                        it.currentPoint.x.toFloat(),
-                        it.currentPoint.y.toFloat(),
-                        it.currentPoint.x.toFloat() + it.currentSize.width.toFloat(),
-                        it.currentPoint.y.toFloat() + it.currentSize.height.toFloat(),
-                        paint
-                    )
-                }
-
-                is DrawObject.Image -> {
-                    val image = temporaryDrawObject as DrawObject.Image
-                    canvas?.apply {
-                        val paint = Paint()
-                        paint.isAntiAlias = true
-                        val alpha = (255.0 * (image.alpha / 10.0)).toInt()
-                        paint.alpha = alpha
-
-                        val rect = Rect(
-                            image.currentPoint.x,
-                            image.currentPoint.y,
-                            image.currentPoint.x + image.currentSize.width,
-                            image.currentPoint.y + image.currentSize.height
-                        )
-                        drawBitmap(image.bitmap, null, rect, paint)
-                    }
-                }
-
+                is DrawObject.Rectangle -> drawRectangle(canvas, it as DrawObject.Rectangle)
+                is DrawObject.Image -> drawImage(canvas, it as DrawObject.Image)
                 else -> return
             }
-
-
         }
     }
 
