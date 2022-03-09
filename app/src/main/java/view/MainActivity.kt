@@ -245,5 +245,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         customRectangleViewList.add(rectView)
     }
 
+    override fun redrawPhoto(photo: Photo) {
+        mainLayout.removeView(selectedCustomRectangleView)
+        customRectangleViewList.remove(selectedCustomRectangleView)
+        val rectView = RectView(this)
+        selectedCustomRectangleView?.bitmap?.let{
+            rectView.drawPhoto(it,photo)
+        }
+        selectedCustomRectangleView = rectView
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
+
 }
 

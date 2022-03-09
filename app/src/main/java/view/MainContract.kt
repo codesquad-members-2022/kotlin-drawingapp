@@ -11,6 +11,7 @@ interface MainContract {
         fun drawRectangle(rect:Rect)
         fun drawPhoto(photo: Photo)
         fun redrawRectangle(rect:Rect)
+        fun redrawPhoto(photo: Photo)
     }
 
     interface Presenter {

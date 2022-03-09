@@ -13,7 +13,7 @@ import model.Rect
 
 
 class RectView(context: Context) : View(context) {
-    private var bitmap: Bitmap? = null
+    var bitmap: Bitmap? = null
     var rectId = ""
     var photoId = ""
     var left = 0.0F
@@ -138,7 +138,14 @@ class RectView(context: Context) : View(context) {
         val y: Float
         var tempView = RectView(context)
         tempView.rectId = "temp"
-        tempView.rectanglePaint.color = this.rectanglePaint.color
+        if(this.photoId==""){
+            tempView.rectanglePaint.color = this.rectanglePaint.color
+        }
+        else{
+            tempView.photoId= "tempPhoto"
+            tempView.bitmap = this.bitmap
+        }
+
         tempView.alpha = (5 * 25.5).toInt()
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
