@@ -33,32 +33,13 @@ class MainPresenter(
         }
 
         drawingRepository.saveCurrentSelectedDrawObject(drawObject)
-        mainView.setCurrentSelectedDrawObject(copyDrawObject(drawObject))
+        mainView.setCurrentSelectedDrawObject(drawObject)
         mainView.showDrawObject(drawingRepository.getAllDrawObject())
         drawObject?.let {
             when (drawObject) {
                 is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha)
                 is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha)
             }
-        }
-    }
-
-    private fun copyDrawObject(drawObject: DrawObject?): DrawObject? {
-        return when (drawObject) {
-            is DrawObject.Rectangle -> {
-                drawObject.copy(
-                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
-                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
-                    rgb = Color(drawObject.rgb.r, drawObject.rgb.g, drawObject.rgb.b)
-                )
-            }
-            is DrawObject.Image -> {
-                drawObject.copy(
-                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
-                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
-                )
-            }
-            else -> null
         }
     }
 

@@ -102,4 +102,29 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         return paint
     }
+
+    private fun copyForTemporaryDrawObject(drawObject: DrawObject?): DrawObject? {
+        return when (drawObject) {
+            is DrawObject.Rectangle -> {
+                drawObject.copy(
+                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
+                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
+                    rgb = com.example.kotlin_drawingapp.model.Color(
+                        drawObject.rgb.r,
+                        drawObject.rgb.g,
+                        drawObject.rgb.b
+                    ),
+                    alpha = 5
+                )
+            }
+            is DrawObject.Image -> {
+                drawObject.copy(
+                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
+                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
+                    alpha = 5
+                )
+            }
+            else -> null
+        }
+    }
 }
