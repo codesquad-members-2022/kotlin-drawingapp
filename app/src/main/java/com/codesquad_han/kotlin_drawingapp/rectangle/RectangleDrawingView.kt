@@ -10,16 +10,21 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.codesquad_han.kotlin_drawingapp.R
-import com.codesquad_han.kotlin_drawingapp.model.Rectangle
+import com.codesquad_han.kotlin_drawingapp.model.*
+import com.codesquad_han.kotlin_drawingapp.model.Point
 
 class RectangleDrawingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private var selectedRectangle: Rectangle? = null
+    private var tempRectangle: Rectangle? = null
     private var rectangleList = mutableListOf<Rectangle>()
 
+    private var isDoubleTouchExist = false  // 현재 두 손가락 동시에
+
     private var paint = Paint()
+    private var tempPaint = Paint()
     private var strokePaint = Paint()
     private lateinit var clickListener: RectangleViewClickInterface
 
@@ -81,18 +86,97 @@ class RectangleDrawingView @JvmOverloads constructor(
                     )
                 }
             }
-
             Log.d("AppTest", "RectangleDrawingView/ ${rectangle.toString()}")
         }
+
+        // 임시뷰 사각형 그리기
+        tempRectangle?.let { tempRectangle ->
+            tempPaint.setColor(
+                Color.argb(
+                    5 * 255 / 10,
+                    tempRectangle.backgroundColor.r,
+                    tempRectangle.backgroundColor.g,
+                    tempRectangle.backgroundColor.b
+                )
+            )
+
+            if (tempRectangle.imageUri == null) {
+                canvas.drawRect(
+                    tempRectangle.point.x.toFloat(),
+                    tempRectangle.point.y.toFloat(),
+                    (tempRectangle.point.x + tempRectangle.size.width).toFloat(),
+                    (tempRectangle.point.y + tempRectangle.size.height).toFloat(),
+                    tempPaint
+                )
+            }
+
+            tempRectangle.imageUri?.let {
+                var bitmap: Bitmap
+                if (Build.VERSION.SDK_INT < 29) { //
+                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    bitmap = ImageDecoder.decodeBitmap(source)
+                }
+
+                var imagePaint = Paint()
+                imagePaint.alpha = 5 * 255 / 10
+                canvas.drawBitmap(
+                    bitmap, null, Rect(
+                        tempRectangle.point.x,
+                        tempRectangle.point.y,
+                        (tempRectangle.point.x + tempRectangle.size.width),
+                        (tempRectangle.point.y + tempRectangle.size.height)
+                    ), imagePaint
+                )
+            }
+        }
+
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val currentPoint = PointF(event.x, event.y)
+        var pointCount = event.pointerCount
 
         // 클릭 리스너 사용해서 액티비티 연결하기
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 checkTouchPoint(currentPoint.x, currentPoint.y)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (pointCount == 2 && selectedRectangle != null) {
+                    if (checkTwoPoint(PointF(event.getX(0), event.getY(0))) &&
+                        checkTwoPoint(PointF(event.getX(1), event.getY(1)))
+                    ) {
+                        if(!isDoubleTouchExist){
+                            isDoubleTouchExist = true
+                            tempRectangle = Rectangle(
+                                selectedRectangle!!.id,
+                                Point(selectedRectangle!!.point.x, selectedRectangle!!.point.y),
+                                Size(selectedRectangle!!.size.width, selectedRectangle!!.size.height),
+                                BackgroundColor(selectedRectangle!!.backgroundColor.r,
+                                                selectedRectangle!!.backgroundColor.g,
+                                                selectedRectangle!!.backgroundColor.b),
+                                Transparency(5),
+                                selectedRectangle!!.imageUri
+                            )
+                            invalidate()
+                        }
+
+                        tempRectangle!!.point.x = (event.getX(0) - (tempRectangle!!.size.width / 4 * 3)).toInt()
+                        tempRectangle!!.point.y = (event.getY(0) - (tempRectangle!!.size.height / 3)).toInt()
+                        invalidate()
+                    }
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                if (isDoubleTouchExist) {
+                    selectedRectangle!!.point.x = tempRectangle!!.point.x
+                    selectedRectangle!!.point.y = tempRectangle!!.point.y  // 임시 사각형 뷰로 선택 사각형 위치 이동
+                    tempRectangle = null
+                    isDoubleTouchExist = false
+                    invalidate()
+                }
             }
         }
 
@@ -141,6 +225,20 @@ class RectangleDrawingView @JvmOverloads constructor(
         }
 
         invalidate()
+    }
+
+    fun checkTwoPoint(point: PointF): Boolean {
+        if (!isDoubleTouchExist) {
+            return (point.x >= selectedRectangle!!.point.x &&
+                    point.x <= selectedRectangle!!.point.x + selectedRectangle!!.size.width &&
+                    point.y >= selectedRectangle!!.point.y &&
+                    point.y <= selectedRectangle!!.point.y + selectedRectangle!!.size.height)
+        } else {
+            return (point.x >= tempRectangle!!.point.x &&
+                    point.x <= tempRectangle!!.point.x + tempRectangle!!.size.width &&
+                    point.y >= tempRectangle!!.point.y &&
+                    point.y <= tempRectangle!!.point.y + tempRectangle!!.size.height)
+        }
     }
 
     fun getColorStr(selectedRectangle: Rectangle): String {
