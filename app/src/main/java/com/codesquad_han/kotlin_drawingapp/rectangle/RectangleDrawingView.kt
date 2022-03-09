@@ -24,8 +24,6 @@ class RectangleDrawingView : View {
     private var tempRectangle: Rectangle? = null
     private var rectangleList = mutableListOf<Rectangle>()
 
-    private var isDoubleTouchExist = false  // 현재 두 손가락 동시에
-
     private var paint = Paint()
     private var tempPaint = Paint()
     private var strokePaint = Paint()
@@ -147,39 +145,44 @@ class RectangleDrawingView : View {
                 checkTouchPoint(currentPoint.x, currentPoint.y)
             }
             MotionEvent.ACTION_MOVE -> {
-                if (pointCount == 2 && selectedRectangle != null) {
-                    if (checkTwoPoint(PointF(event.getX(0), event.getY(0))) &&
-                        checkTwoPoint(PointF(event.getX(1), event.getY(1)))
-                    ) {
-                        if(!isDoubleTouchExist){
-                            isDoubleTouchExist = true
+                if (selectedRectangle != null) {
+                    if (checkTwoPoint(PointF(event.getX(0), event.getY(0)))) {
+                        if (tempRectangle == null) {
                             tempRectangle = Rectangle(
                                 selectedRectangle!!.id,
                                 Point(selectedRectangle!!.point.x, selectedRectangle!!.point.y),
-                                Size(selectedRectangle!!.size.width, selectedRectangle!!.size.height),
-                                BackgroundColor(selectedRectangle!!.backgroundColor.r,
-                                                selectedRectangle!!.backgroundColor.g,
-                                                selectedRectangle!!.backgroundColor.b),
+                                Size(
+                                    selectedRectangle!!.size.width,
+                                    selectedRectangle!!.size.height
+                                ),
+                                BackgroundColor(
+                                    selectedRectangle!!.backgroundColor.r,
+                                    selectedRectangle!!.backgroundColor.g,
+                                    selectedRectangle!!.backgroundColor.b
+                                ),
                                 Transparency(5),
                                 selectedRectangle!!.imageUri
                             )
                             invalidate()
                         }
 
-                        tempRectangle!!.point.x = (event.getX(0) - (tempRectangle!!.size.width / 4 * 3)).toInt()
-                        tempRectangle!!.point.y = (event.getY(0) - (tempRectangle!!.size.height / 3)).toInt()
+                        tempRectangle!!.point.x =
+                            (event.getX(0) - (tempRectangle!!.size.width / 2)).toInt()
+                        tempRectangle!!.point.y =
+                            (event.getY(0) - (tempRectangle!!.size.height / 2)).toInt()
+                        // 임시뷰 움직이는 동안 좌표 변화 보여주기
+                        clickListener.updatePointText(tempRectangle!!.point.x, tempRectangle!!.point.y)
                         invalidate()
                     }
                 }
             }
             MotionEvent.ACTION_UP -> {
-                if (isDoubleTouchExist) {
+                if (tempRectangle != null) {
                     var newX = tempRectangle!!.point.x
                     var newY = tempRectangle!!.point.y
                     tempRectangle = null
-                    isDoubleTouchExist = false
 
-                     // 임시 사각형 뷰로 선택 사각형 위치 이동
+                    // 임시 사각형 뷰로 선택 사각형 위치 이동
                     clickListener.updateSelectedRectanglePoint(selectedRectangle!!.id, newX, newY)
                 }
             }
@@ -217,7 +220,9 @@ class RectangleDrawingView : View {
                         getColorStr(it),
                         it.transparency.transparency,
                         true,
-                        it.id
+                        it.id,
+                        it.point.x, it.point.y,
+                        it.size.width, it.size.height
                     )
                 }
                 break
@@ -226,14 +231,17 @@ class RectangleDrawingView : View {
 
         if (!selected) {
             selectedRectangle = null
-            clickListener.clickDrawingView("", -1, false, "")
+            clickListener.clickDrawingView(
+                "", -1, false, "",
+                0, 0, 0, 0
+            )
         }
 
         invalidate()
     }
 
     fun checkTwoPoint(point: PointF): Boolean {
-        if (!isDoubleTouchExist) {
+        if (tempRectangle == null) {
             return (point.x >= selectedRectangle!!.point.x &&
                     point.x <= selectedRectangle!!.point.x + selectedRectangle!!.size.width &&
                     point.y >= selectedRectangle!!.point.y &&

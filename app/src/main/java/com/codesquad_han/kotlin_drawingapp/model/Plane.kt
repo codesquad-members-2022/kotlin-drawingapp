@@ -38,5 +38,25 @@ class Plane(rectangleFactory: RectangleFactory) {
         }
     }
 
+    fun updatePointX(value: Int, id: String): Int{
+        rectangleList.forEach {
+            if(it.id == id){
+                if(it.point.x > 1) it.point.x += value
+                return it.point.x
+            }
+        }
+        return -1
+    }
+
+    fun updatePointY(value: Int, id: String): Int{
+        rectangleList.forEach {
+            if(it.id == id){
+                if(it.point.y > 1) it.point.y += value
+                return it.point.y
+            }
+        }
+        return -1
+    }
+
     fun returnRectangleCount() = rectangleList.size
 }

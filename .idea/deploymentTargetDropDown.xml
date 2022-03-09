@@ -12,6 +12,10 @@
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
+<<<<<<< HEAD
     <timeTargetWasSelectedWithDropDown value="2022-03-10T16:30:41.507263200Z" />
+=======
+    <timeTargetWasSelectedWithDropDown value="2022-03-09T16:26:18.905660Z" />
+>>>>>>> ecf552e (feat : 위치 조절 기능 추가)
   </component>
 </project>

@@ -72,6 +72,9 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         setBtnMakeRectangle()
         setTransparencySeekBar()
         setBtnGallery()
+
+        setPointXchange()
+        setPointYchange()
     }
 
     // presenter 초기화 및 livedata 옵저버 등록
@@ -88,6 +91,32 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    fun setPointXchange(){
+        binding.ivPointXup?.let {
+            it.setOnClickListener {
+                presenter.updatePointX(1, SELECTED_RECTANGLE_ID)
+            }
+        }
+        binding.ivPointXdown?.let {
+            it.setOnClickListener {
+                presenter.updatePointX(-1, SELECTED_RECTANGLE_ID)
+            }
+        }
+    }
+
+    fun setPointYchange(){
+        binding.ivPointYup?.let {
+            it.setOnClickListener {
+                presenter.updatePointY(1, SELECTED_RECTANGLE_ID)
+            }
+        }
+        binding.ivPointYdown?.let {
+            it.setOnClickListener {
+                presenter.updatePointY(-1, SELECTED_RECTANGLE_ID)
+            }
+        }
+    }
+
     // 만든 사각형 커스텀 뷰에 추가로 그리기
     override fun showRectangle(updatedRectangleList: MutableList<Rectangle>) {
         Log.d("AppTest", "update rectangle list size : ${updatedRectangleList.size}")
@@ -96,8 +125,21 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    override fun showPointX(newX: Int) {
+        binding.tvPointX?.let{
+            it.text = newX.toString()
+        }
+    }
 
-    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String) { // 커스텀 뷰 터치 시 호출
+    override fun showPointY(newY: Int) {
+        binding.tvPointY?.let{
+            it.text = newY.toString()
+        }
+    }
+
+
+    ///////////////
+    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String, x: Int, y: Int, width: Int, height: Int) { // 커스텀 뷰 터치 시 호출
         if (selected) {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.VISIBLE
@@ -110,6 +152,18 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             }
             binding.btnOpenGallery?.let {
                 it.isEnabled = true
+            }
+            binding.tvPointX?.let {
+                it.text = x.toString()
+            }
+            binding.tvPointY?.let {
+                it.text = y.toString()
+            }
+            binding.tvSizeW?.let {
+                it.text = width.toString()
+            }
+            binding.tvSizeH?.let {
+                it.text = height.toString()
             }
 
             // id 값을 활용해 현재 선택된 사각형 투명도 데이터 업데이트 후 뷰에 반영시키기
@@ -127,6 +181,15 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     override fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) {
         SELECTED_RECTANGLE_ID = id
         presenter.updateSelectedRectanglePoint(id, newX, newY)
+    }
+
+    override fun updatePointText(x: Int, y: Int) {
+        binding.tvPointX?.let {
+            it.text = x.toString()
+        }
+        binding.tvPointY?.let {
+            it.text = y.toString()
+        }
     }
 
     fun ConvertDPtoPX(context: Context, dp: Int): Int {
