@@ -13,6 +13,8 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private var drawViewTouchListener: OnDrawViewTouchListener? = null
+    var currentSelectedDrawObject: DrawObject? = null
+
     fun setOnDrawViewTouchListener(listenerDrawView: OnDrawViewTouchListener) {
         drawViewTouchListener = listenerDrawView
     }

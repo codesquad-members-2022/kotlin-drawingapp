@@ -9,6 +9,8 @@ class MainContract {
         fun showDrawObject(drawObject: List<DrawObject>)
 
         fun showDrawObjectInfo(color: Color, alpha: Int)
+
+        fun setCurrentSelectedDrawObject(drawObject: DrawObject?)
     }
 
     interface Presenter {

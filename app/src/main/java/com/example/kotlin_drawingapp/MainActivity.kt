@@ -97,4 +97,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         tvRgb.text = String.format("%X", color.getRgb())
         seekBarAlpha.progress = alpha
     }
+
+    override fun setCurrentSelectedDrawObject(drawObject: DrawObject?) {
+        drawView.currentSelectedDrawObject = drawObject
+    }
 }
