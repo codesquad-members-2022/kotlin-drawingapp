@@ -1,16 +1,29 @@
 package com.codesquard.kotlin_drawingapp
 
-import android.content.Context
-import android.view.View
-
 interface TaskContract {
 
     interface TaskView {
-        fun showRectangle()
+        fun showRectangle(newRect: Rectangle)
+
+        fun showSelectedRectangle()
+
+        fun updateRect()
+
+        fun showRectColor(color: String = "")
+
+        fun showRectAlpha(alpha: Float = 0f)
+
     }
 
     interface Presenter {
-        fun onCreateView(context: Context): TaskPresenter.CustomView
+        fun addNewRectangle()
+
+        fun selectRectangle(x: Float, y: Float)
+
+        fun changeAlphaValue(value: Float)
+
+        fun changeColor()
+
     }
 
 }

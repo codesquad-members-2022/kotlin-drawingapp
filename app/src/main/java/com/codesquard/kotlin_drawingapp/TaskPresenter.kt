@@ -1,42 +1,66 @@
 package com.codesquard.kotlin_drawingapp
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.view.View
+class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.Presenter,
+    RectangleListener {
 
-class TaskPresenter(val taskView: TaskContract.TaskView) : TaskContract.Presenter {
-    private val plane: PlaneListener = Plane()
-    private val rectangleList = ArrayList<RectangleViewModel>()
+    private val plane = Plane(this)
+    private var selectedRectIndex = -1
 
-    override fun onCreateView(context: Context): CustomView {
-        return CustomView(context)
+    override fun addNewRectangle() {
+        plane.createNewRectangle()
     }
 
-    inner class CustomView(context: Context) : View(context) {
-        private val rectangle = plane.onCreateRectangle()
-
-        init {
-            rectangleList.add(rectangle)
-        }
-
-        override fun onDraw(canvas: Canvas?) {
-            super.onDraw(canvas)
-
-            val paint = Paint()
-            val alpha = rectangle.getAlpha()
-            val r = rectangle.getColor()[0]
-            val g = rectangle.getColor()[1]
-            val b = rectangle.getColor()[2]
-            paint.color = Color.argb(alpha, r, g, b)
-
-            val x = rectangle.getPoint()[0]
-            val y = rectangle.getPoint()[1]
-            canvas?.drawRect(x, y, 150f + x, 120f + y, paint)
-        }
-
+    override fun selectRectangle(x: Float, y: Float) {
+        plane.selectRectangle(x, y)
     }
 
+    override fun changeAlphaValue(value: Float) {
+        plane.updateAlpha(value)
+    }
+
+    override fun changeColor() {
+        plane.updateColor()
+    }
+
+    override fun onCreateRectangle(newRect: Rectangle) {
+        taskView.showRectangle(newRect)
+    }
+
+    override fun onSelectRectangle(index: Int) {
+        selectedRectIndex = index
+        if (index > -1) {
+            taskView.updateRect()
+        }
+        getRectAlpha()
+        getRectColor()
+        taskView.showSelectedRectangle()
+    }
+
+    override fun onUpdateRectangle() {
+        getRectColor()
+        taskView.showSelectedRectangle()
+    }
+
+    private fun getRectColor() {
+        if (selectedRectIndex == -1) {
+            taskView.showRectColor()
+        } else {
+            val color = plane.getRectangle(selectedRectIndex).getColor()
+            val colorText =
+                "#${color[0].toString(16)}${color[1].toString(16)}${color[2].toString(16)}"
+            taskView.showRectColor(colorText)
+        }
+    }
+
+    private fun getRectAlpha() {
+        if (selectedRectIndex == -1) {
+            taskView.showRectAlpha()
+        } else {
+            val alpha = plane.getRectangle(selectedRectIndex).getAlpha() / 25
+            taskView.showRectAlpha(alpha.toFloat())
+        }
+    }
 
 }
+
+

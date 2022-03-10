@@ -1,9 +1,9 @@
 package com.codesquard.kotlin_drawingapp
 
-class RectangleViewModelFactory {
-    private val rectangleView = RectangleViewModel()
+class RectangleFactory {
+    private val rectangle = Rectangle()
 
-    private fun setRectangleViewID() {
+    private fun setRectangleID() {
         val letter = "abcdefghijklmnopqrstuvwxyz0123456789"
         var randomID = ""
         (1..9).forEach {
@@ -11,13 +11,13 @@ class RectangleViewModelFactory {
             if (it == 3 || it == 6)
                 randomID += "-"
         }
-        rectangleView.setID(randomID)
+        rectangle.setID(randomID)
     }
 
-    private fun setRectangleViewPoint() {
-        val pointX = (300..900).random().toFloat()
-        val pointY = (300..900).random().toFloat()
-        rectangleView.setPoint(pointX, pointY)
+    private fun setRectanglePoint() {
+        val pointX = (0..1500).random().toFloat()
+        val pointY = (100..1200).random().toFloat()
+        rectangle.setPoint(pointX, pointY)
     }
 
     /*private fun dp2px(dp: Float): Float {
@@ -26,44 +26,45 @@ class RectangleViewModelFactory {
         return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
     }*/
 
-    private fun setRectangleViewSize() {
+    private fun setRectangleSize() {
         val width = 150
         val height = 120
-        rectangleView.setSize(width, height)
+        rectangle.setSize(width, height)
     }
 
-    private fun setRectangleViewColor() {
+    private fun setRectangleColor() {
         val r = (0..255).random()
         val g = (0..255).random()
         val b = (0..255).random()
-        rectangleView.setColor(r, g, b)
+        rectangle.setColor(r, g, b)
     }
 
-    private fun setRectangleViewAlpha() {
-        val alpha = (100..1000).random()
-        rectangleView.setAlpha(alpha)
+    private fun setRectangleAlpha() {
+        val alpha = (0..255).random()
+        rectangle.setAlpha(alpha)
     }
 
-    fun getInstance(): RectangleViewModel {
-        setRectangleViewID()
-        setRectangleViewPoint()
-        setRectangleViewColor()
-        setRectangleViewAlpha()
-        setRectangleViewSize()
-        return rectangleView
+    fun getInstance(): Rectangle {
+        setRectangleID()
+        setRectanglePoint()
+        setRectangleColor()
+        setRectangleAlpha()
+        setRectangleSize()
+        return rectangle
     }
 
     fun printInfo(): String {
-        return rectangleView.toString()
+        return rectangle.toString()
     }
 
 }
 
-class RectangleViewModel {
+class Rectangle {
     private lateinit var id: String
     private lateinit var point: Array<Float>
     private lateinit var size: Array<Int>
     private lateinit var color: Array<Int>
+    private var isSelected: Boolean = false
     private var alpha: Int = 0
 
     fun setPoint(x: Float, y: Float) {
@@ -84,8 +85,8 @@ class RectangleViewModel {
 
     fun getColor() = color
 
-    fun setAlpha(alpha: Int) {
-            this.alpha = alpha
+    fun setAlpha(alpha: Int = 0) {
+        this.alpha = alpha
     }
 
     fun getAlpha() = alpha
@@ -93,6 +94,12 @@ class RectangleViewModel {
     fun setID(id: String) {
         this.id = id
     }
+
+    fun isSelected(boolean: Boolean = false) {
+        this.isSelected = boolean
+    }
+
+    fun getStatus() = isSelected
 
     fun getID() = id
 

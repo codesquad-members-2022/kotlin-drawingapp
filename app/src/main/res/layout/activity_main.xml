@@ -13,7 +13,7 @@
     android:backgroundTint="#E9E6FA"
     style="?attr/materialButtonOutlinedStyle"
     android:drawableTop="@drawable/ic_crop_square_black_24dp"
-    android:text="@string/사각형"
+    android:text="@string/rectangle"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
