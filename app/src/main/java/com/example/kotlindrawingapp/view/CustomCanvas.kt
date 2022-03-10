@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp
+package com.example.kotlindrawingapp.view
 
 import android.content.Context
 import android.graphics.*
@@ -13,6 +13,7 @@ import com.example.kotlindrawingapp.domain.figure.square.Square
 
 class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
+    private lateinit var listener: Movable
     private lateinit var plane: Plane
     private var paint: Paint = Paint()
     private var selectedPaint: Paint = Paint()
@@ -31,7 +32,13 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
         val width = figure.size.width
         val height = figure.size.height
         when (figure) {
-            is Square -> canvas.drawRect(moveX, moveY, moveX + width, moveY + height, temporaryPaint(figure))
+            is Square -> canvas.drawRect(
+                moveX,
+                moveY,
+                moveX + width,
+                moveY + height,
+                temporaryPaint(figure)
+            )
             is Picture -> {
                 val bitmap = Picture.byteArrayToBitmap(figure.memory)
                 val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
@@ -101,23 +108,25 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             MotionEvent.ACTION_MOVE -> {
                 plane.selectedSquare.value?.let { figure ->
                     temporary = figure
+                    listener.move(moveX, moveY)
                     invalidate()
                 }
             }
             MotionEvent.ACTION_UP -> {
                 val selectedFigure = plane.selectedSquare.value
-                selectedFigure?.let {
+                selectedFigure?.let { selectedFigure ->
                     temporary?.let {
-                        it.update(Point(moveX, moveY))
-                        plane.removeFigure(selectedFigure)
-                        plane.addFigure(it)
+                        listener.move(moveX, moveY, it, selectedFigure)
                         temporary = null
-                        invalidate()
                     }
                 }
                 temporary = null
             }
         }
         return true
+    }
+
+    fun setListener(listener: Movable) {
+        this.listener = listener
     }
 }

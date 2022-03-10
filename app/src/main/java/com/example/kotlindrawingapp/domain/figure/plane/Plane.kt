@@ -2,10 +2,7 @@ package com.example.kotlindrawingapp.domain.figure.plane
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.kotlindrawingapp.domain.figure.Alpha
-import com.example.kotlindrawingapp.domain.figure.Figure
-import com.example.kotlindrawingapp.domain.figure.Point
-import com.example.kotlindrawingapp.domain.figure.RGB
+import com.example.kotlindrawingapp.domain.figure.*
 import com.example.kotlindrawingapp.domain.figure.square.Square
 
 class Plane private constructor(private val _squares: MutableList<Figure>) {
@@ -19,7 +16,9 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
         get() = _squares
 
     fun addFigure(figure: Figure?) {
-        figure?.let { _squares.add(it) }
+        figure?.let {
+            _squares.add(it)
+        }
     }
 
     fun removeFigure(figure: Figure?) {
@@ -64,6 +63,46 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
 
     fun findByIndex(idx: Int): Figure {
         return _squares[idx]
+    }
+
+    fun updatePointX(newX: Float) {
+        item?.let {
+            val y = it.point.y
+            it.update(Point(newX, y))
+            val index = _squares.indexOf(it)
+            _squares[index].update(Point(newX, y))
+            _selectedSquare.value = it
+        }
+    }
+
+    fun updatePointY(newY: Float) {
+        item?.let {
+            val x = it.point.x
+            it.update(Point(x, newY))
+            val index = _squares.indexOf(it)
+            _squares[index].update(Point(x, newY))
+            _selectedSquare.value = it
+        }
+    }
+
+    fun updateWidth(newWidth: Int) {
+        item?.let {
+            val height = it.size.height
+            it.update(Size(newWidth, height))
+            val index = _squares.indexOf(it)
+            _squares[index].update(Size(newWidth, height))
+            _selectedSquare.value = it
+        }
+    }
+
+    fun updateHeight(newHeight: Int) {
+        item?.let {
+            val width = it.size.width
+            it.update(Size(width, newHeight))
+            val index = _squares.indexOf(it)
+            _squares[index].update(Size(width, newHeight))
+            _selectedSquare.value = it
+        }
     }
 
     companion object {

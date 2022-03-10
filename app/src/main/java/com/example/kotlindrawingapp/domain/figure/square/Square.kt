@@ -5,7 +5,7 @@ import com.example.kotlindrawingapp.domain.figure.*
 data class Square(
     override val id: ID,
     override var point: Point,
-    override val size: Size,
+    override var size: Size,
     override var rgb: RGB?,
     override var alpha: Alpha
 ) : Figure() {
