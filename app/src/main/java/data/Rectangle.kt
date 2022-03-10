@@ -1,4 +1,4 @@
-package Data
+package data
 
 import android.graphics.Paint
 import android.graphics.RectF

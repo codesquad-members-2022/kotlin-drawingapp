@@ -5,4 +5,7 @@
     <string name="visibility">투명도</string>
     <string name="square_visibility">투명도</string>
     <string name="make_square">사각형</string>
+    <string name="remove_all_rectangles">초기화</string>
+    <string name="rectangle_counts">사각형 갯수</string>
+    <string name="load_photo">사진 불러오기</string>
 </resources>

@@ -1,12 +1,11 @@
-package Data
+package data
 
-import Presenter.GenerateRectangle
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 
-class RectFactory : GenerateRectangle {
-    override fun makeRandomRect(): Rectangle {
+class RectFactory {
+    fun makeRandomRect(): Rectangle {
         val squareWidth = 150.toFloat()
         val squareHeight = 150.toFloat()
         val charA = (97..122).random().toChar()
@@ -26,13 +25,13 @@ class RectFactory : GenerateRectangle {
         return Rectangle(randomID, RectF(x, y, w, h), paint)
     }
 
-    override fun makeRectangleStrokesList(rectangle: Rectangle): Rectangle {
+    fun makeRectangleStrokesList(rectangle: Rectangle): Rectangle {
         val bottom = rectangle.rectangles.bottom
         val left = rectangle.rectangles.left
         val right = rectangle.rectangles.right
         val top = rectangle.rectangles.top
         val paint = Paint()
-        paint.style = Paint.Style.FILL_AND_STROKE
+        paint.style = Paint.Style.STROKE
         paint.color = Color.WHITE
         return Rectangle("Stroke", RectF(left, top, right, bottom), paint)
     }
