@@ -24,8 +24,6 @@ class MainContract {
 
         fun setCurrentSelectedDrawObjectAlpha(alpha: Int)
 
-        fun modifyDrawObjectPoint(target: DrawObject, point: Point)
-
-        fun modifyDrawObjectSize(target: DrawObject, size: Size)
+        fun modifyDrawObjectProperty(target: DrawObject, point: Point, size: Size)
     }
 }

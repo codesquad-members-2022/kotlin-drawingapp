@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         binding.drawView.setOnDrawViewUpdateListener(object : DrawView.OnDrawViewPointUpdateListener{
             override fun onUpdate(target: DrawObject, point: Point) {
-                presenter.modifyDrawObjectPoint(target, point)
+                presenter.modifyDrawObjectProperty(target, point, target.currentSize)
             }
         })
 
@@ -92,49 +92,49 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         binding.btnCurrentXPlus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x + 1, it.currentPoint.y))
+                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x + 1, it.currentPoint.y), it.currentSize)
             }
         }
 
         binding.btnCurrentXMinus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x - 1, it.currentPoint.y))
+                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x - 1, it.currentPoint.y), it.currentSize)
             }
         }
 
         binding.btnCurrentYPlus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x, it.currentPoint.y + 1))
+                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x, it.currentPoint.y + 1), it.currentSize)
             }
         }
 
         binding.btnCurrentYMinus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x, it.currentPoint.y - 1))
+                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x, it.currentPoint.y - 1), it.currentSize)
             }
         }
 
         binding.btnCurrentWidthPlus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width + 1, it.currentSize.height))
+                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width + 1, it.currentSize.height))
             }
         }
 
         binding.btnCurrentWidthMinus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width - 1, it.currentSize.height))
+                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width - 1, it.currentSize.height))
             }
         }
 
         binding.btnCurrentHeightPlus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width, it.currentSize.height + 1))
+                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width, it.currentSize.height + 1))
             }
         }
 
         binding.btnCurrentHeightMinus.setOnClickListener {
             binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width, it.currentSize.height - 1))
+                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width, it.currentSize.height - 1))
             }
         }
     }

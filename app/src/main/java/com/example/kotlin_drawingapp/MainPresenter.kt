@@ -52,12 +52,12 @@ class MainPresenter(
         }
     }
 
-    override fun modifyDrawObjectPoint(target: DrawObject, point: Point) {
+    override fun modifyDrawObjectProperty(target: DrawObject, point: Point, size: Size) {
         val newDrawObject = when (target) {
             is DrawObject.Rectangle -> {
                 DrawObject.Rectangle(
                     target.id,
-                    target.currentSize,
+                    size,
                     point,
                     target.rgb,
                     target.alpha
@@ -67,39 +67,8 @@ class MainPresenter(
             is DrawObject.Image -> {
                 DrawObject.Image(
                     target.id,
-                    target.currentSize,
+                    size,
                     point,
-                    target.alpha,
-                    target.bitmap
-                )
-            }
-        }
-
-        newDrawObject.selected = true
-        drawingRepository.modifyDrawObject(target, newDrawObject)
-        drawingRepository.saveCurrentSelectedDrawObject(newDrawObject)
-        mainView.setCurrentSelectedDrawObject(newDrawObject)
-        currentSelectedDrawObjectInfo(newDrawObject)
-        mainView.showDrawObject(drawingRepository.getAllDrawObject())
-    }
-
-    override fun modifyDrawObjectSize(target: DrawObject, size: Size) {
-        val newDrawObject = when (target) {
-            is DrawObject.Rectangle -> {
-                DrawObject.Rectangle(
-                    target.id,
-                    size,
-                    target.currentPoint,
-                    target.rgb,
-                    target.alpha
-                )
-            }
-
-            is DrawObject.Image -> {
-                DrawObject.Image(
-                    target.id,
-                    size,
-                    target.currentPoint,
                     target.alpha,
                     target.bitmap
                 )
