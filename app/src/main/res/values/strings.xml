@@ -7,4 +7,5 @@
     <string name="label_button_picture">사진</string>
     <string name="label_textview_position">위치</string>
     <string name="label_textview_one">1</string>
+    <string name="label_button_text">텍스트</string>
 </resources>

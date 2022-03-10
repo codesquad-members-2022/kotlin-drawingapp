@@ -19,37 +19,46 @@
         android:id="@+id/btn_square"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
-        android:background="@drawable/background_btn"
+        android:background="@drawable/background_start_btn"
         android:drawableTop="@drawable/ic_baseline_crop_square_24"
         android:paddingTop="10dp"
         android:text="@string/label_button_square"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btn_picture"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/btn_picture" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_picture"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
-        android:background="@drawable/background_btn"
+        android:background="@drawable/background_inner_btn"
         android:drawableTop="@drawable/ic_image"
         android:paddingTop="24dp"
         android:text="@string/label_button_picture"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/view_board"
-        app:layout_constraintStart_toEndOf="@id/btn_square" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_text"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:background="@drawable/background_end_btn"
+        android:drawableTop="@drawable/ic_baseline_text_fields_24"
+        android:drawablePadding="12dp"
+        android:paddingTop="24dp"
+        android:text="@string/label_button_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_picture" />
 
     <LinearLayout
         android:id="@+id/view_board"
         android:layout_width="120dp"
-        android:layout_height="match_parent"
+        android:layout_height="520dp"
         android:background="#EEF1F3"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingTop="20dp"
         android:paddingRight="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
