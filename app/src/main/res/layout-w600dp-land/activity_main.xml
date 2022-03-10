@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".MainActivity"
+  tools:context=".view.MainActivity"
   android:id="@+id/main_layout">
   <Button
     android:id="@+id/create_btn"
@@ -30,7 +30,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/create_btn"/>
-  <com.codesquard.kotlin_drawingapp.CustomView
+  <com.codesquard.kotlin_drawingapp.view.CustomView
     android:id="@+id/custom_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,7 +38,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toStartOf="@+id/second_constraintLayout"
     app:layout_constraintBottom_toTopOf="@+id/create_btn"/>
-  <com.codesquard.kotlin_drawingapp.TemporaryView
+  <com.codesquard.kotlin_drawingapp.view.TemporaryView
     android:id="@+id/temporary_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

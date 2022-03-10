@@ -1,4 +1,4 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.model
 
 interface Rectangle {
     var id: String

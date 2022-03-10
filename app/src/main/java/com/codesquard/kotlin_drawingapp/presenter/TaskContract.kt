@@ -1,6 +1,7 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.presenter
 
 import android.graphics.Bitmap
+import com.codesquard.kotlin_drawingapp.model.Rectangle
 
 interface TaskContract {
 

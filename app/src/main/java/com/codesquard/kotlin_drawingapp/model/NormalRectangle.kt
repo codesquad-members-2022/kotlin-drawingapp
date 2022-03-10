@@ -1,4 +1,4 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.model
 
 class NormalRectangle : Rectangle {
     override lateinit var id: String

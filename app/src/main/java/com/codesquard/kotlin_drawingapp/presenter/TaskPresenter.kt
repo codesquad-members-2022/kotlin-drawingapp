@@ -1,6 +1,9 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.presenter
 
 import android.graphics.Bitmap
+import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
+import com.codesquard.kotlin_drawingapp.model.Plane
+import com.codesquard.kotlin_drawingapp.model.Rectangle
 
 class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.Presenter,
     RectangleListener {

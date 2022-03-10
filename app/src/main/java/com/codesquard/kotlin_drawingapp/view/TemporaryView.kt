@@ -1,9 +1,11 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.view
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
+import com.codesquard.kotlin_drawingapp.model.Rectangle
 
 class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 

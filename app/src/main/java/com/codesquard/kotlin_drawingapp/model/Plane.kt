@@ -1,7 +1,7 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.model
 
 import android.graphics.Bitmap
-import android.util.Log
+import com.codesquard.kotlin_drawingapp.presenter.RectangleListener
 
 class Plane(private val listener: RectangleListener) {
 

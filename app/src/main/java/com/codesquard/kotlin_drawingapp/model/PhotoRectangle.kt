@@ -1,4 +1,4 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.model
 
 import android.graphics.Bitmap
 

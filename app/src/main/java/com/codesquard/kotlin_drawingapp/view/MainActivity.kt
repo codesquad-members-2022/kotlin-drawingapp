@@ -1,4 +1,4 @@
-package com.codesquard.kotlin_drawingapp
+package com.codesquard.kotlin_drawingapp.view
 
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
@@ -13,6 +13,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.codesquard.kotlin_drawingapp.*
+import com.codesquard.kotlin_drawingapp.model.Rectangle
+import com.codesquard.kotlin_drawingapp.presenter.TaskContract
+import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
