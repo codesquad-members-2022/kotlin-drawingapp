@@ -52,7 +52,7 @@
 
             <TextView
                 android:id="@+id/tvBackgroundColorDescription"
-                style="@style/tv_1"
+                style="@style/tvPropertyDescription_600dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:maxLines="1"
@@ -92,7 +92,7 @@
 
             <TextView
                 android:id="@+id/tvTransparencyDescription"
-                style="@style/tv_1"
+                style="@style/tvPropertyDescription_600dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:maxLines="1"

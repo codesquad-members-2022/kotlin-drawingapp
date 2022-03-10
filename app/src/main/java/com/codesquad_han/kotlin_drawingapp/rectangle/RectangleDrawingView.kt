@@ -13,9 +13,12 @@ import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.model.*
 import com.codesquad_han.kotlin_drawingapp.model.Point
 
-class RectangleDrawingView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+class RectangleDrawingView : View {
+
+    constructor(context: Context) : super(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
 
     private var selectedRectangle: Rectangle? = null
     private var tempRectangle: Rectangle? = null
