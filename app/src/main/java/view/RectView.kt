@@ -133,20 +133,9 @@ class RectView(context: Context) : View(context) {
         invalidate()
     }
 
-    fun onTouch(event: MotionEvent): RectView {
+    fun onTouch(event: MotionEvent,tempView:RectView) {
         val x: Float
         val y: Float
-        var tempView = RectView(context)
-        tempView.rectId = "temp"
-        if(this.photoId==""){
-            tempView.rectanglePaint.color = this.rectanglePaint.color
-        }
-        else{
-            tempView.photoId= "tempPhoto"
-            tempView.bitmap = this.bitmap
-        }
-
-        tempView.alpha = (5 * 25.5).toInt()
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
                 x = event.getX(0)
@@ -155,7 +144,6 @@ class RectView(context: Context) : View(context) {
                 tempView.top = y
                 tempView.right = (x + this.rectWidth)
                 tempView.bottom = y + this.rectHeight
-                return tempView
             }
             MotionEvent.ACTION_UP -> {
                 x = event.getX(0)
@@ -164,10 +152,8 @@ class RectView(context: Context) : View(context) {
                 this.top = y
                 this.right = x + this.rectWidth
                 this.bottom = y + this.rectHeight
-                return this
             }
         }
-        return this
     }
 
 

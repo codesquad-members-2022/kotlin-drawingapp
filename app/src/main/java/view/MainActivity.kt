@@ -22,14 +22,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
 import model.Photo
 import model.Rect
-
+private const val REQUEST_CODE= 1000
 
 class MainActivity : AppCompatActivity(), MainContract.View {
+
     private lateinit var mainLayout: FrameLayout
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
@@ -43,7 +45,6 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
     private var selectedRectangle: Rect? = null
-    var temp: RectView? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     else -> {
                         requestPermissions(
                             arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                            1000)
+                            REQUEST_CODE)
                     }
                 }
             }
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                                             permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            1000-> {
+            REQUEST_CODE-> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
@@ -183,9 +184,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         this.selectedCustomRectangleView =
             customRectangleViewList.find { it.rectId == rect.rectId }
         this.selectedRectangle = rect
+
         selectedCustomRectangleView?.drawBorder()
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
+        var tempView= RectView(this)
+        tempView.isVisible= false
         if (selectedCustomRectangleView?.photoId == "") {
             rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
             rect.opacity.value?.let {
@@ -193,24 +197,30 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
             rect.backGroundColor.observe(this, backgroundObserver)
             rect.opacity.observe(this, opacityObserver)
+            tempView.drawRectangle(rect)
         } else {
             rgbValueTextView.text = "No Color"
             rect.opacity.value?.let {
                 opacitySeekBar.progress = it
             }
             rect.opacity.observe(this, opacityObserver)
+            selectedCustomRectangleView?.bitmap?.let{
+                tempView.drawPhoto(it, rect as Photo)
+            }
         }
 
+
+        tempView.changeOpacity(5)
+        mainLayout.addView(tempView)
         selectedCustomRectangleView?.setOnTouchListener { view, motionEvent ->
+            tempView.isVisible=true
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
-                temp?.let { mainLayout.removeView(temp) }
-                temp = selectedCustomRectangleView?.onTouch(motionEvent)
-                if (temp?.rectId == "temp") {
-                    mainLayout.addView(temp)
-                }
+                selectedCustomRectangleView?.onTouch(motionEvent,tempView)
+                tempView.invalidate()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 selectedCustomRectangleView?.let {
-                    it.onTouch(motionEvent)
+                    it.onTouch(motionEvent, tempView)
+                    mainLayout.removeView(tempView)
                     presenter.changePosition(it)
                 }
             }
