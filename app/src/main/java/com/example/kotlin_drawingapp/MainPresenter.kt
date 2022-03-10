@@ -2,6 +2,7 @@ package com.example.kotlin_drawingapp
 
 import android.graphics.Bitmap
 import android.graphics.Point
+import android.util.Size
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.ImageFactory
 import com.example.kotlin_drawingapp.model.RectangleFactory
@@ -68,6 +69,37 @@ class MainPresenter(
                     target.id,
                     target.currentSize,
                     point,
+                    target.alpha,
+                    target.bitmap
+                )
+            }
+        }
+
+        newDrawObject.selected = true
+        drawingRepository.modifyDrawObject(target, newDrawObject)
+        drawingRepository.saveCurrentSelectedDrawObject(newDrawObject)
+        mainView.setCurrentSelectedDrawObject(newDrawObject)
+        currentSelectedDrawObjectInfo(newDrawObject)
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
+    }
+
+    override fun modifyDrawObjectSize(target: DrawObject, size: Size) {
+        val newDrawObject = when (target) {
+            is DrawObject.Rectangle -> {
+                DrawObject.Rectangle(
+                    target.id,
+                    size,
+                    target.currentPoint,
+                    target.rgb,
+                    target.alpha
+                )
+            }
+
+            is DrawObject.Image -> {
+                DrawObject.Image(
+                    target.id,
+                    size,
+                    target.currentPoint,
                     target.alpha,
                     target.bitmap
                 )

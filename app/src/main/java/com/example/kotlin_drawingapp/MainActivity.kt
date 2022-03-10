@@ -113,6 +113,30 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 presenter.modifyDrawObjectPoint(it, Point(it.currentPoint.x, it.currentPoint.y - 1))
             }
         }
+
+        binding.btnCurrentWidthPlus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width + 1, it.currentSize.height))
+            }
+        }
+
+        binding.btnCurrentWidthMinus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width - 1, it.currentSize.height))
+            }
+        }
+
+        binding.btnCurrentHeightPlus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width, it.currentSize.height + 1))
+            }
+        }
+
+        binding.btnCurrentHeightMinus.setOnClickListener {
+            binding.drawView.currentSelectedDrawObject?.let {
+                presenter.modifyDrawObjectSize(it, Size(it.currentSize.width, it.currentSize.height - 1))
+            }
+        }
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
