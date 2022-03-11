@@ -40,7 +40,7 @@ class MainPresenter(
     }
 
     override fun changeYPos(rectView: RectView, value: Int) {
-        plane.changePosition(rectView.rectId, (rectView.left+value).toInt(),  rectView.top.toInt())
+        plane.changePosition(rectView.rectId, (rectView.left).toInt(),  (rectView.top+value).toInt())
     }
 
     override fun changeSize(rectView: RectView, mode: String, value: Int) {

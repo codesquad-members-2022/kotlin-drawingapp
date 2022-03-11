@@ -2,6 +2,7 @@ package model
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.lifecycle.MutableLiveData
 import java.io.ByteArrayOutputStream
 
 class Plane(private val context: Context) {
@@ -77,15 +78,13 @@ class Plane(private val context: Context) {
 
     fun changePosition(rectId: String, x: Int, y: Int):Rect? {
         val selectedRect = customRectangleList.find { it.rectId == rectId }
-        selectedRect?.point?.value?.xPos = x
-        selectedRect?.point?.value?.yPos = y
+        selectedRect?.point?.value =(Point(x,y))
         return selectedRect
     }
 
     fun changeSize(rectId: String, width: Int, height: Int) {
         val selectedRect = customRectangleList.find { it.rectId == rectId }
-        selectedRect?.size?.value?.width = width
-        selectedRect?.size?.value?.height = height
+        selectedRect?.size?.value = (Size(width,height))
     }
 
 

@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         val btnHeightUp= findViewById<Button>(R.id.btn_height_up)
         val btnHeightDown= findViewById<Button>(R.id.btn_height_down)
         val btnXposUp= findViewById<Button>(R.id.btn_xPos_up)
-        val btnYposUp= findViewById<Button>(R.id.btn_yPos_down)
+        val btnYposUp= findViewById<Button>(R.id.btn_yPos_up)
         val btnXposDown= findViewById<Button>(R.id.btn_xPos_down)
         val btnYposDown= findViewById<Button>(R.id.btn_yPos_down)
         editTvWidth= findViewById<EditText>(R.id.editText_width)
@@ -273,6 +273,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             }
             rect.backGroundColor.observe(this, backgroundObserver)
             rect.opacity.observe(this, opacityObserver)
+
             tempView.drawRectangle(rect)
         } else {
             rgbValueTextView.text = "No Color"
@@ -284,7 +285,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 tempView.drawPhoto(it, rect as Photo)
             }
         }
-
+        rect.point.observe(this, posObserver)
+        rect.size.observe(this, sizeObserver)
 
         tempView.changeOpacity(5)
         mainLayout.addView(tempView)

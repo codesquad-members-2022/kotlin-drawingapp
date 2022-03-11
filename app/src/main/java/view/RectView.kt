@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import model.BackGroundColor
@@ -155,6 +156,7 @@ class RectView(context: Context) : View(context) {
                 tempView.top = y
                 tempView.right = (x + this.rectWidth)
                 tempView.bottom = y + this.rectHeight
+                
             }
             MotionEvent.ACTION_UP -> {
                 x = event.getX(0)
@@ -169,8 +171,9 @@ class RectView(context: Context) : View(context) {
 
 
     fun changeSize(width:Int, height:Int){
-        this.right= left+ width
-        this.bottom= top+ height
+        Log.d("Test", "${width},${height}")
+        this.right= this.left+ width
+        this.bottom= this.top+ height
         this.rectHeight= height
         this.rectWidth= width
         invalidate()
@@ -178,7 +181,9 @@ class RectView(context: Context) : View(context) {
 
     fun changePos(xPos:Float, yPos:Float){
         this.left= xPos
+        this.right= this.left+ this.rectWidth
         this.top= yPos
+        this.bottom= this.top + this.rectHeight
         invalidate()
     }
 
