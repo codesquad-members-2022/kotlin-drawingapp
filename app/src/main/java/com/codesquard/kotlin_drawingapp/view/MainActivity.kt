@@ -192,27 +192,19 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView.invalidate()
     }
 
-    override fun updateRectangle() {
+    override fun enableRectColorBtnAndSlider() {
         onClickColorBtn()
         onSlideAlpha()
     }
 
-    override fun showRectSize(width: Int, height: Int) {
-        sizeWBtn.text = "W"
-        sizeHBtn.text = "H"
-        if (width > 0) {
-            sizeWBtn.text = "W   $width"
-            sizeHBtn.text = "H   $height"
-        }
+    override fun showRectSize(width: String, height: String) {
+        sizeWBtn.text = "W   $width"
+        sizeHBtn.text = "H   $height"
     }
 
-    override fun showRectPosition(x: Int, y: Int) {
-        positionXBtn.text = "X"
-        positionYBtn.text = "Y"
-        if (x > 0) {
-            positionXBtn.text = "X   $x"
-            positionYBtn.text = "Y   $y"
-        }
+    override fun showRectPosition(x: String, y: String) {
+        positionXBtn.text = "X   $x"
+        positionYBtn.text = "Y   $y"
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

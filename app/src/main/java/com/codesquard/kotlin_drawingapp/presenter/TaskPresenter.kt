@@ -43,13 +43,19 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
 
     override fun onSelectRectangle(index: Int) {
         selectedRectIndex = index
-        if (index > -1) {
-            taskView.updateRectangle()
-        }
         getRectAlpha()
         getRectColor()
         getRectSize()
         getRectPosition()
+        taskView.showSelectedRectangle()
+        taskView.enableRectColorBtnAndSlider()
+    }
+
+    override fun onUnSelectRectangle() {
+        taskView.showRectColor()
+        taskView.showRectAlpha()
+        taskView.showRectSize()
+        taskView.showRectPosition()
         taskView.showSelectedRectangle()
     }
 
@@ -64,7 +70,6 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
 
     private fun getRectColor() {
         when (true) {
-            selectedRectIndex == -1 -> taskView.showRectColor()
             plane.getRectangle(selectedRectIndex) is PhotoRectangle -> {
                 val colorText = "None"
                 taskView.showRectColor(colorText)
@@ -81,32 +86,21 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     }
 
     private fun getRectAlpha() {
-        if (selectedRectIndex == -1) {
-            taskView.showRectAlpha()
-        } else {
-            val alpha = plane.getRectangle(selectedRectIndex).alphaValue / 25
-            taskView.showRectAlpha(alpha.toFloat())
-        }
+        val alpha = plane.getRectangle(selectedRectIndex).alphaValue / 25
+        taskView.showRectAlpha(alpha.toFloat())
+
     }
 
     private fun getRectSize() {
-        if (selectedRectIndex == -1) {
-            taskView.showRectSize()
-        } else {
-            val width = plane.getRectangle(selectedRectIndex).size[0]
-            val height = plane.getRectangle(selectedRectIndex).size[1]
-            taskView.showRectSize(width, height)
-        }
+        val width = plane.getRectangle(selectedRectIndex).size[0].toString()
+        val height = plane.getRectangle(selectedRectIndex).size[1].toString()
+        taskView.showRectSize(width, height)
     }
 
     private fun getRectPosition() {
-        if (selectedRectIndex == -1) {
-            taskView.showRectPosition()
-        } else {
-            val x = plane.getRectangle(selectedRectIndex).point[0].toInt()
-            val y = plane.getRectangle(selectedRectIndex).point[1].toInt()
-            taskView.showRectPosition(x, y)
-        }
+        val x = plane.getRectangle(selectedRectIndex).point[0].toInt().toString()
+        val y = plane.getRectangle(selectedRectIndex).point[1].toInt().toString()
+        taskView.showRectPosition(x, y)
     }
 
 }

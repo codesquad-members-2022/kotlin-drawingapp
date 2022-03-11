@@ -11,7 +11,7 @@ interface TaskContract {
 
         fun showSelectedRectangle()
 
-        fun updateRectangle()
+        fun enableRectColorBtnAndSlider()
 
         fun showRectColor(color: String = "")
 
@@ -21,9 +21,9 @@ interface TaskContract {
 
         fun showDraggingRectangle(tempRect: Rectangle?)
 
-        fun showRectSize(width: Int = 0, height: Int = 0)
+        fun showRectSize(width: String = "", height: String = "")
 
-        fun showRectPosition(x: Int = 0, y: Int = 0)
+        fun showRectPosition(x: String = "", y: String = "")
 
     }
 

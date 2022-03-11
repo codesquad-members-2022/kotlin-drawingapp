@@ -29,7 +29,7 @@ class Plane(private val listener: RectangleListener) {
 
     fun selectRectangle(x: Float, y: Float) {
         val reversedRectList = rectangleList.reversed()
-        unSelectRectangle(reversedRectList)
+        unSelectRectangle()
 
         reversedRectList.forEachIndexed { index, rect ->
             val rectFirstX = rect.point[0]
@@ -44,17 +44,17 @@ class Plane(private val listener: RectangleListener) {
                 listener.onSelectRectangle(notReversedListIndex)
                 return
             } else {
-                listener.onSelectRectangle()
+                listener.onUnSelectRectangle()
             }
         }
     }
 
-    private fun unSelectRectangle(rectList: List<Rectangle>) {
-        selectedRect = null
-        rectList.forEach {
-            it.isSelected(false)
-            listener.onSelectRectangle()
+    private fun unSelectRectangle() {
+        selectedRect?.run {
+            this.isSelected(false)
+            selectedRect = null
         }
+        listener.onUnSelectRectangle()
     }
 
     fun updateAlpha(value: Float) {
