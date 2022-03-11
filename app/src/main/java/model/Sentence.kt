@@ -30,7 +30,7 @@ class Sentence private constructor(
             var res= ""
             val start= (0..textArray.size-5).random()
             for(i in 0 until 5){
-                res+=  textArray[start+i]
+                res+=  "${textArray[start+i]} "
             }
             return res
         }

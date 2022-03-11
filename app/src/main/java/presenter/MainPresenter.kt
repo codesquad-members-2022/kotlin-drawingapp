@@ -62,4 +62,8 @@ class MainPresenter(
         view.drawPhoto(plane.createPhotoPaint(image))
     }
 
+    override fun createSentencePaint() {
+        view.drawSentence(plane.createTextPaint())
+    }
+
 }

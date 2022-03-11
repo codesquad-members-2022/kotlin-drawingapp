@@ -65,6 +65,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
         val btnMakePhotoView = findViewById<Button>(R.id.btn_addPhoto)
+        val btnMakeSentenceView= findViewById<Button>(R.id.btn_addSentence)
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
         val btnWidthUp= findViewById<Button>(R.id.btn_width_up)
         val btnWidthDown= findViewById<Button>(R.id.btn_width_down)
@@ -100,6 +101,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
             }
 
+        }
+
+        btnMakeSentenceView.setOnClickListener {
+            presenter.createSentencePaint()
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -327,6 +332,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         val rectView = RectView(this)
         val image = BitmapFactory.decodeByteArray(photo.imageInfo, 0, photo.imageInfo.size)
         rectView.drawPhoto(image, photo)
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
+
+    override fun drawSentence(sentence: Sentence) {
+        val rectView = RectView(this)
+        rectView.drawSentence(sentence)
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
     }
