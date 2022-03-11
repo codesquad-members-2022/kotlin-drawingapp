@@ -11,8 +11,10 @@
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-421dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteX="-170dp"
+        tools:layout_editor_absoluteY="160dp">
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -29,15 +31,14 @@
             android:layout_marginTop="50dp"
             android:layout_marginRight="50dp"
             android:text="배경색"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_rgb_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_rgb_title"
-            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/imageview_border"
             android:padding="10dp"
@@ -62,8 +63,244 @@
             android:layout_below="@id/tv_alpha_title"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
-            android:max="10"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:max="10" />
+
+        <TextView
+            android:id="@+id/tv_pos_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seekbar_opacity"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="50dp"
+            android:text="위치 "
+            android:textColor="@color/black"
+
+            />
+
+        <LinearLayout
+            android:id="@+id/linear_xPos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_pos_title"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/imageview_border"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_xPos_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="X"
+                android:textSize="18sp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/editText_xPos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_xPos_up"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_up_24">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_xPos_down"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_down_24" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_yPos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_xPos"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/imageview_border"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_yPos_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Y"
+                android:textSize="18sp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/editText_yPos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_yPos_up"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_up_24">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_yPos_down"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_down_24" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_size_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_yPos"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="50dp"
+            android:text="크기 "
+            android:textColor="@color/black"
+
+            />
+
+        <LinearLayout
+            android:id="@+id/linear_width"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_size_title"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/imageview_border"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_width_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="6dp"
+                android:text="W"
+                android:textSize="18sp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/editText_width"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_width_up"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_up_24">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_width_down"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_down_24" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_width"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/imageview_border"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/tv_height_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="H"
+                android:textSize="18sp">
+
+            </TextView>
+
+            <EditText
+                android:id="@+id/editText_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="4"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_height_up"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_up_24">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_height_down"
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_baseline_arrow_drop_down_24" />
+            </LinearLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -81,6 +318,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/btn_addPhoto"
         android:layout_width="wrap_content"
