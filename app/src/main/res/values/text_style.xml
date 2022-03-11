@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="tv_1">
+    <style name="tvPropertyDescription_600dp">
         <item name="android:textColor">@color/black</item>
         <item name="autoSizeMinTextSize">2sp</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="android:gravity">left|center</item>
+    </style>
+
+    <style name="tvPropertyDescription">
+        <item name="android:textColor">@color/black</item>
+        <item name="autoSizeMinTextSize">2sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="tvBackgound">
