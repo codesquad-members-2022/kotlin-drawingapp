@@ -30,6 +30,15 @@ class Plane(private val context: Context) {
         return photo
     }
 
+    fun createTextPaint():Sentence{
+        var sentence= Sentence.SentenceFactory.makeSentence()
+        while (customRectangleList.count { it.rectId == sentence.rectId } != 0) {
+            sentence = Sentence.SentenceFactory.makeSentence()
+        }
+        customRectangleList.add(sentence)
+        return sentence
+    }
+
     fun getRectCount(): Int {
         return customRectangleList.size
     }
