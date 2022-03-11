@@ -28,6 +28,13 @@ object FigureFactory {
     }
 
     fun createText(size: Size): Text {
-        return Text(generateID(), generatePoint(), size, null, generateAlpha(), generateText())
+        return Text(
+            generateID(),
+            generatePoint(),
+            size,
+            generateRGB(),
+            generateAlpha(),
+            generateText()
+        )
     }
 }

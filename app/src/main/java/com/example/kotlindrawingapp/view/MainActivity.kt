@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private lateinit var customView: CustomCanvas
     private lateinit var squareButton: Button
     private lateinit var pictureButton: Button
+    private lateinit var textButton: Button
     private lateinit var xUpButton: ImageButton
     private lateinit var xDownButton: ImageButton
     private lateinit var yUpButton: ImageButton
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
 
         squareButton.setOnClickListener { presenter.loadFigure() }
         pictureButton.setOnClickListener { albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
+        textButton.setOnClickListener { presenter.loadText() }
         onCoordinateEvent()
         onSizeEvent()
         onSeekBarEvent()
@@ -136,6 +138,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private fun initialize() {
         squareButton = findViewById(R.id.btn_square)
         pictureButton = findViewById(R.id.btn_picture)
+        textButton = findViewById(R.id.btn_text)
         customView = findViewById(R.id.container_canvas)
         colorTextView = findViewById(R.id.tv_color)
         seekBar = findViewById(R.id.seekBar_alpha)

@@ -24,6 +24,10 @@ class Presenter(
         repository.addPicture(bitmap)
     }
 
+    override fun loadText() {
+        repository.addText()
+    }
+
     override fun removeFigure(figure: Figure) {
         repository.deleteSquare(figure)
     }

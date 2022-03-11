@@ -26,6 +26,12 @@ class FigureRepository {
         plane.value = _plane
     }
 
+
+    fun addText() {
+        _plane.addFigure(FigureFactory.createText(Size(1000, 100)))
+        plane.value = _plane
+    }
+
     fun deleteSquare(figure: Figure) {
         _plane.removeFigure(figure)
         plane.value = _plane

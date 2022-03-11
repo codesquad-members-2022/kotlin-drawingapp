@@ -16,6 +16,8 @@ interface Contract {
 
         fun loadPicture(bitmap: Bitmap)
 
+        fun loadText()
+
         fun removeFigure(figure: Figure)
 
         fun editRectangleAlpha(alpha: Int)

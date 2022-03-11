@@ -10,11 +10,13 @@ import com.example.kotlindrawingapp.domain.figure.plane.Plane
 import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.domain.figure.Point
 import com.example.kotlindrawingapp.domain.figure.square.Square
+import com.example.kotlindrawingapp.domain.figure.text.Text
 
 class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private lateinit var listener: Movable
     private lateinit var plane: Plane
+    private lateinit var bounds: Rect
     private var paint: Paint = Paint()
     private var selectedPaint: Paint = Paint()
     private var temporary: Figure? = null
@@ -44,6 +46,14 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
                 val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
                 canvas.drawBitmap(newBitmap, moveX, moveY, temporaryPaint(figure))
             }
+            is Text -> {
+                val text = figure.text
+                bounds = Rect()
+                paint = temporaryPaint(figure)
+                paint.textSize = 80F
+                paint.getTextBounds(text, 0, text.length, bounds)
+                canvas.drawText(text, moveX, moveY, paint)
+            }
         }
     }
 
@@ -58,6 +68,14 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
                 val bitmap = Picture.byteArrayToBitmap(figure.memory)
                 val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
                 canvas.drawBitmap(newBitmap, x, y, paintSquare(figure))
+            }
+            is Text -> {
+                val text = figure.text
+                bounds = Rect()
+                paint = paintSquare(figure)
+                paint.textSize = 80F
+                paint.getTextBounds(text, 0, text.length, bounds)
+                canvas.drawText(text, x, y, paint)
             }
         }
         if (plane.selectedSquare.value == figure) {
