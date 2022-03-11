@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         mainLayout = findViewById(R.id.main_layout)
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
-        backgroundBtn = findViewById(R.id.background_btn)
+        backgroundBtn = findViewById(R.id.btn_background)
         photoBtn = findViewById(R.id.photo_btn)
         alphaSlider = findViewById(R.id.slider_alpha)
         presenter = TaskPresenter(this)

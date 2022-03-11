@@ -4,4 +4,6 @@
   <string name="background">배경색</string>
   <string name="alpha">투명도</string>
   <string name="photo">사진</string>
+  <string name="position">위치</string>
+  <string name="size">크기</string>
 </resources>
