@@ -31,6 +31,12 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         plane.dragRectangle(x, y)
     }
 
+    override fun changePosition(x: Float, y: Float) {
+    }
+
+    override fun changeSize(x: Float, y: Float) {
+    }
+
     override fun onCreateRectangle(newRect: Rectangle) {
         taskView.showRectangle(newRect)
     }

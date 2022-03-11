@@ -33,6 +33,10 @@ interface TaskContract {
 
         fun changeColor()
 
+        fun changeSize(x: Float, y: Float)
+
+        fun changePosition(x: Float, y: Float)
+
         fun dragRectangle(x: Float, y: Float)
 
     }

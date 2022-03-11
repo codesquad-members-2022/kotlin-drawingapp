@@ -7,7 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,14 +24,18 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
-    private lateinit var firstBtn: Button
     private lateinit var mainLayout: ConstraintLayout
-    private lateinit var backgroundBtn: Button
-    private lateinit var alphaSlider: Slider
-    private lateinit var photoBtn: Button
-    private lateinit var presenter: TaskContract.Presenter
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
+    private lateinit var firstBtn: Button
+    private lateinit var backgroundBtn: Button
+    private lateinit var photoBtn: Button
+    private lateinit var positionXBtn: Button
+    private lateinit var positionYBtn: Button
+    private lateinit var sizeWBtn: Button
+    private lateinit var sizeHBtn: Button
+    private lateinit var alphaSlider: Slider
+    private lateinit var presenter: TaskContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,10 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         backgroundBtn = findViewById(R.id.btn_background)
         photoBtn = findViewById(R.id.photo_btn)
         alphaSlider = findViewById(R.id.slider_alpha)
+        positionXBtn = findViewById(R.id.btn_position_x)
+        positionYBtn = findViewById(R.id.btn_position_y)
+        sizeWBtn = findViewById(R.id.btn_size_w)
+        sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
@@ -48,6 +58,34 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
         onClickRectBtn()
         onClickPhotoBtn(requestPermissionLauncher)
+        onTouchBtnToChangeSize()
+        onTouchBtnToChangePosition()
+    }
+
+    private fun onTouchBtnToChangeSize() {
+        val btnArray = arrayOf(sizeHBtn, sizeWBtn)
+        btnArray.forEach {
+            it.setOnTouchListener { v: View, event: MotionEvent ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y)
+                    else -> v.performClick()
+                }
+                true
+            }
+        }
+    }
+
+    private fun onTouchBtnToChangePosition() {
+        val btnArray = arrayOf(positionYBtn, positionXBtn)
+        btnArray.forEach {
+            it.setOnTouchListener { v: View, event: MotionEvent ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y)
+                    else -> v.performClick()
+                }
+                true
+            }
+        }
     }
 
     private fun registerIntentToGetPhotoAsBitmap() =
