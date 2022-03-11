@@ -1,42 +1,56 @@
 package com.example.kotlin_drawingapp
 
-import com.example.kotlin_drawingapp.model.Rectangle
+import android.graphics.Bitmap
+import com.example.kotlin_drawingapp.model.Color
+import com.example.kotlin_drawingapp.model.ImageFactory
+import com.example.kotlin_drawingapp.model.RectangleFactory
+import com.example.kotlin_drawingapp.model.draw.DrawObject
+import com.example.kotlin_drawingapp.model.source.DrawingDataSource
 
 class MainPresenter(
+    private val drawingRepository: DrawingDataSource,
     private val mainView: MainContract.View
 ) : MainContract.Presenter {
 
-    private val plane = Plane()
-    private var currentSelectedRectangle: Rectangle? = null
     override fun createRectangle() {
-        plane.createRectangle()
-        mainView.showRectangle(plane.getAllRectangle())
+        drawingRepository.saveDrawObject(RectangleFactory.create())
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
     }
 
-    override fun selectRectangle(x: Float, y: Float) {
-        val rect = plane.getRectangleByPosition(x.toInt(), y.toInt())
-        if (rect == null) {
-            plane.clearRectangleBorder()
+    override fun createImage(bitmap: Bitmap) {
+        drawingRepository.saveDrawObject(ImageFactory.create(bitmap))
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
+    }
+
+    override fun selectDrawObject(x: Float, y: Float) {
+        val drawObject = drawingRepository.getDrawObjectByPosition(x.toInt(), y.toInt())
+        if (drawObject == null) {
+            drawingRepository.clearDrawObjectBorder()
         } else {
-            plane.createRectangleBorder(rect)
+            drawingRepository.saveSelectedStatus(drawObject, true)
         }
 
-        currentSelectedRectangle = rect
-        val borderList = plane.getAllRectangleBorder()
-        mainView.showRectangleBorder(borderList)
-        rect?.let {
-            mainView.showRectangleInfo(rect.rgb, rect.alpha)
+        drawingRepository.saveCurrentSelectedDrawObject(drawObject)
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
+        drawObject?.let {
+            when (drawObject) {
+                is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha)
+                is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha)
+            }
         }
     }
 
-    override fun setCurrentSelectedRectangleAlpha(alpha: Int) {
-        val tmpCurrentSelectedRectangle = currentSelectedRectangle
-        tmpCurrentSelectedRectangle?.let {
-            val replacement = tmpCurrentSelectedRectangle.copy()
-            replacement.alpha = alpha
-            currentSelectedRectangle = replacement
-            plane.modifyRectangle(tmpCurrentSelectedRectangle, replacement)
-            mainView.showRectangle(plane.getAllRectangle())
+    override fun setCurrentSelectedDrawObjectAlpha(alpha: Int) {
+        val tmpCurrentSelectedDrawObject = drawingRepository.getCurrentSelectedDrawObject()
+        tmpCurrentSelectedDrawObject?.let {
+            val replacement = tmpCurrentSelectedDrawObject
+            when (replacement) {
+                is DrawObject.Rectangle -> replacement.alpha = alpha
+                is DrawObject.Image -> replacement.alpha = alpha
+            }
+            drawingRepository.saveCurrentSelectedDrawObject(replacement)
+            drawingRepository.modifyDrawObject(tmpCurrentSelectedDrawObject, replacement)
+            mainView.showDrawObject(drawingRepository.getAllDrawObject())
         }
     }
 }
