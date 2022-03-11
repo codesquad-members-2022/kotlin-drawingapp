@@ -133,13 +133,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnHeightDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                presenter.changeSize(it, "height", -1)
+                if(it.rectHeight!=1) {
+                    presenter.changeSize(it, "height", -1)
+                }
             }
         }
 
         btnWidthDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                presenter.changeSize(it, "width", -1)
+                if(it.rectWidth!=1) {
+                    presenter.changeSize(it, "width", -1)
+                }
             }
         }
 
@@ -162,7 +166,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
         btnXposDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                presenter.changeXpos(it, -1)
+                if(it.left.toInt()!=1) {
+                    presenter.changeXpos(it, -1)
+                }
             }
         }
 
@@ -174,7 +180,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnYposDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                presenter.changeYPos(it, -1)
+                if(it.top.toInt()!=1) {
+                    presenter.changeYPos(it, -1)
+                }
             }
         }
     }

@@ -156,7 +156,7 @@ class RectView(context: Context) : View(context) {
                 tempView.top = y
                 tempView.right = (x + this.rectWidth)
                 tempView.bottom = y + this.rectHeight
-                
+
             }
             MotionEvent.ACTION_UP -> {
                 x = event.getX(0)
