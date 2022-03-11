@@ -7,9 +7,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.SeekBar
@@ -19,14 +22,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.BackGroundColor
 import model.Photo
 import model.Rect
-
+private const val REQUEST_CODE= 1000
 
 class MainActivity : AppCompatActivity(), MainContract.View {
+
     private lateinit var mainLayout: FrameLayout
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
@@ -39,7 +44,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         selectedCustomRectangleView?.changeOpacity(opacity)
     }
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
-    private var selectedRectangle:Rect?=null
+    private var selectedRectangle: Rect? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,35 +63,39 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnMakePhotoView.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    getPhotoFromGallery()
-                } else {
-                    if(shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        showContextPopupPermission()
+                when {
+                    ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED -> {
+                        getPhotoFromGallery()
                     }
-                    else{
-                        requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1000)
+                    else -> {
+                        requestPermissions(
+                            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                            REQUEST_CODE)
                     }
                 }
-            } else {
-                getPhotoFromGallery()
             }
+
         }
-
-
-
         mainLayout.setOnTouchListener { _, motionEvent ->
-            customRectangleViewList.map{
-                it.eraseBorder()
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                customRectangleViewList.map { it.eraseBorder() }
+                selectedRectangle?.opacity?.removeObserver(opacityObserver)
+                selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
+                presenter.selectRectangle(motionEvent.x, motionEvent.y)
             }
-            selectedRectangle?.opacity?.removeObserver(opacityObserver)
-            selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
-            presenter.selectRectangle(motionEvent.x, motionEvent.y)
             true
         }
 
+
         tvRgbValue.setOnClickListener {
-            selectedCustomRectangleView?.let { selectedView -> presenter.changeColor(selectedView) }
+            selectedCustomRectangleView?.let { selectedView ->
+                presenter.changeColor(
+                    selectedView
+                )
+            }
         }
 
         opacitySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -99,18 +108,34 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
         })
+
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE-> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    getPhotoFromGallery()
+                } else {
+                    showContextPopupPermission()
+                }
+                return
+            }
+        }
+    }
+
 
     private fun showContextPopupPermission() {
         AlertDialog.Builder(this).setTitle("권한이 필요합니다")
-            .setMessage("사진을 불러오기 위해 권한이 필요합니다")
-            .setPositiveButton("동의하기") { _, _ ->
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(
-                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        1000
-                    )
-                }
+            .setMessage("사진을 불러오기 위해 권한설정이 필요합니다")
+            .setPositiveButton("설정하러가기") { _, _ ->
+                val intent= Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    .setData(Uri.parse("package:$packageName"));
+                startActivity(intent)
             }
             .setNegativeButton("취소하기") { _, _ -> }
             .create()
@@ -154,29 +179,53 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun displaySelectedRectAttribute(rect: Rect) {
-
-        this.selectedCustomRectangleView = customRectangleViewList.find{it.rectId==rect.rectId}
+        this.selectedCustomRectangleView =
+            customRectangleViewList.find { it.rectId == rect.rectId }
         this.selectedRectangle = rect
+
         selectedCustomRectangleView?.drawBorder()
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-        if(selectedCustomRectangleView?.photoId == ""){
+        var tempView= RectView(this)
+        tempView.isVisible= false
+        if (selectedCustomRectangleView?.photoId == "") {
             rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
-            rect.opacity.value?.let{
+            rect.opacity.value?.let {
                 opacitySeekBar.progress = it
             }
             rect.backGroundColor.observe(this, backgroundObserver)
             rect.opacity.observe(this, opacityObserver)
-        }
-        else{
+            tempView.drawRectangle(rect)
+        } else {
             rgbValueTextView.text = "No Color"
-            rect.opacity.value?.let{
+            rect.opacity.value?.let {
                 opacitySeekBar.progress = it
             }
             rect.opacity.observe(this, opacityObserver)
+            selectedCustomRectangleView?.bitmap?.let{
+                tempView.drawPhoto(it, rect as Photo)
+            }
         }
 
+
+        tempView.changeOpacity(5)
+        mainLayout.addView(tempView)
+        selectedCustomRectangleView?.setOnTouchListener { view, motionEvent ->
+            tempView.isVisible=true
+            if (motionEvent.action == MotionEvent.ACTION_MOVE) {
+                selectedCustomRectangleView?.onTouch(motionEvent,tempView)
+                tempView.invalidate()
+            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                selectedCustomRectangleView?.let {
+                    it.onTouch(motionEvent, tempView)
+                    mainLayout.removeView(tempView)
+                    presenter.changePosition(it)
+                }
+            }
+            true
+        }
 
     }
 
@@ -190,11 +239,33 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun drawPhoto(photo: Photo) {
         val rectView = RectView(this)
-        val image= BitmapFactory.decodeByteArray(photo.imageInfo, 0, photo.imageInfo.size)
+        val image = BitmapFactory.decodeByteArray(photo.imageInfo, 0, photo.imageInfo.size)
         rectView.drawPhoto(image, photo)
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
     }
 
+    override fun redrawRectangle(rect: Rect) {
+        mainLayout.removeView(selectedCustomRectangleView)
+        customRectangleViewList.remove(selectedCustomRectangleView)
+        val rectView = RectView(this)
+        rectView.drawRectangle(rect)
+        selectedCustomRectangleView = rectView
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
+
+    override fun redrawPhoto(photo: Photo) {
+        mainLayout.removeView(selectedCustomRectangleView)
+        customRectangleViewList.remove(selectedCustomRectangleView)
+        val rectView = RectView(this)
+        selectedCustomRectangleView?.bitmap?.let{
+            rectView.drawPhoto(it,photo)
+        }
+        selectedCustomRectangleView = rectView
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
 
 }
+

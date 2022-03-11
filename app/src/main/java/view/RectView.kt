@@ -1,7 +1,11 @@
 package view
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.view.MotionEvent
 import android.view.View
 import model.BackGroundColor
 import model.Photo
@@ -9,17 +13,19 @@ import model.Rect
 
 
 class RectView(context: Context) : View(context) {
-    private var bitmap: Bitmap? = null
+    var bitmap: Bitmap? = null
     var rectId = ""
     var photoId = ""
-    private var left = 0.0F
+    var left = 0.0F
     private var right = 0.0F
-    private var top = 0.0F
+    var top = 0.0F
     private var bottom = 0.0F
+    var rectWidth = 0
+    var rectHeight = 0
     var alpha = 0
-    var backGroundRGB:String=""
-    private var selectedFlag = false
-    private val rectanglePaint = Paint()
+    var backGroundRGB: String = ""
+    var selectedFlag = false
+    var rectanglePaint = Paint()
     private val borderPaint = Paint().apply {
         this.style = Paint.Style.STROKE
         this.color = Color.BLACK
@@ -49,8 +55,10 @@ class RectView(context: Context) : View(context) {
             left = it.point.xPos.toFloat()
             right = (it.point.xPos + it.size.width).toFloat()
             top = it.point.yPos.toFloat()
+            this.rectWidth = it.size.width
+            this.rectHeight = it.size.height
             bottom = (it.point.yPos + it.size.height).toFloat()
-            this.backGroundRGB= it.backGroundColor.value?.getRGBHexValue().toString()
+            this.backGroundRGB = it.backGroundColor.value?.getRGBHexValue().toString()
             val backGroundColor = it.backGroundColor.value?.getBackGroundColor()
             val opacity = ((it.opacity.value?.times(25.5))?.toInt())
             backGroundColor?.let { color ->
@@ -65,7 +73,7 @@ class RectView(context: Context) : View(context) {
 
     fun drawPhoto(image: Bitmap, photo: Photo) {
         photo.let {
-            rectId= photo.rectId
+            rectId = photo.rectId
             photoId = photo.photoId
             left = it.point.xPos.toFloat()
             right = (it.point.xPos + it.size.width).toFloat()
@@ -75,7 +83,7 @@ class RectView(context: Context) : View(context) {
                 this.alpha = (alpha * 25.5).toInt()
             }
         }
-        this.backGroundRGB ="No Color"
+        this.backGroundRGB = "No Color"
         this.bitmap = resizeBitmap(image, photo)
     }
 
@@ -124,5 +132,29 @@ class RectView(context: Context) : View(context) {
         this.alpha = (opacity * 25.5).toInt()
         invalidate()
     }
+
+    fun onTouch(event: MotionEvent,tempView:RectView) {
+        val x: Float
+        val y: Float
+        when (event.action) {
+            MotionEvent.ACTION_MOVE -> {
+                x = event.getX(0)
+                y = event.getY(0)
+                tempView.left = x
+                tempView.top = y
+                tempView.right = (x + this.rectWidth)
+                tempView.bottom = y + this.rectHeight
+            }
+            MotionEvent.ACTION_UP -> {
+                x = event.getX(0)
+                y = event.getY(0)
+                this.left = x
+                this.top = y
+                this.right = x + this.rectWidth
+                this.bottom = y + this.rectHeight
+            }
+        }
+    }
+
 
 }

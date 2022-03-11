@@ -10,12 +10,15 @@ interface MainContract {
         fun displaySelectedRectAttribute(rect:Rect)
         fun drawRectangle(rect:Rect)
         fun drawPhoto(photo: Photo)
+        fun redrawRectangle(rect:Rect)
+        fun redrawPhoto(photo: Photo)
     }
 
     interface Presenter {
         fun selectRectangle(xPos: Float, yPos: Float)
         fun changeColor(rectView: RectView)
         fun changeOpacity(rectView: RectView, opacity: Int)
+        fun changePosition(rectView: RectView)
         fun createRectanglePaint()
         fun createPhotoPaint(image: Bitmap)
     }

@@ -1,5 +1,6 @@
 import android.content.Context
 import android.graphics.Bitmap
+import model.Photo
 import model.Plane
 import view.MainContract
 import view.RectView
@@ -24,6 +25,17 @@ class MainPresenter(
 
     override fun changeOpacity(rectView: RectView, opacity: Int) {
         plane.changeOpacity(rectView.rectId, opacity)
+    }
+
+    override fun changePosition(rectView: RectView) {
+        plane.changePosition(rectView.rectId, rectView.left.toInt(), rectView.top.toInt())?.let{
+            if(rectView.photoId=="") {
+                view.redrawRectangle(it)
+            }
+            else{
+                view.redrawPhoto(it as Photo)
+            }
+        }
     }
 
     override fun createRectanglePaint() {
