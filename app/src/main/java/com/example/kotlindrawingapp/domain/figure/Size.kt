@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp.square
+package com.example.kotlindrawingapp.domain.figure
 
 data class Size(
     val width: Int = DEFAULT_WIDTH,

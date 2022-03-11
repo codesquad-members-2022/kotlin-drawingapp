@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp.square
+package com.example.kotlindrawingapp.domain.figure
 
 data class Alpha(var alpha: Int) {
 
@@ -14,5 +14,10 @@ data class Alpha(var alpha: Int) {
         private const val MINIMUM = 1
         private const val MAXIMUM = 10
         private const val OUT_OF_RANGE_MESSAGE = "범위에서 벗어났습니다."
+
+        fun generateAlpha(): Alpha {
+            val alpha = (1..10).random()
+            return Alpha(alpha)
+        }
     }
 }

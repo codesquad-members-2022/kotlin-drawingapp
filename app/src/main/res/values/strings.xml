@@ -2,4 +2,7 @@
     <string name="app_name">kotlin-drawingapp</string>
     <string name="label_textview_alpha">투명도</string>
     <string name="label_textview_background">배경색</string>
+    <string name="label_textview_none">NONE</string>
+    <string name="label_button_square">사각형</string>
+    <string name="label_button_picture">사진</string>
 </resources>
