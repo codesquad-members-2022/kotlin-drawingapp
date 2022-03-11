@@ -197,6 +197,24 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onSlideAlpha()
     }
 
+    override fun showRectSize(width: Int, height: Int) {
+        sizeWBtn.text = "W"
+        sizeHBtn.text = "H"
+        if (width > 0) {
+            sizeWBtn.text = "W   $width"
+            sizeHBtn.text = "H   $height"
+        }
+    }
+
+    override fun showRectPosition(x: Int, y: Int) {
+        positionXBtn.text = "X"
+        positionYBtn.text = "Y"
+        if (x > 0) {
+            positionXBtn.text = "X   $x"
+            positionYBtn.text = "Y   $y"
+        }
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val x = event?.x ?: 0f
         val y = event?.y ?: 0f

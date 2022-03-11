@@ -48,6 +48,8 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         }
         getRectAlpha()
         getRectColor()
+        getRectSize()
+        getRectPosition()
         taskView.showSelectedRectangle()
     }
 
@@ -84,6 +86,26 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         } else {
             val alpha = plane.getRectangle(selectedRectIndex).alphaValue / 25
             taskView.showRectAlpha(alpha.toFloat())
+        }
+    }
+
+    private fun getRectSize() {
+        if (selectedRectIndex == -1) {
+            taskView.showRectSize()
+        } else {
+            val width = plane.getRectangle(selectedRectIndex).size[0]
+            val height = plane.getRectangle(selectedRectIndex).size[1]
+            taskView.showRectSize(width, height)
+        }
+    }
+
+    private fun getRectPosition() {
+        if (selectedRectIndex == -1) {
+            taskView.showRectPosition()
+        } else {
+            val x = plane.getRectangle(selectedRectIndex).point[0].toInt()
+            val y = plane.getRectangle(selectedRectIndex).point[1].toInt()
+            taskView.showRectPosition(x, y)
         }
     }
 

@@ -21,6 +21,10 @@ interface TaskContract {
 
         fun showDraggingRectangle(tempRect: Rectangle?)
 
+        fun showRectSize(width: Int = 0, height: Int = 0)
+
+        fun showRectPosition(x: Int = 0, y: Int = 0)
+
     }
 
     interface Presenter {
