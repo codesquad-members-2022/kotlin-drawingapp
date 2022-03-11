@@ -51,13 +51,18 @@ class RectView(context: Context) : View(context) {
 
     fun drawRectangle(rect: Rect) {
         rect.let {
-            rectId = rect.rectId
-            left = it.point.xPos.toFloat()
-            right = (it.point.xPos + it.size.width).toFloat()
-            top = it.point.yPos.toFloat()
-            this.rectWidth = it.size.width
-            this.rectHeight = it.size.height
-            bottom = (it.point.yPos + it.size.height).toFloat()
+            it.point.value?.let {point->
+                left = point.xPos.toFloat()
+                top = point.yPos.toFloat()
+
+            }
+            it.size.value?.let{size->
+                right = (this.left + size.width)
+                bottom = (this.top + size.height)
+                this.rectWidth = size.width
+                this.rectHeight = size.height
+            }
+            this.rectId= it.rectId
             this.backGroundRGB = it.backGroundColor.value?.getRGBHexValue().toString()
             val backGroundColor = it.backGroundColor.value?.getBackGroundColor()
             val opacity = ((it.opacity.value?.times(25.5))?.toInt())
@@ -75,10 +80,17 @@ class RectView(context: Context) : View(context) {
         photo.let {
             rectId = photo.rectId
             photoId = photo.photoId
-            left = it.point.xPos.toFloat()
-            right = (it.point.xPos + it.size.width).toFloat()
-            top = it.point.yPos.toFloat()
-            bottom = (it.point.yPos + it.size.height).toFloat()
+            it.point.value?.let {point->
+                left = point.xPos?.toFloat()
+                top = point.yPos.toFloat()
+
+            }
+            it.size.value?.let{ size ->
+                right = (this.left + size.width)
+                bottom = (this.top + size.height)
+                this.rectWidth = size.width
+                this.rectHeight = size.height
+            }
             it.opacity.value?.let { alpha ->
                 this.alpha = (alpha * 25.5).toInt()
             }
@@ -88,8 +100,8 @@ class RectView(context: Context) : View(context) {
     }
 
     private fun resizeBitmap(image: Bitmap, photo: Photo): Bitmap {
-        val width = photo.size.width // 축소시킬 너비
-        val height = photo.size.height // 축소시킬 높이
+        val width = this.rectWidth // 축소시킬 너비
+        val height = this.rectHeight // 축소시킬 높이
         var bmpWidth = image.width.toFloat()
         var bmpHeight = image.height.toFloat()
 
@@ -112,7 +124,6 @@ class RectView(context: Context) : View(context) {
         )
 
     }
-
     fun drawBorder() {
         this.selectedFlag = true
         invalidate()
@@ -154,6 +165,21 @@ class RectView(context: Context) : View(context) {
                 this.bottom = y + this.rectHeight
             }
         }
+    }
+
+
+    fun changeSize(width:Int, height:Int){
+        this.right= left+ width
+        this.bottom= top+ height
+        this.rectHeight= height
+        this.rectWidth= width
+        invalidate()
+    }
+
+    fun changePos(xPos:Float, yPos:Float){
+        this.left= xPos
+        this.top= yPos
+        invalidate()
     }
 
 

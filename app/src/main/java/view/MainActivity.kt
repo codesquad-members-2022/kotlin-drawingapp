@@ -13,10 +13,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MotionEvent
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -25,9 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
-import model.BackGroundColor
-import model.Photo
-import model.Rect
+import model.*
+
 private const val REQUEST_CODE= 1000
 
 class MainActivity : AppCompatActivity(), MainContract.View {
@@ -36,6 +32,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
     private lateinit var tvRgbValue: TextView
+    private lateinit var editTvWidth:EditText
+    private lateinit var editTvHeight:EditText
+    private lateinit var editTvXpos:EditText
+    private lateinit var editTvYpos:EditText
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
         selectedCustomRectangleView?.changeColor(colorValue)
         tvRgbValue.text = colorValue.getRGBHexValue()
@@ -45,7 +45,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
     private var selectedRectangle: Rect? = null
+    private val sizeObserver = Observer<Size> { size->
+        selectedCustomRectangleView?.changeSize(size.width, size.height)
+        editTvWidth.setText("${size.width}")
+        editTvHeight.setText("${size.height}")
 
+    }
+    private val posObserver = Observer<Point> { point->
+        selectedCustomRectangleView?.changePos(point.xPos.toFloat(), point.yPos.toFloat())
+        editTvXpos.setText("${point.xPos}")
+        editTvYpos.setText("${point.yPos}")
+    }
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +66,19 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
         val btnMakePhotoView = findViewById<Button>(R.id.btn_addPhoto)
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
-
+        val btnWidthUp= findViewById<Button>(R.id.btn_width_up)
+        val btnWidthDown= findViewById<Button>(R.id.btn_width_down)
+        val btnHeightUp= findViewById<Button>(R.id.btn_height_up)
+        val btnHeightDown= findViewById<Button>(R.id.btn_height_down)
+        val btnXposUp= findViewById<Button>(R.id.btn_xPos_up)
+        val btnYposUp= findViewById<Button>(R.id.btn_yPos_down)
+        val btnXposDown= findViewById<Button>(R.id.btn_xPos_down)
+        val btnYposDown= findViewById<Button>(R.id.btn_yPos_down)
+        editTvWidth= findViewById<EditText>(R.id.editText_width)
+        editTvHeight= findViewById<EditText>(R.id.editText_height)
+        editTvXpos= findViewById<EditText>(R.id.editText_xPos)
+        editTvYpos= findViewById<EditText>(R.id.editText_yPos)
+        tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
         btnMakeRectangle.setOnClickListener {
             presenter.createRectanglePaint()
         }
@@ -109,6 +131,52 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         })
 
+        btnHeightDown.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeSize(it, "height", -1)
+            }
+        }
+
+        btnWidthDown.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeSize(it, "width", -1)
+            }
+        }
+
+        btnWidthUp.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeSize(it, "width", 1)
+            }
+        }
+
+        btnHeightUp.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeSize(it, "height", 1)
+            }
+        }
+
+        btnXposUp.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeXpos(it, 1)
+            }
+        }
+        btnXposDown.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeXpos(it, -1)
+            }
+        }
+
+        btnYposUp.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeYPos(it, 1)
+            }
+        }
+
+        btnYposDown.setOnClickListener {
+            selectedCustomRectangleView?.let {
+                presenter.changeYPos(it, -1)
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -188,7 +256,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         selectedCustomRectangleView?.drawBorder()
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
+        val editTvWidth= findViewById<EditText>(R.id.editText_width)
+        val editTvHeight= findViewById<EditText>(R.id.editText_height)
+        val editTvXpos= findViewById<EditText>(R.id.editText_xPos)
+        val editTvYpos= findViewById<EditText>(R.id.editText_yPos)
         var tempView= RectView(this)
+        editTvHeight.setText("${rect.size.value?.height}")
+        editTvWidth.setText("${rect.size.value?.width}")
+        editTvXpos.setText("${rect.point.value?.xPos}")
+        editTvYpos.setText("${rect.point.value?.yPos}")
         tempView.isVisible= false
         if (selectedCustomRectangleView?.photoId == "") {
             rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()

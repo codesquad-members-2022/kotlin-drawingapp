@@ -16,8 +16,8 @@ class RectFactory {
         private fun makeNewRectType(): Rect {
             return Rect(
                 randomRectId(),
-                makeRandomPoint(),
-                makeSize(),
+                MutableLiveData(makeRandomPoint()),
+                MutableLiveData(makeSize()),
                 MutableLiveData(makeRandomRGB()),
                 MutableLiveData(makeRandomOpacity())
             )
@@ -28,8 +28,8 @@ class RectFactory {
             return Photo(
                 randomPhotoId(),
                 randomRectId(),
-                makeRandomPoint(),
-                makeSize(),
+                MutableLiveData(makeRandomPoint()),
+                MutableLiveData(makeSize()),
                 MutableLiveData(makeRandomRGB()),
                 MutableLiveData(makeRandomOpacity())
             )

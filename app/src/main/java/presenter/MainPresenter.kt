@@ -29,11 +29,27 @@ class MainPresenter(
 
     override fun changePosition(rectView: RectView) {
         plane.changePosition(rectView.rectId, rectView.left.toInt(), rectView.top.toInt())?.let{
-            if(rectView.photoId=="") {
-                view.redrawRectangle(it)
+
+
+            view.redrawRectangle(it)
+        }
+    }
+
+    override fun changeXpos(rectView: RectView, value: Int) {
+        plane.changePosition(rectView.rectId, (rectView.left+value).toInt(),  rectView.top.toInt())
+    }
+
+    override fun changeYPos(rectView: RectView, value: Int) {
+        plane.changePosition(rectView.rectId, (rectView.left+value).toInt(),  rectView.top.toInt())
+    }
+
+    override fun changeSize(rectView: RectView, mode: String, value: Int) {
+        when(mode){
+            "width"->{
+                plane.changeSize(rectView.rectId, rectView.rectWidth+value, rectView.rectHeight )
             }
-            else{
-                view.redrawPhoto(it as Photo)
+            "height"->{
+                plane.changeSize(rectView.rectId, rectView.rectWidth, rectView.rectHeight+value)
             }
         }
     }

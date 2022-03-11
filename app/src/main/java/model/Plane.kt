@@ -9,9 +9,8 @@ class Plane(private val context: Context) {
 
     fun createRectanglePaint(): Rect {
         var rect = RectFactory.makeRect()
-        while(customRectangleList.count{it.rectId==rect.rectId }!=0)
-        {
-            rect= RectFactory.makeRect()
+        while (customRectangleList.count { it.rectId == rect.rectId } != 0) {
+            rect = RectFactory.makeRect()
         }
         customRectangleList.add(rect)
         return rect
@@ -45,9 +44,17 @@ class Plane(private val context: Context) {
 
     fun checkIsInCustomRectangleArea(x: Float, y: Float): Int {
         customRectangleList.map {
-            if (it.point.xPos <= x && it.point.xPos + it.size.width >= x) {
-                if (it.point.yPos <= y && it.point.yPos + it.size.height > y) {
-                    return customRectangleList.indexOf(it)
+            var rectXpos = 0
+            var rectYpos = 0
+            it.point.value?.let { point ->
+                rectXpos = point.xPos
+                rectYpos = point.yPos
+            }
+            it.size.value?.let { size ->
+                if (rectXpos <= x && rectXpos + size.width >= x) {
+                    if (rectYpos <= y && rectYpos + size.height > y) {
+                        return customRectangleList.indexOf(it)
+                    }
                 }
             }
         }
@@ -58,25 +65,28 @@ class Plane(private val context: Context) {
         return customRectangleList[index]
     }
 
-    fun changeColor(rectId:String){
+    fun changeColor(rectId: String) {
         val randomColor = BackGroundColor((0..255).random(), (0..255).random(), (0..255).random())
         customRectangleList.find { it.rectId == rectId }?.backGroundColor?.value = randomColor
     }
 
-    fun changeOpacity(rectId:String, opacity: Int) {
-        customRectangleList.find {  it.rectId == rectId  }?.opacity?.value = opacity
+    fun changeOpacity(rectId: String, opacity: Int) {
+        customRectangleList.find { it.rectId == rectId }?.opacity?.value = opacity
 
     }
 
-    fun changePosition(rectId: String, x:Int, y:Int):Rect?{
-        val selectedRect =   customRectangleList.find {  it.rectId == rectId  }
-
-        selectedRect?.point?.xPos = x
-        selectedRect?.point?.yPos= y
+    fun changePosition(rectId: String, x: Int, y: Int):Rect? {
+        val selectedRect = customRectangleList.find { it.rectId == rectId }
+        selectedRect?.point?.value?.xPos = x
+        selectedRect?.point?.value?.yPos = y
         return selectedRect
     }
 
-
+    fun changeSize(rectId: String, width: Int, height: Int) {
+        val selectedRect = customRectangleList.find { it.rectId == rectId }
+        selectedRect?.size?.value?.width = width
+        selectedRect?.size?.value?.height = height
+    }
 
 
 }

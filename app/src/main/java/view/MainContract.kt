@@ -19,6 +19,9 @@ interface MainContract {
         fun changeColor(rectView: RectView)
         fun changeOpacity(rectView: RectView, opacity: Int)
         fun changePosition(rectView: RectView)
+        fun changeXpos(rectView: RectView, value: Int)
+        fun changeYPos(rectView: RectView,value: Int)
+        fun changeSize(rectView: RectView, mode:String, value:Int)
         fun createRectanglePaint()
         fun createPhotoPaint(image: Bitmap)
     }
