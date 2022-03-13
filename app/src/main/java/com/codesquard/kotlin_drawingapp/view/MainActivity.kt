@@ -6,7 +6,6 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
@@ -18,7 +17,6 @@ import com.codesquard.kotlin_drawingapp.*
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
-import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
@@ -45,7 +43,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
         backgroundBtn = findViewById(R.id.btn_background)
-        photoBtn = findViewById(R.id.photo_btn)
+        photoBtn = findViewById(R.id.btn_photo_rect)
         alphaSlider = findViewById(R.id.slider_alpha)
         positionXBtn = findViewById(R.id.btn_position_x)
         positionYBtn = findViewById(R.id.btn_position_y)
@@ -160,7 +158,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     private fun onClickRectBtn() {
-        firstBtn = findViewById(R.id.create_btn)
+        firstBtn = findViewById(R.id.btn_normal_rect)
         firstBtn.setOnClickListener {
             val width = dpToPx(150f)
             val height = dpToPx(120f)

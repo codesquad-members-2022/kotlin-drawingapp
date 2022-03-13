@@ -1,9 +1,10 @@
 <resources>
   <string name="app_name">kotlin-drawingapp</string>
-  <string name="rectangle">사각형</string>
-  <string name="background">배경색</string>
-  <string name="alpha">투명도</string>
-  <string name="photo">사진</string>
-  <string name="position">위치</string>
-  <string name="size">크기</string>
+  <string name="normal_rect">사각형</string>
+  <string name="rect_background">배경색</string>
+  <string name="rect_alpha">투명도</string>
+  <string name="photo_rect">사진</string>
+  <string name="rect_position">위치</string>
+  <string name="rect_size">크기</string>
+  <string name="text_rect">텍스트</string>
 </resources>
