@@ -12,7 +12,9 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     private var selectedRectIndex = -1
 
     override fun addNewRectangle(width: Float, height: Float, photo: Bitmap?) {
-        plane.createNewRectangle(width, height, photo)
+        photo?.let {
+            plane.createNewPhotoRectangle(photo, width, height)
+        } ?: plane.createNewNormalRectangle(width, height)
     }
 
     override fun selectRectangle(x: Float, y: Float) {

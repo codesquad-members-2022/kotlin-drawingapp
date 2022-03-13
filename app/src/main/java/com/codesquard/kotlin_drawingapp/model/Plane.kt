@@ -6,18 +6,21 @@ import com.codesquard.kotlin_drawingapp.presenter.RectangleListener
 class Plane(private val listener: RectangleListener) {
 
     private val rectangleList = mutableListOf<Rectangle>()
-    private lateinit var newRect: Rectangle
     private var selectedRect: Rectangle? = null
 
-    fun createNewRectangle(width: Float, height: Float, photo: Bitmap? = null) {
-        photo?.run {
-            val photoRect = PhotoRectangle()
-            photoRect.setBitmap(this)
-            newRect = photoRect
-        } ?: run {
-            newRect = NormalRectangle()
-        }
-        newRect = RectangleFactory(newRect).getInstance()
+    fun createNewPhotoRectangle(photo: Bitmap, width: Float, height: Float) {
+        val newRect = PhotoRectangle()
+        newRect.setBitmap(photo)
+        addNewRectangle(newRect, width, height)
+    }
+
+    fun createNewNormalRectangle(width: Float, height: Float) {
+        val newRect = NormalRectangle()
+        addNewRectangle(newRect, width, height)
+    }
+
+    private fun addNewRectangle(newRect: Rectangle, width: Float, height: Float) {
+        val newRect = RectangleFactory(newRect).getInstance()
         newRect.setSize(width.toInt(), height.toInt())
         rectangleList.add(newRect)
         listener.onCreateRectangle(newRect)
