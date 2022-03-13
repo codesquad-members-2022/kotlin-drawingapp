@@ -1,5 +1,6 @@
 package com.codesquard.kotlin_drawingapp.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
@@ -63,28 +64,36 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     private fun onTouchBtnToChangeSize() {
-        val btnArray = arrayOf(sizeHBtn, sizeWBtn)
-        btnArray.forEach {
-            it.setOnTouchListener { v: View, event: MotionEvent ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y)
-                    else -> v.performClick()
-                }
-                true
+        sizeWBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y, true)
+                else -> v.performClick()
             }
+            true
+        }
+        sizeHBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y, false)
+                else -> v.performClick()
+            }
+            true
         }
     }
 
     private fun onTouchBtnToChangePosition() {
-        val btnArray = arrayOf(positionYBtn, positionXBtn)
-        btnArray.forEach {
-            it.setOnTouchListener { v: View, event: MotionEvent ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y)
-                    else -> v.performClick()
-                }
-                true
+        positionXBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y, true)
+                else -> v.performClick()
             }
+            true
+        }
+        positionYBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y, false)
+                else -> v.performClick()
+            }
+            true
         }
     }
 

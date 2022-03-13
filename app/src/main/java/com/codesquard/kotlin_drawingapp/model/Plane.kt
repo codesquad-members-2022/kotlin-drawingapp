@@ -28,9 +28,9 @@ class Plane(private val listener: RectangleListener) {
     fun countRectangle() = rectangleList.size
 
     fun selectRectangle(x: Float, y: Float) {
-        val reversedRectList = rectangleList.reversed()
         unSelectRectangle()
 
+        val reversedRectList = rectangleList.reversed()
         reversedRectList.forEachIndexed { index, rect ->
             val rectFirstX = rect.point[0]
             val rectFirstY = rect.point[1] + 45
@@ -72,6 +72,50 @@ class Plane(private val listener: RectangleListener) {
             this.setColor(r, g, b)
             listener.onUpdateRectangle()
         } ?: return
+    }
+
+    fun reduceSize(isWidth: Boolean) {
+        selectedRect?.let {
+            if (isWidth && it.size[0] > 1) {
+                it.size[0] -= 1
+            } else if (!isWidth && it.size[1] > 1) {
+                it.size[1] -= 1
+            } else return
+        } ?: return
+        listener.onUpdateRectangle()
+    }
+
+    fun increaseSize(isWidth: Boolean) {
+        selectedRect?.let {
+            if (isWidth) {
+                it.size[0] += 1
+            } else {
+                it.size[1] += 1
+            }
+        } ?: return
+        listener.onUpdateRectangle()
+    }
+
+    fun reducePosition(isX: Boolean) {
+        selectedRect?.let {
+            if (isX && it.point[0] >= 2f) {
+                it.point[0] -= 1f
+            } else if (!isX && it.point[1] >= 2f) {
+                it.point[1] -= 1f
+            } else return
+        } ?: return
+        listener.onUpdateRectangle()
+    }
+
+    fun increasePosition(isX: Boolean) {
+        selectedRect?.let {
+            if (isX) {
+                it.point[0] += 1f
+            } else {
+                it.point[1] += 1f
+            }
+        } ?: return
+        listener.onUpdateRectangle()
     }
 
     fun dragRectangle(x: Float, y: Float) {

@@ -31,10 +31,24 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         plane.dragRectangle(x, y)
     }
 
-    override fun changePosition(x: Float, y: Float) {
+    override fun changePosition(x: Float, y: Float, isX: Boolean) {
+        if (x > 220f && x < 255f) {
+            if (y > 20f && y < 50) {
+                plane.reducePosition(isX)
+            } else if (y >= 50 && y < 75) {
+                plane.increasePosition(isX)
+            }
+        }
     }
 
-    override fun changeSize(x: Float, y: Float) {
+    override fun changeSize(x: Float, y: Float, isWidth: Boolean) {
+        if (x > 220f && x < 255f) {
+            if (y > 20f && y < 50) {
+                plane.reduceSize(isWidth)
+            } else if (y >= 50 && y < 75) {
+                plane.increaseSize(isWidth)
+            }
+        }
     }
 
     override fun onCreateRectangle(newRect: Rectangle) {
@@ -61,6 +75,8 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
 
     override fun onUpdateRectangle() {
         getRectColor()
+        getRectPosition()
+        getRectSize()
         taskView.showSelectedRectangle()
     }
 
