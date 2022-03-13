@@ -122,7 +122,13 @@ class Plane(private val listener: RectangleListener) {
         selectedRect?.run {
             this.point[0] = x
             this.point[1] = y - 45
-            listener.onDragRectangle(selectedRect)
+            if (this.point[0] < 1) {
+                this.point[0] = 1f
+            }
+            if (this.point[1] < 1) {
+                this.point[1] = 1f
+            }
         } ?: return
+        listener.onDragRectangle(selectedRect)
     }
 }
