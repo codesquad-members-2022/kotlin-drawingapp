@@ -1,6 +1,5 @@
 package com.codesquard.kotlin_drawingapp.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
@@ -8,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
@@ -20,6 +18,7 @@ import com.codesquard.kotlin_drawingapp.*
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
@@ -111,8 +110,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
                 } else {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
                 }
-                val width = dp2px(150f)
-                val height = dp2px(120f)
+                val width = dpToPx(150f)
+                val height = dpToPx(120f)
                 presenter.addNewRectangle(width, height, photo)
             } else {
                 Snackbar.make(customView, "사진을 불러오지 못하였습니다", Snackbar.LENGTH_SHORT).show()
@@ -163,8 +162,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     private fun onClickRectBtn() {
         firstBtn = findViewById(R.id.create_btn)
         firstBtn.setOnClickListener {
-            val width = dp2px(150f)
-            val height = dp2px(120f)
+            val width = dpToPx(150f)
+            val height = dpToPx(120f)
             presenter.addNewRectangle(width, height)
         }
     }
@@ -206,7 +205,9 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onSlideAlpha()
     }
 
-    override fun showRectSize(width: String, height: String) {
+    override fun showRectSize(w: Float, h: Float) {
+        val width = pxToDp(w).toInt()
+        val height = pxToDp(h).toInt()
         sizeWBtn.text = "W   $width"
         sizeHBtn.text = "H   $height"
     }
@@ -230,10 +231,18 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         return super.onTouchEvent(event)
     }
 
-    private fun dp2px(dp: Float): Float {
+    private fun dpToPx(dp: Float): Float {
         val resources = this.resources
         val metrics = resources.displayMetrics
-        return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        val density = metrics.density
+        return dp * density
+    }
+
+    private fun pxToDp(px: Float): Float {
+        val resources = this.resources
+        val metrics = resources.displayMetrics
+        val density = metrics.density
+        return px / density
     }
 }
 
