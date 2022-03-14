@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlindrawingapp.domain.figure.*
 import com.example.kotlindrawingapp.domain.figure.square.Square
+import com.example.kotlindrawingapp.domain.figure.text.Text
 
 class Plane private constructor(private val _squares: MutableList<Figure>) {
 
@@ -28,7 +29,12 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     fun count(): Int = _squares.size
 
     fun selected(point: Point): Figure? {
-        val filter = _squares.filter { figure -> figure.isSelected(point) }
+        val filter = _squares.filter { figure ->
+            when (figure) {
+                is Text -> figure.isSelected(point)
+                else -> figure.isSelected(point)
+            }
+        }
         return if (filter.isEmpty()) null else filter.last()
     }
 

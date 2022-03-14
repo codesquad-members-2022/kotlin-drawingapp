@@ -79,7 +79,19 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             }
         }
         if (plane.selectedSquare.value == figure) {
-            canvas.drawRect(x, y, (x + width), (y + height), selectedPaintSquare())
+            when (figure) {
+                is Text -> {
+                    canvas.drawRect(
+                        x - 10,
+                        y - bounds.height() - 10,
+                        x + bounds.width() + 10,
+                        y + bounds.bottom + 10,
+                        selectedPaintSquare()
+                    )
+                }
+                else -> canvas.drawRect(x, y, (x + width), (y + height), selectedPaintSquare())
+
+            }
         }
     }
 

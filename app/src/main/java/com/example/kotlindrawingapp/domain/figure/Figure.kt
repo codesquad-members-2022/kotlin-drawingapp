@@ -7,7 +7,7 @@ abstract class Figure {
     abstract var alpha: Alpha
     abstract var rgb: RGB?
 
-    fun isSelected(touchPoint: Point): Boolean {
+    open fun isSelected(touchPoint: Point): Boolean {
         return touchPoint.x >= point.x && touchPoint.y >= point.y
                 && touchPoint.x <= point.x + size.width && touchPoint.y <= point.y + size.height
     }

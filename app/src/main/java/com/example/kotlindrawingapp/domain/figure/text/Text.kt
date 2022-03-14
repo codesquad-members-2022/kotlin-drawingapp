@@ -11,6 +11,11 @@ data class Text(
     var text: String
 ) : Figure() {
 
+    override fun isSelected(touchPoint: Point): Boolean {
+        return touchPoint.x >= point.x && touchPoint.y >= point.y - size.height
+                && touchPoint.x <= point.x + size.width && touchPoint.y <= point.y
+    }
+
     companion object {
         private const val BLANK = " "
         private const val text =
@@ -23,7 +28,7 @@ data class Text(
         }
 
         private fun generateNumber(list: List<String>): Int {
-            return (0..list.size).random()
+            return (0..list.size - 5).random()
         }
 
     }
