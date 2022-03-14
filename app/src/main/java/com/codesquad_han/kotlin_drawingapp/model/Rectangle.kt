@@ -9,7 +9,8 @@ class Rectangle(
     size: Size,
     backgroundColor: BackgroundColor,
     transparency: Transparency,
-    imageUri: Uri?
+    imageUri: Uri?,
+    text: String?
 ) {
     val id = id
     val point = point
@@ -17,6 +18,7 @@ class Rectangle(
     val backgroundColor = backgroundColor
     val transparency = transparency
     var imageUri = imageUri
+    var text = text
 
     override fun toString(): String {
         return "($id), X:${point.x},Y:${point.y}, W:${size.width},H:${size.height}, R:${backgroundColor.r},G:${backgroundColor.g},${backgroundColor.b}, " +

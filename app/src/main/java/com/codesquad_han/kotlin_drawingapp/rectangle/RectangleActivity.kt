@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
+import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.Plane
@@ -52,7 +53,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     val width = binding.rectangleDrawingView!!.width - RECTANGLE_WIDTH
                     val height = binding.rectangleDrawingView!!.height - RECTANGLE_HEIGHT
 
-                    rectangleFactory = RectangleFactory(width, height)
+                    rectangleFactory = RectangleFactory(width, height, getString(R.string.TestText).split(' '))
                     Log.d("AppTest", "width:$width, height:$height")
 
                     initPresenter(rectangleFactory)
@@ -90,6 +91,12 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     fun setBtnMakeRectangle() {
         binding.btnGenerateRectangle?.setOnClickListener {
             presenter.start()
+        }
+    }
+
+    fun setBtnMakeTextRectangle(){
+        binding.btnGenerateTextRectangle?.setOnClickListener {
+            presenter.addTextRectangle()
         }
     }
 

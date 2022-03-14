@@ -27,6 +27,8 @@ interface RectangleContract {
 
         fun addRectangle() // 사각형 생성
 
+        fun addTextRectangle() // 텍스트 생성
+
         fun getRectangleList()
 
         fun updateTransparency(id: String, transparency: Int) // 선택한 사각형 투명도 변경

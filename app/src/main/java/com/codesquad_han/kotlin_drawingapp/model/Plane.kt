@@ -11,6 +11,10 @@ class Plane(rectangleFactory: RectangleFactory) {
         rectangleList.add(rectangle)
     }
 
+    fun generateTextRectangle(){
+        val textRectangle = rectangleFactory.generateTextRectangle()
+    }
+
     fun returnRectangleList() = rectangleList
 
     fun updateTransparency(id: String, transparency: Int) {

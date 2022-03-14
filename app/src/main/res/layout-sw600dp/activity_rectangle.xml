@@ -586,6 +586,17 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#678CCC"
             android:text="사각형 추가"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateTextRectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerateTextRectangle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#365A98"
+            android:text="텍스트 추가"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
