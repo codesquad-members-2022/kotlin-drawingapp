@@ -14,4 +14,6 @@ interface RectangleListener {
 
     fun onDragRectangle(tempRect: Rectangle?)
 
+    fun onMeasureTextSize(textRect: Rectangle)
+
 }

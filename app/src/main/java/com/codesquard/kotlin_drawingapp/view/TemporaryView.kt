@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
+import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
 class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
@@ -31,12 +32,23 @@ class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context
                 )
             }
 
-            if (this is PhotoRectangle) {
-                val photo: Bitmap = this.getPhoto() ?: return
-                val rect = RectF(startX, startY, endX, endY)
-                canvas?.drawBitmap(photo, null, rect, paint)
-            } else {
-                canvas?.drawRect(startX, startY, endX, endY, paint)
+            when (this) {
+                is PhotoRectangle -> {
+                    val photo: Bitmap = this.getPhoto() ?: return
+                    val rect = RectF(startX, startY, endX, endY)
+                    canvas?.drawBitmap(photo, null, rect, paint)
+                }
+                is TextRectangle -> {
+                    val text = this.getText()
+                    val textBound = Rect()
+                    paint.textSize = 50f
+                    paint.getTextBounds(text, 0, text.length, textBound)
+                    val rY = textBound.top.toFloat()
+                    canvas?.drawText(text, startX, startY - rY, paint)
+                }
+                else -> {
+                    canvas?.drawRect(startX, startY, endX, endY, paint)
+                }
             }
         }
     }

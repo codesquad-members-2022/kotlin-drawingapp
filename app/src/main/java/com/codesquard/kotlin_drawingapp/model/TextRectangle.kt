@@ -12,6 +12,8 @@ class TextRectangle : Rectangle {
     """.trimIndent().split(" ")
     private var textValue = ""
 
+    fun getTextList() = textList
+
     fun getText() = textValue
 
     fun setText(index: Int) {

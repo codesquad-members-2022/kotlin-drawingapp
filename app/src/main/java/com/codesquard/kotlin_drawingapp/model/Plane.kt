@@ -11,15 +11,26 @@ class Plane(private val listener: RectangleListener) {
     fun createNewPhotoRectangle(photo: Bitmap, width: Float, height: Float) {
         val newRect = PhotoRectangle()
         newRect.setBitmap(photo)
-        addNewRectangle(newRect, width, height)
+        addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
     }
 
     fun createNewNormalRectangle(width: Float, height: Float) {
         val newRect = NormalRectangle()
-        addNewRectangle(newRect, width, height)
+        addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
     }
 
-    private fun addNewRectangle(newRect: Rectangle, width: Float, height: Float) {
+    fun createNewTextRectangle() {
+        val newRect = RectangleFactory(TextRectangle()).getInstance()
+        listener.onMeasureTextSize(newRect)
+    }
+
+    fun addNewTextRectangle(textRect: Rectangle, textSize: Array<Int>) {
+        textRect.setSize(textSize[0], textSize[1])
+        rectangleList.add(textRect)
+        listener.onCreateRectangle(textRect)
+    }
+
+    private fun addNewNormalRectangleOrPhotoRectangle(newRect: Rectangle, width: Float, height: Float) {
         val newRect = RectangleFactory(newRect).getInstance()
         newRect.setSize(width.toInt(), height.toInt())
         rectangleList.add(newRect)

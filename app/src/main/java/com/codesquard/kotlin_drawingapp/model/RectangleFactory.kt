@@ -37,12 +37,20 @@ class RectangleFactory(private val rectangle: Rectangle) {
         rectangle.setAlpha(alpha)
     }
 
+    private fun setRectangleText() {
+        if (rectangle is TextRectangle) {
+            val randomIndex = (0 until rectangle.getTextList().size).random()
+            rectangle.setText(randomIndex)
+        }
+    }
+
     fun getInstance(): Rectangle {
         setRectangleID()
         setRectanglePoint()
         setRectangleColor()
         setRectangleAlpha()
         setRectangleSize()
+        setRectangleText()
         return rectangle
     }
 

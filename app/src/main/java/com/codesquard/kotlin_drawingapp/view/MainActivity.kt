@@ -25,15 +25,18 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     private lateinit var mainLayout: ConstraintLayout
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
-    private lateinit var firstBtn: Button
+    private lateinit var normalRectCreateBtn: Button
     private lateinit var backgroundBtn: Button
-    private lateinit var photoBtn: Button
+    private lateinit var photoRectCreateBtn: Button
+    private lateinit var textRectCreateBtn: Button
     private lateinit var positionXBtn: Button
     private lateinit var positionYBtn: Button
     private lateinit var sizeWBtn: Button
     private lateinit var sizeHBtn: Button
     private lateinit var alphaSlider: Slider
     private lateinit var presenter: TaskContract.Presenter
+    private var width = 0f
+    private var height = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,19 +46,24 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
         backgroundBtn = findViewById(R.id.btn_background)
-        photoBtn = findViewById(R.id.btn_photo_rect)
+        normalRectCreateBtn = findViewById(R.id.btn_normal_rect)
+        photoRectCreateBtn = findViewById(R.id.btn_photo_rect)
+        textRectCreateBtn = findViewById(R.id.btn_text_rect)
         alphaSlider = findViewById(R.id.slider_alpha)
         positionXBtn = findViewById(R.id.btn_position_x)
         positionYBtn = findViewById(R.id.btn_position_y)
         sizeWBtn = findViewById(R.id.btn_size_w)
         sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
+        width = dpToPx(150f)
+        height = dpToPx(120f)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
 
-        onClickRectBtn()
-        onClickPhotoBtn(requestPermissionLauncher)
+        onClickNormalRectBtn()
+        onClickPhotoRectBtn(requestPermissionLauncher)
+        onClickTextRectBtn()
         onTouchBtnToChangeSize()
         onTouchBtnToChangePosition()
     }
@@ -108,8 +116,6 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
                 } else {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
                 }
-                val width = dpToPx(150f)
-                val height = dpToPx(120f)
                 presenter.addNewRectangle(width, height, photo)
             } else {
                 Snackbar.make(customView, "사진을 불러오지 못하였습니다", Snackbar.LENGTH_SHORT).show()
@@ -136,8 +142,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         return requestPermissionLauncher
     }
 
-    private fun onClickPhotoBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
-        photoBtn.setOnClickListener {
+    private fun onClickTextRectBtn() {
+        textRectCreateBtn.setOnClickListener {
+            presenter.createNewTextRectangle()
+        }
+    }
+
+    private fun onClickPhotoRectBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
+        photoRectCreateBtn.setOnClickListener {
             requestPermissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
         }
     }
@@ -157,11 +169,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         })
     }
 
-    private fun onClickRectBtn() {
-        firstBtn = findViewById(R.id.btn_normal_rect)
-        firstBtn.setOnClickListener {
-            val width = dpToPx(150f)
-            val height = dpToPx(120f)
+    private fun onClickNormalRectBtn() {
+        normalRectCreateBtn.setOnClickListener {
             presenter.addNewRectangle(width, height)
         }
     }
@@ -213,6 +222,11 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     override fun showRectPosition(x: String, y: String) {
         positionXBtn.text = "X   $x"
         positionYBtn.text = "Y   $y"
+    }
+
+    override fun measureTextSize(textRect: Rectangle) {
+        val textSize = customView.measureTextSize(textRect)
+        presenter.addNewTextRectangle(textRect, textSize)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

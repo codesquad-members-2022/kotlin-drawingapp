@@ -25,11 +25,17 @@ interface TaskContract {
 
         fun showRectPosition(x: String = "", y: String = "")
 
+        fun measureTextSize(textRect: Rectangle)
+
     }
 
     interface Presenter {
 
         fun addNewRectangle(width: Float, height: Float, photo: Bitmap? = null)
+
+        fun createNewTextRectangle()
+
+        fun addNewTextRectangle(textRect: Rectangle, textSize: Array<Int>)
 
         fun selectRectangle(x: Float, y: Float)
 

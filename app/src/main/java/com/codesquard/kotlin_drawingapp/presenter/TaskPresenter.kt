@@ -17,6 +17,14 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         } ?: plane.createNewNormalRectangle(width, height)
     }
 
+    override fun createNewTextRectangle() {
+        plane.createNewTextRectangle()
+    }
+
+    override fun addNewTextRectangle(textRect: Rectangle, textSize: Array<Int>) {
+        plane.addNewTextRectangle(textRect, textSize)
+    }
+
     override fun selectRectangle(x: Float, y: Float) {
         plane.selectRectangle(x, y)
     }
@@ -55,6 +63,10 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
 
     override fun onCreateRectangle(newRect: Rectangle) {
         taskView.showRectangle(newRect)
+    }
+
+    override fun onMeasureTextSize(textRect: Rectangle) {
+        taskView.measureTextSize(textRect)
     }
 
     override fun onSelectRectangle(index: Int) {

@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
+import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
 class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
 
@@ -39,19 +40,42 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
                 val strokePaint = Paint().apply {
                     color = Color.rgb(r, g, b)
                     style = Paint.Style.STROKE
-                    strokeWidth = 10f
+                    strokeWidth = 5f
                 }
-                canvas?.drawRect(x, y, width, height, strokePaint)
+                canvas?.drawRect(x - 2.5f, y - 2.5f, width + 2.5f, height + 2.5f, strokePaint)
             }
 
-            if (it is PhotoRectangle) {
-                val photo: Bitmap = it.getPhoto() ?: return
-                val rect = RectF(x, y, width, height)
-                canvas?.drawBitmap(photo, null, rect, paint)
-            } else {
-                canvas?.drawRect(x, y, width, height, paint)
+            when (it) {
+                is PhotoRectangle -> {
+                    val photo: Bitmap = it.getPhoto() ?: return
+                    val rect = RectF(x, y, width, height)
+                    canvas?.drawBitmap(photo, null, rect, paint)
+                }
+                is TextRectangle -> {
+                    val text = it.getText()
+                    val textBound = Rect()
+                    paint.textSize = 50f
+                    paint.getTextBounds(text, 0, text.length, textBound)
+                    val rY = textBound.top.toFloat()
+                    canvas?.drawText(text, x, y - rY, paint)
+                }
+                else -> {
+                    canvas?.drawRect(x, y, width, height, paint)
+                }
             }
         }
+    }
+
+    fun measureTextSize(textRect: Rectangle): Array<Int> {
+        val textRect = textRect as TextRectangle
+        val text = textRect.getText()
+        val textBound = Rect()
+        val paint = Paint()
+        paint.run {
+            this.textSize = 50f
+            this.getTextBounds(text, 0, text.length, textBound)
+        }
+        return arrayOf(textBound.width(), textBound.height())
     }
 }
 
