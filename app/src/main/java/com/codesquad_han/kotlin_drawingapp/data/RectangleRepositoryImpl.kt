@@ -22,4 +22,20 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
     override fun updateSelctedRectanglePoint(id: String, newX: Int, newY: Int) {
         plane.updateSelectedRectanglePoint(id, newX, newY)
     }
+
+    override fun updatePointX(value: Int, id: String): Int {
+        return plane.updatePointX(value, id)
+    }
+
+    override fun updatePointY(value: Int, id: String): Int {
+        return plane.updatePointY(value, id)
+    }
+
+    override fun updateSizeWidth(value: Int, id: String): Int {
+        return plane.updateSizeWidth(value, id)
+    }
+
+    override fun updateSizeHeight(value: Int, id: String): Int {
+        return plane.updateSizeHeight(value, id)
+    }
 }

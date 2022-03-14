@@ -26,6 +26,10 @@ class RectanglePresenter(
         liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 
+    override fun addTextRectangle() {
+
+    }
+
     override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신
         rectangleRepository.updateTransparency(id, transparency)
         liveRectangleList.value = rectangleRepository.getRectangleList()
@@ -38,6 +42,26 @@ class RectanglePresenter(
 
     override fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) {
         rectangleRepository.updateSelctedRectanglePoint(id, newX, newY)
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updatePointX(value: Int, id: String) {
+        rectangleView.showPointX(rectangleRepository.updatePointX(value, id))
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updatePointY(value: Int, id: String) {
+        rectangleView.showPointY(rectangleRepository.updatePointY(value, id))
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updateSizeWidth(value: Int, id: String) {
+        rectangleView.showSizeW(rectangleRepository.updateSizeWidth(value, id))
+        liveRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updateSizeHeight(value: Int, id: String) {
+        rectangleView.showSizeH(rectangleRepository.updateSizeHeight(value, id))
         liveRectangleList.value = rectangleRepository.getRectangleList()
     }
 

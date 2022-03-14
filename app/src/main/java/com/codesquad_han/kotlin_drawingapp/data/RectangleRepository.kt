@@ -14,4 +14,12 @@ interface RectangleRepository {
     fun updateImageUri(id: String, imageUri: Uri?)
 
     fun updateSelctedRectanglePoint(id: String, newX: Int, newY: Int)
+
+    fun updatePointX(value: Int, id: String) : Int
+
+    fun updatePointY(value: Int, id: String) : Int
+
+    fun updateSizeWidth(value: Int, id: String) : Int
+
+    fun updateSizeHeight(value: Int, id: String) : Int
 }
