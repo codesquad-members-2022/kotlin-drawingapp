@@ -1,6 +1,6 @@
 package model
 
-data class Size(var width: Int, var height: Int) {
+data class Size(val width: Int, val height: Int) {
     override fun toString(): String {
         return "W$width, H$height,"
     }
