@@ -16,7 +16,6 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
 
     private lateinit var listener: Movable
     private lateinit var plane: Plane
-    private lateinit var bounds: Rect
     private var paint: Paint = Paint()
     private var selectedPaint: Paint = Paint()
     private var temporary: Figure? = null
@@ -48,10 +47,8 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             }
             is Text -> {
                 val text = figure.text
-                bounds = Rect()
                 paint = temporaryPaint(figure)
                 paint.textSize = 80F
-                paint.getTextBounds(text, 0, text.length, bounds)
                 canvas.drawText(text, moveX, moveY, paint)
             }
         }
@@ -71,10 +68,8 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             }
             is Text -> {
                 val text = figure.text
-                bounds = Rect()
                 paint = paintSquare(figure)
                 paint.textSize = 80F
-                paint.getTextBounds(text, 0, text.length, bounds)
                 canvas.drawText(text, x, y, paint)
             }
         }
@@ -82,10 +77,10 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             when (figure) {
                 is Text -> {
                     canvas.drawRect(
-                        x - 10,
-                        y - bounds.height() - 10,
-                        x + bounds.width() + 10,
-                        y + bounds.bottom + 10,
+                        x - 20,
+                        y - height,
+                        x + width + 20,
+                        y + 20,
                         selectedPaintSquare()
                     )
                 }
@@ -158,5 +153,14 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
 
     fun setListener(listener: Movable) {
         this.listener = listener
+    }
+
+    fun getWidthAndHeight(text: String): Pair<Int, Int> {
+        val bounds = Rect()
+        Paint().apply {
+            textSize = 80F
+            getTextBounds(text, 0, text.length, bounds)
+        }
+        return Pair(bounds.width(), bounds.height())
     }
 }

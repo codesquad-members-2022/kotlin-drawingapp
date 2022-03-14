@@ -2,6 +2,7 @@ package com.example.kotlindrawingapp.presenter
 
 import android.graphics.Bitmap
 import com.example.kotlindrawingapp.domain.figure.Figure
+import com.example.kotlindrawingapp.view.Sizeable
 
 interface Contract {
 
@@ -10,13 +11,15 @@ interface Contract {
     }
 
     interface Presenter {
+        fun loadRandomText(callback: Sizeable)
+
         fun loadFigure()
 
         fun loadFigure(figure: Figure)
 
         fun loadPicture(bitmap: Bitmap)
 
-        fun loadText()
+        fun loadText(size: Pair<Int, Int>, text: String)
 
         fun removeFigure(figure: Figure)
 

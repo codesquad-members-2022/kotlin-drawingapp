@@ -2,7 +2,10 @@ package com.example.kotlindrawingapp.presenter
 
 import android.graphics.Bitmap
 import com.example.kotlindrawingapp.domain.figure.Figure
+import com.example.kotlindrawingapp.domain.figure.text.Text
+import com.example.kotlindrawingapp.domain.figure.text.Text.Companion.generateText
 import com.example.kotlindrawingapp.repository.FigureRepository
+import com.example.kotlindrawingapp.view.Sizeable
 
 class Presenter(
     private val view: Contract.View,
@@ -11,6 +14,10 @@ class Presenter(
 
     val selectedSquare = repository.selectedSquare
     val plane = repository.plane
+
+    override fun loadRandomText(callback: Sizeable) {
+        callback.getWidthAndHeight(generateText())
+    }
 
     override fun loadFigure() {
         repository.addSquare()
@@ -24,8 +31,8 @@ class Presenter(
         repository.addPicture(bitmap)
     }
 
-    override fun loadText() {
-        repository.addText()
+    override fun loadText(size: Pair<Int, Int>, text: String) {
+        repository.addText(size, text)
     }
 
     override fun removeFigure(figure: Figure) {

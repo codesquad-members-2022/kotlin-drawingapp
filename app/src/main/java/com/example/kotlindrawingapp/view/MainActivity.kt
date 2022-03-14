@@ -65,7 +65,14 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
 
         squareButton.setOnClickListener { presenter.loadFigure() }
         pictureButton.setOnClickListener { albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
-        textButton.setOnClickListener { presenter.loadText() }
+        textButton.setOnClickListener {
+            presenter.loadRandomText(object : Sizeable {
+                override fun getWidthAndHeight(text: String) {
+                    val size = customView.getWidthAndHeight(text)
+                    presenter.loadText(size, text)
+                }
+            })
+        }
         onCoordinateEvent()
         onSizeEvent()
         onSeekBarEvent()

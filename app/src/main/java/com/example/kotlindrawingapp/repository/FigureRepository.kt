@@ -27,8 +27,8 @@ class FigureRepository {
     }
 
 
-    fun addText() {
-        _plane.addFigure(FigureFactory.createText(Size(1000, 100)))
+    fun addText(size: Pair<Int, Int>, text: String) {
+        _plane.addFigure(FigureFactory.createText(text, Size(size.first, size.second)))
         plane.value = _plane
     }
 
