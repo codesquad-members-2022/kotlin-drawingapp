@@ -22,6 +22,12 @@ class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context
         dragRectangle(tempRect, canvas)
     }
 
+    override fun setPaint(rect: Rectangle): Paint {
+        val paint = Paint()
+        paint.color = Color.argb(50, rect.color[0], rect.color[1], rect.color[2])
+        return paint
+    }
+
     private fun dragRectangle(tempRect: Rectangle?, canvas: Canvas?) {
         tempRect?.let {
             val paint = setPaint(it)

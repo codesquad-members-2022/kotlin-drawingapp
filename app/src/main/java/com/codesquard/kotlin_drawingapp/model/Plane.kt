@@ -7,6 +7,8 @@ class Plane(private val listener: RectangleListener) {
 
     private val rectangleList = mutableListOf<Rectangle>()
     private var selectedRect: Rectangle? = null
+    private var draggedX = 0f
+    private var draggedY = 0f
 
     fun createNewPhotoRectangle(photo: Bitmap, width: Float, height: Float) {
         val newRect = PhotoRectangle()
@@ -54,6 +56,7 @@ class Plane(private val listener: RectangleListener) {
 
             if ((x in rectFirstX..rectSecondX) && (y in rectFirstY..rectSecondY)) {
                 rect.isSelected(true)
+                setTouchedPoint(x, y)
                 selectedRect = rectangleList[notReversedListIndex]
                 listener.onSelectRectangle(notReversedListIndex)
                 return
@@ -132,10 +135,21 @@ class Plane(private val listener: RectangleListener) {
         listener.onUpdateRectangle()
     }
 
+    private fun setTouchedPoint(x: Float, y: Float) {
+        draggedX = x
+        draggedY = y
+    }
+
+    private fun setDraggedPoint(x: Float, y: Float) {
+        draggedX = x - draggedX
+        draggedY = y - draggedY
+    }
+
     fun dragRectangle(x: Float, y: Float) {
+        setDraggedPoint(x, y)
         selectedRect?.run {
-            this.point[0] = x
-            this.point[1] = y - 45
+            this.point[0] += draggedX
+            this.point[1] += draggedY
             if (this.point[0] < 1) {
                 this.point[0] = 1f
             }
@@ -143,6 +157,7 @@ class Plane(private val listener: RectangleListener) {
                 this.point[1] = 1f
             }
         } ?: return
+        setTouchedPoint(x, y)
         listener.onDragRectangle(selectedRect)
     }
 }
