@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 
 open class Rect(
     val rectId: String,
-    val point: Point,
-    val size: Size,
+    var point: MutableLiveData<Point>,
+    var size: MutableLiveData<Size>,
     var backGroundColor: MutableLiveData<BackGroundColor>,
     var opacity: MutableLiveData<Int>
 ) {

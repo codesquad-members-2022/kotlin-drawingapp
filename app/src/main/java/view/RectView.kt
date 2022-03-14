@@ -5,11 +5,14 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.text.TextPaint
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import model.BackGroundColor
 import model.Photo
 import model.Rect
+import model.Sentence
 
 
 class RectView(context: Context) : View(context) {
@@ -20,23 +23,46 @@ class RectView(context: Context) : View(context) {
     private var right = 0.0F
     var top = 0.0F
     private var bottom = 0.0F
+    private var text=""
     var rectWidth = 0
     var rectHeight = 0
+    var textWidth= 0
+    var textHeight=0
     var alpha = 0
     var backGroundRGB: String = ""
     var selectedFlag = false
-    var rectanglePaint = Paint()
+    private var rectanglePaint = Paint()
+    private var textPaint= Paint().apply {
+        this.textSize= 30F
+        this.isAntiAlias = true
+
+    }
     private val borderPaint = Paint().apply {
         this.style = Paint.Style.STROKE
         this.color = Color.BLACK
         this.strokeWidth = 2.0F
     }
 
+    private val textBorderPaint= Paint().apply{
+        this.textSize = 30F;
+        this.isAntiAlias = true
+        this.style = Paint.Style.STROKE
+        this.color = Color.BLACK
+        this.strokeWidth = 4.0F
+    }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (selectedFlag) {
-            canvas.drawRect(left, top, right, bottom, borderPaint)
+            if(this.text.isEmpty()){
+                canvas.drawRect(left, top, right, bottom, borderPaint)
+            }
+            else{
+
+                canvas.drawRect(left, top, left+textWidth, top+textHeight, borderPaint)
+            }
+
         }
         bitmap?.let {
             val paint = Paint()
@@ -44,20 +70,37 @@ class RectView(context: Context) : View(context) {
             canvas.drawBitmap(it, left, top, paint)
             return
         }
-        rectanglePaint.alpha = this.alpha
-        canvas.drawRect(left, top, right, bottom, rectanglePaint)
+
+        if(this.text.isEmpty()){
+            rectanglePaint.alpha = this.alpha
+            canvas.drawRect(left, top, right, bottom, rectanglePaint)
+        }
+        else{
+            textPaint.alpha=this.alpha
+            canvas.drawText(text, left,top, textPaint)
+            val bound= android.graphics.Rect()
+            textPaint.getTextBounds(text, 0, text.length, bound)
+            textWidth= bound.width()
+            textHeight=bound.height()
+        }
+
 
     }
 
     fun drawRectangle(rect: Rect) {
         rect.let {
-            rectId = rect.rectId
-            left = it.point.xPos.toFloat()
-            right = (it.point.xPos + it.size.width).toFloat()
-            top = it.point.yPos.toFloat()
-            this.rectWidth = it.size.width
-            this.rectHeight = it.size.height
-            bottom = (it.point.yPos + it.size.height).toFloat()
+            it.point.value?.let {point->
+                left = point.xPos.toFloat()
+                top = point.yPos.toFloat()
+
+            }
+            it.size.value?.let{size->
+                right = (this.left + size.width)
+                bottom = (this.top + size.height)
+                this.rectWidth = size.width
+                this.rectHeight = size.height
+            }
+            this.rectId= it.rectId
             this.backGroundRGB = it.backGroundColor.value?.getRGBHexValue().toString()
             val backGroundColor = it.backGroundColor.value?.getBackGroundColor()
             val opacity = ((it.opacity.value?.times(25.5))?.toInt())
@@ -75,10 +118,17 @@ class RectView(context: Context) : View(context) {
         photo.let {
             rectId = photo.rectId
             photoId = photo.photoId
-            left = it.point.xPos.toFloat()
-            right = (it.point.xPos + it.size.width).toFloat()
-            top = it.point.yPos.toFloat()
-            bottom = (it.point.yPos + it.size.height).toFloat()
+            it.point.value?.let {point->
+                left = point.xPos?.toFloat()
+                top = point.yPos.toFloat()
+
+            }
+            it.size.value?.let{ size ->
+                right = (this.left + size.width)
+                bottom = (this.top + size.height)
+                this.rectWidth = size.width
+                this.rectHeight = size.height
+            }
             it.opacity.value?.let { alpha ->
                 this.alpha = (alpha * 25.5).toInt()
             }
@@ -88,8 +138,8 @@ class RectView(context: Context) : View(context) {
     }
 
     private fun resizeBitmap(image: Bitmap, photo: Photo): Bitmap {
-        val width = photo.size.width // 축소시킬 너비
-        val height = photo.size.height // 축소시킬 높이
+        val width = this.rectWidth // 축소시킬 너비
+        val height = this.rectHeight // 축소시킬 높이
         var bmpWidth = image.width.toFloat()
         var bmpHeight = image.height.toFloat()
 
@@ -111,6 +161,28 @@ class RectView(context: Context) : View(context) {
             bmpWidth.toInt(), bmpHeight.toInt(), true
         )
 
+    }
+
+    fun drawSentence(sentence: Sentence){
+        sentence.let {
+            it.point.value?.let {point->
+                left = point.xPos.toFloat()
+                top = point.yPos.toFloat()
+
+            }
+            it.size.value?.let{size->
+                right = (this.left + size.width)
+                bottom = (this.top + size.height)
+                this.rectWidth = size.width
+                this.rectHeight = size.height
+            }
+            this.rectId= it.rectId
+            this.text= sentence.text
+            val opacity = ((it.opacity.value?.times(25.5))?.toInt())
+            opacity?.let { op ->
+                this.alpha = op
+            }
+        }
     }
 
     fun drawBorder() {
@@ -144,6 +216,7 @@ class RectView(context: Context) : View(context) {
                 tempView.top = y
                 tempView.right = (x + this.rectWidth)
                 tempView.bottom = y + this.rectHeight
+
             }
             MotionEvent.ACTION_UP -> {
                 x = event.getX(0)
@@ -154,6 +227,24 @@ class RectView(context: Context) : View(context) {
                 this.bottom = y + this.rectHeight
             }
         }
+    }
+
+
+    fun changeSize(width:Int, height:Int){
+        Log.d("Test", "${width},${height}")
+        this.right= this.left+ width
+        this.bottom= this.top+ height
+        this.rectHeight= height
+        this.rectWidth= width
+        invalidate()
+    }
+
+    fun changePos(xPos:Float, yPos:Float){
+        this.left= xPos
+        this.right= this.left+ this.rectWidth
+        this.top= yPos
+        this.bottom= this.top + this.rectHeight
+        invalidate()
     }
 
 

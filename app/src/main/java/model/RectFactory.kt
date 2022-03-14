@@ -16,8 +16,8 @@ class RectFactory {
         private fun makeNewRectType(): Rect {
             return Rect(
                 randomRectId(),
-                makeRandomPoint(),
-                makeSize(),
+                MutableLiveData(makeRandomPoint()),
+                MutableLiveData(makeSize()),
                 MutableLiveData(makeRandomRGB()),
                 MutableLiveData(makeRandomOpacity())
             )
@@ -28,37 +28,38 @@ class RectFactory {
             return Photo(
                 randomPhotoId(),
                 randomRectId(),
-                makeRandomPoint(),
-                makeSize(),
+                MutableLiveData(makeRandomPoint()),
+                MutableLiveData(makeSize()),
                 MutableLiveData(makeRandomRGB()),
                 MutableLiveData(makeRandomOpacity())
             )
         }
 
-        private fun makeSize(): Size {
+
+        internal fun makeSize(): Size {
             val width = 150
             val height = 120
             return Size(width, height)
         }
 
-        private fun makeRandomPoint(): Point {
+        internal fun makeRandomPoint(): Point {
             val xPos = (1..2048).random()
             val yPos = (1..1536).random()
             return Point(xPos, yPos)
         }
 
-        private fun makeRandomOpacity(): Int {
+        internal fun makeRandomOpacity(): Int {
             return (1..10).random()
         }
 
-        private fun makeRandomRGB(): BackGroundColor {
+        internal fun makeRandomRGB(): BackGroundColor {
             val redValue = (0..255).random()
             val blueValue = (0..255).random()
             val greenValue = (0..255).random()
             return BackGroundColor(redValue, blueValue, greenValue)
         }
 
-        private fun randomRectId(): String {
+        internal fun randomRectId(): String {
             val targetLength = 3
             return "${getRandomString(targetLength)}-$${getRandomString(targetLength)}-${
                 getRandomString(
@@ -82,5 +83,7 @@ class RectFactory {
                 .map { allowedChars.random() }
                 .joinToString("")
         }
+
+
     }
 }
