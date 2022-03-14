@@ -1,5 +1,6 @@
 package com.codesquard.kotlin_drawingapp.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onTouchBtnToChangePosition()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun onTouchBtnToChangeSize() {
         sizeWBtn.setOnTouchListener { v: View, event: MotionEvent ->
             when (event.action) {
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun onTouchBtnToChangePosition() {
         positionXBtn.setOnTouchListener { v: View, event: MotionEvent ->
             when (event.action) {
