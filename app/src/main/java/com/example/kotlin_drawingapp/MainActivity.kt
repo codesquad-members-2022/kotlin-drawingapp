@@ -61,6 +61,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             presenter.createRectangle()
         }
 
+        binding.btnGenerateTextview?.setOnClickListener {
+            presenter.createTextView()
+        }
+
         binding.drawView.setOnDrawViewTouchListener(object : DrawView.OnDrawViewTouchListener {
             override fun onClick(point: PointF) {
                 presenter.selectDrawObject(point.x, point.y)
