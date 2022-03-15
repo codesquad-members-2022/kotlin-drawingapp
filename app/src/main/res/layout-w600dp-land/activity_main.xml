@@ -7,11 +7,12 @@
   android:layout_height="match_parent"
   tools:context=".view.MainActivity"
   android:id="@+id/main_layout">
+
   <Button
     android:id="@+id/btn_normal_rect"
     style="?attr/materialButtonOutlinedStyle"
-    android:layout_width="90dp"
-    android:layout_height="70dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:backgroundTint="#E9E6FA"
     android:drawableTop="@drawable/ic_crop_square_black_24dp"
     android:text="@string/normal_rect"
@@ -19,51 +20,61 @@
     app:layout_constraintEnd_toStartOf="@+id/btn_photo_rect"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintHorizontal_chainStyle="packed"/>
+
   <Button
     android:id="@+id/btn_photo_rect"
     style="?attr/materialButtonOutlinedStyle"
-    android:layout_width="90dp"
-    android:layout_height="70dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:backgroundTint="#E9E6FA"
     android:drawableTop="@drawable/ic_add_photo_alternate_black_outline_24dp"
     android:text="@string/photo_rect"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toStartOf="@+id/btn_text_rect"
     app:layout_constraintStart_toEndOf="@id/btn_normal_rect"/>
+
   <Button
     android:id="@+id/btn_text_rect"
     style="?attr/materialButtonOutlinedStyle"
-    android:layout_width="90dp"
-    android:layout_height="70dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:backgroundTint="#E9E6FA"
     android:drawableTop="@drawable/ic_title_black_24dp"
     android:text="@string/text_rect"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/btn_photo_rect"/>
+
   <com.codesquard.kotlin_drawingapp.view.CustomView
     android:id="@+id/custom_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintEnd_toStartOf="@+id/second_constraintLayout"
-    app:layout_constraintBottom_toTopOf="@+id/btn_normal_rect"/>
+    android:layout_marginEnd="150dp"
+    android:layout_marginBottom="80dp"
+    app:layout_constraintBottom_toTopOf="@+id/btn_normal_rect"
+    app:layout_constraintEnd_toStartOf="@id/second_constraintLayout"
+    app:layout_constraintStart_toStartOf="parent"/>
+
   <com.codesquard.kotlin_drawingapp.view.TemporaryView
     android:id="@+id/temporary_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    android:layout_marginEnd="150dp"
+    android:layout_marginBottom="80dp"
+    app:layout_constraintBottom_toTopOf="@+id/btn_normal_rect"
+    app:layout_constraintEnd_toStartOf="@id/second_constraintLayout"
+    app:layout_constraintStart_toStartOf="parent"/>
+
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/second_constraintLayout"
     android:layout_width="150dp"
     android:layout_height="match_parent"
     android:background="#E9E6FA"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/custom_view"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="0.0"/>
+
   <TextView
     android:id="@+id/text_background"
     android:layout_width="wrap_content"
@@ -74,6 +85,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toTopOf="@id/btn_background"/>
+
   <Button
     android:id="@+id/btn_background"
     style="?attr/materialButtonOutlinedStyle"
@@ -84,6 +96,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/text_background"
     app:layout_constraintBottom_toTopOf="@+id/text_alpha"/>
+
   <TextView
     android:id="@+id/text_alpha"
     android:layout_width="wrap_content"
@@ -94,6 +107,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/btn_background"
     app:layout_constraintBottom_toTopOf="@id/slider_alpha"/>
+
   <com.google.android.material.slider.Slider
     android:id="@+id/slider_alpha"
     android:layout_width="120dp"
@@ -106,6 +120,7 @@
     app:layout_constraintBottom_toTopOf="@id/text_position"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/text_alpha"/>
+
   <TextView
     android:id="@+id/text_position"
     android:layout_width="wrap_content"
@@ -116,6 +131,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/slider_alpha"
     app:layout_constraintBottom_toTopOf="@+id/btn_position_x"/>
+
   <Button
     android:id="@+id/btn_position_x"
     style="?attr/materialButtonOutlinedStyle"
@@ -131,6 +147,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/text_position"
     app:layout_constraintBottom_toTopOf="@+id/btn_position_y"/>
+
   <Button
     android:id="@+id/btn_position_y"
     style="?attr/materialButtonOutlinedStyle"
@@ -145,6 +162,7 @@
     android:text="Y"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/btn_position_x"/>
+
   <TextView
     android:id="@+id/text_size"
     android:layout_width="wrap_content"
@@ -155,6 +173,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@id/btn_position_y"
     app:layout_constraintBottom_toTopOf="@+id/btn_size_w"/>
+
   <Button
     android:id="@+id/btn_size_w"
     style="?attr/materialButtonOutlinedStyle"
@@ -170,6 +189,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/text_size"
     app:layout_constraintBottom_toTopOf="@+id/btn_size_h"/>
+
   <Button
     android:id="@+id/btn_size_h"
     style="?attr/materialButtonOutlinedStyle"
@@ -184,4 +204,5 @@
     android:text="H"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/btn_size_w"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

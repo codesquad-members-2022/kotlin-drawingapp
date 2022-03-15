@@ -123,8 +123,8 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     }
 
     private fun getRectSize() {
-        val width = plane.getRectangle(selectedRectIndex).size[0].toFloat()
-        val height = plane.getRectangle(selectedRectIndex).size[1].toFloat()
+        val width = plane.getRectangle(selectedRectIndex).size[0].toString()
+        val height = plane.getRectangle(selectedRectIndex).size[1].toString()
         taskView.showRectSize(width, height)
     }
 

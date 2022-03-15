@@ -48,7 +48,7 @@ class Plane(private val listener: RectangleListener) {
         val reversedRectList = rectangleList.reversed()
         reversedRectList.forEachIndexed { index, rect ->
             val rectFirstX = rect.point[0]
-            val rectFirstY = rect.point[1] + 45
+            val rectFirstY = rect.point[1]
             val rectSecondX = rectFirstX + rect.size[0]
             val rectSecondY = rectFirstY + rect.size[1]
             val notReversedListIndex = reversedRectList.size - 1 - index

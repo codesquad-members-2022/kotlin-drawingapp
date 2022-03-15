@@ -18,6 +18,7 @@ import com.codesquard.kotlin_drawingapp.*
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onClickTextRectBtn()
         onTouchBtnToChangeSize()
         onTouchBtnToChangePosition()
+        setCustomViewTouchEvent()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -215,11 +217,15 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onSlideAlpha()
     }
 
-    override fun showRectSize(w: Float, h: Float) {
-        val width = pxToDp(w).toInt()
-        val height = pxToDp(h).toInt()
-        sizeWBtn.text = "W   $width"
-        sizeHBtn.text = "H   $height"
+    override fun showRectSize(w: String, h: String) {
+        sizeWBtn.text = "W   $w"
+        sizeHBtn.text = "H   $h"
+        if (w.isNotEmpty()) {
+            val width = pxToDp(w.toFloat()).toInt()
+            val height = pxToDp(h.toFloat()).toInt()
+            sizeWBtn.text = "W   $width"
+            sizeHBtn.text = "H   $height"
+        }
     }
 
     override fun showRectPosition(x: String, y: String) {
@@ -232,18 +238,28 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         presenter.addNewTextRectangle(textRect, textSize)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val x = event?.x ?: 0f
-        val y = event?.y ?: 0f
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setCustomViewTouchEvent() {
+        customView.setOnTouchListener { _, event ->
+            val x = event?.x ?: 0f
+            val y = event?.y ?: 0f
 
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> presenter.selectRectangle(x, y)
-            MotionEvent.ACTION_MOVE -> {
-                presenter.dragRectangle(x, y)
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    presenter.selectRectangle(x, y)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    presenter.dragRectangle(x, y)
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    showDraggedRectangle()
+                    true
+                }
+                else -> false
             }
-            MotionEvent.ACTION_UP -> showDraggedRectangle()
         }
-        return super.onTouchEvent(event)
     }
 
     private fun dpToPx(dp: Float): Float {

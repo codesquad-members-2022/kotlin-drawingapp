@@ -21,7 +21,7 @@ interface TaskContract {
 
         fun showDraggingRectangle(tempRect: Rectangle?)
 
-        fun showRectSize(width: Float = 0f, height: Float = 0f)
+        fun showRectSize(width: String = "", height: String = "")
 
         fun showRectPosition(x: String = "", y: String = "")
 
