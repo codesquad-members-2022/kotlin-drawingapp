@@ -15,9 +15,9 @@ class RectangleFactory(private val rectangle: Rectangle) {
         rectangle.setID(randomID)
     }
 
-    private fun setRectanglePoint(pointArray: Array<Int>) {
-        val pointX = (0..pointArray[0]).random().toFloat()
-        val pointY = (0..pointArray[1]).random().toFloat()
+    private fun setRectanglePoint(sizeArray: Array<Int>, pointArray: Array<Int>) {
+        val pointX = (0..(pointArray[0] - sizeArray[0])).random().toFloat()
+        val pointY = (0..(pointArray[1] - sizeArray[1])).random().toFloat()
         rectangle.setPoint(pointX, pointY)
     }
 
@@ -56,10 +56,10 @@ class RectangleFactory(private val rectangle: Rectangle) {
 
     fun getInstance(sizeArray: Array<Int>, pointArray: Array<Int>, photo: Bitmap? = null): Rectangle {
         setRectangleID()
-        setRectanglePoint(pointArray)
+        setRectangleSize(sizeArray)
+        setRectanglePoint(sizeArray, pointArray)
         setRectangleColor()
         setRectangleAlpha()
-        setRectangleSize(sizeArray)
         setRectangleText()
         setRectanglePhoto(photo)
         return rectangle
