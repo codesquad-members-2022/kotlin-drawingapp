@@ -23,7 +23,7 @@ class RectView(context: Context) : View(context) {
     private var right = 0.0F
     var top = 0.0F
     private var bottom = 0.0F
-    private var text=""
+    var text=""
     var rectWidth = 0
     var rectHeight = 0
     var textWidth= 0

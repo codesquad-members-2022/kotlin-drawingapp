@@ -14,6 +14,7 @@ interface MainContract {
         fun drawSentence(sentence: Sentence)
         fun redrawRectangle(rect:Rect)
         fun redrawPhoto(photo: Photo)
+        fun redrawSentence(sentence: Sentence)
     }
 
     interface Presenter {

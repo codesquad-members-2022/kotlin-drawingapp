@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         editTvXpos.setText("${rect.point.value?.xPos}")
         editTvYpos.setText("${rect.point.value?.yPos}")
         tempView.isVisible= false
-        if (selectedCustomRectangleView?.photoId == "") {
+        if (selectedCustomRectangleView?.photoId == ""&&selectedCustomRectangleView?.text=="") {
             rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
             rect.opacity.value?.let {
                 opacitySeekBar.progress = it
@@ -288,7 +288,16 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             rect.opacity.observe(this, opacityObserver)
 
             tempView.drawRectangle(rect)
-        } else {
+        }
+        else if(selectedCustomRectangleView?.text!=""){
+            rgbValueTextView.text = "No Color"
+            rect.opacity.value?.let {
+                opacitySeekBar.progress = it
+            }
+            rect.opacity.observe(this, opacityObserver)
+            tempView.drawSentence(rect as Sentence)
+        }
+        else {
             rgbValueTextView.text = "No Color"
             rect.opacity.value?.let {
                 opacitySeekBar.progress = it
@@ -360,6 +369,16 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         selectedCustomRectangleView?.bitmap?.let{
             rectView.drawPhoto(it,photo)
         }
+        selectedCustomRectangleView = rectView
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
+
+    override fun redrawSentence(sentence: Sentence) {
+        mainLayout.removeView(selectedCustomRectangleView)
+        customRectangleViewList.remove(selectedCustomRectangleView)
+        val rectView = RectView(this)
+        rectView.drawSentence(sentence)
         selectedCustomRectangleView = rectView
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)

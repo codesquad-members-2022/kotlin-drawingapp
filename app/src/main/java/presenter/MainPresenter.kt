@@ -2,6 +2,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import model.Photo
 import model.Plane
+import model.Sentence
 import view.MainContract
 import view.RectView
 
@@ -28,10 +29,17 @@ class MainPresenter(
     }
 
     override fun changePosition(rectView: RectView) {
+
         plane.changePosition(rectView.rectId, rectView.left.toInt(), rectView.top.toInt())?.let{
-
-
-            view.redrawRectangle(it)
+            if(rectView.photoId==""&&rectView.text==""){
+                view.redrawRectangle(it)
+            }
+            else if(rectView.text!=""){
+                view.redrawSentence(it as Sentence)
+            }
+            else{
+                view.redrawPhoto(it as Photo)
+            }
         }
     }
 
