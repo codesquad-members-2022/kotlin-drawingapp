@@ -59,8 +59,7 @@ class RectView(context: Context) : View(context) {
                 canvas.drawRect(left, top, right, bottom, borderPaint)
             }
             else{
-
-                canvas.drawRect(left, top, left+textWidth, top+textHeight, borderPaint)
+                canvas.drawRect(left, top-textHeight, left+textWidth, top+textHeight, borderPaint)
             }
 
         }
