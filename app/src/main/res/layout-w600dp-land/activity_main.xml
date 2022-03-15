@@ -6,13 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
+    <LinearLayout
+        android:id="@+id/view_layer"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:background="#EEF1F3"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="10dp"
+            android:text="@string/label_textview_layer"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/custom_layer" />
+
+    </LinearLayout>
+
     <com.example.kotlindrawingapp.view.CustomCanvas
         android:id="@+id/container_canvas"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/view_board"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/view_layer"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton

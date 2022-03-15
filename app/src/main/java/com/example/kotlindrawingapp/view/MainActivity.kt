@@ -15,7 +15,7 @@ import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.presenter.Presenter
 import com.example.kotlindrawingapp.repository.FigureRepository
 
-class MainActivity : AppCompatActivity(), Contract.View, Movable {
+class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener {
 
     private lateinit var presenter: Presenter
     private lateinit var colorTextView: TextView
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private lateinit var height: TextView
     private lateinit var seekBar: SeekBar
     private lateinit var customView: CustomCanvas
+    private lateinit var customLayerView: LayerCustomView
     private lateinit var squareButton: Button
     private lateinit var pictureButton: Button
     private lateinit var textButton: Button
@@ -37,6 +38,10 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private lateinit var widthDownButton: ImageButton
     private lateinit var heightUpButton: ImageButton
     private lateinit var heightDownButton: ImageButton
+    private lateinit var layer: LinearLayout
+    private var squareIndex = 1
+    private var textIndex = 1
+    private var pictureIndex = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +68,21 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             }
         }
 
-        squareButton.setOnClickListener { presenter.loadFigure() }
-        pictureButton.setOnClickListener { albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
+        squareButton.setOnClickListener {
+            presenter.loadFigure()
+            customLayerView =
+                LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
+            squareIndex++
+            layer.addView(customLayerView)
+        }
+
+        pictureButton.setOnClickListener {
+            albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            customLayerView = LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
+            pictureIndex++
+            layer.addView(customLayerView)
+        }
+
         textButton.setOnClickListener {
             presenter.loadRandomText(object : Sizeable {
                 override fun getWidthAndHeight(text: String) {
@@ -72,6 +90,10 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                     presenter.loadText(size, text)
                 }
             })
+            customLayerView =
+                LayerCustomView(this, "Text $textIndex", R.drawable.ic_baseline_text_fields_24)
+            textIndex++
+            layer.addView(customLayerView)
         }
         onCoordinateEvent()
         onSizeEvent()
@@ -162,6 +184,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
         y = findViewById(R.id.tv_y)
         width = findViewById(R.id.tv_width)
         height = findViewById(R.id.tv_height)
+        layer = findViewById(R.id.view_layer)
     }
 
     private val getAlbum =
@@ -203,5 +226,22 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     override fun move(tempX: Float, tempY: Float) {
         x.text = tempX.toString()
         y.text = tempY.toString()
+    }
+
+    override fun drawSquare(index: Int) {
+        customLayerView =
+            LayerCustomView(this, "Rect $index", R.drawable.ic_baseline_crop_square_24)
+        layer.addView(customLayerView)
+    }
+
+    override fun drawPicture(index: Int) {
+        customLayerView = LayerCustomView(this, "Photo $index", R.drawable.ic_image)
+        layer.addView(customLayerView)
+    }
+
+    override fun drawText(index: Int) {
+        customLayerView =
+            LayerCustomView(this, "Text $index", R.drawable.ic_baseline_text_fields_24)
+        layer.addView(customLayerView)
     }
 }

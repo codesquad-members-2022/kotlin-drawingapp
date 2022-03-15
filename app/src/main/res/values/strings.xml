@@ -8,4 +8,6 @@
     <string name="label_textview_position">위치</string>
     <string name="label_textview_one">1</string>
     <string name="label_button_text">텍스트</string>
+    <string name="label_textview_layer">레이어</string>
+    <string name="description_icon">description_icon</string>
 </resources>
