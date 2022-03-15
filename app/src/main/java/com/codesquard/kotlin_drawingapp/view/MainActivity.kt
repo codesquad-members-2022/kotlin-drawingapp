@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,7 +19,6 @@ import com.codesquard.kotlin_drawingapp.*
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
-import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     private lateinit var sizeHBtn: Button
     private lateinit var alphaSlider: Slider
     private lateinit var presenter: TaskContract.Presenter
-    private var width = 0f
-    private var height = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +55,6 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn = findViewById(R.id.btn_size_w)
         sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
-        width = dpToPx(150f)
-        height = dpToPx(120f)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
@@ -69,6 +65,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         onTouchBtnToChangeSize()
         onTouchBtnToChangePosition()
         setCustomViewTouchEvent()
+        measureCustomViewSize()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -121,7 +118,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
                 } else {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
                 }
-                presenter.addNewRectangle(width, height, photo)
+                presenter.addNewRectangle(photo)
             } else {
                 Snackbar.make(customView, "사진을 불러오지 못하였습니다", Snackbar.LENGTH_SHORT).show()
             }
@@ -176,7 +173,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun onClickNormalRectBtn() {
         normalRectCreateBtn.setOnClickListener {
-            presenter.addNewRectangle(width, height)
+            presenter.addNewRectangle()
         }
     }
 
@@ -234,7 +231,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     override fun measureTextSize(textRect: Rectangle) {
-        val textSize = customView.measureTextSize(textRect)
+        val textSize = customView.getTextSize(textRect)
         presenter.addNewTextRectangle(textRect, textSize)
     }
 
@@ -262,18 +259,30 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         }
     }
 
-    private fun dpToPx(dp: Float): Float {
-        val resources = this.resources
-        val metrics = resources.displayMetrics
-        val density = metrics.density
-        return dp * density
+    private fun getInitRectSize(width: Float, height: Float) = arrayOf(dpToPx(width), dpToPx(height))
+
+    private fun measureCustomViewSize() {
+        customView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val rectMaxPoint = customView.getViewSize()
+                presenter.setInitRectSizeAndMaxPoint(getInitRectSize(150f, 120f), rectMaxPoint)
+                customView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
-    private fun pxToDp(px: Float): Float {
+    private fun dpToPx(dp: Float): Int {
         val resources = this.resources
         val metrics = resources.displayMetrics
         val density = metrics.density
-        return px / density
+        return (dp * density).toInt()
+    }
+
+    private fun pxToDp(px: Float): Int {
+        val resources = this.resources
+        val metrics = resources.displayMetrics
+        val density = metrics.density
+        return (px / density).toInt()
     }
 }
 

@@ -31,7 +31,9 @@ interface TaskContract {
 
     interface Presenter {
 
-        fun addNewRectangle(width: Float, height: Float, photo: Bitmap? = null)
+        fun setInitRectSizeAndMaxPoint(rectSize: Array<Int>, rectMaxPoint: Array<Int>)
+
+        fun addNewRectangle(photo: Bitmap? = null)
 
         fun createNewTextRectangle()
 

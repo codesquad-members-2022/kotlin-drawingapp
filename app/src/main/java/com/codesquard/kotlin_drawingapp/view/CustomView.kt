@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
@@ -30,7 +29,11 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr), Cu
         }
     }
 
-    fun measureTextSize(textRect: Rectangle): Array<Int> {
+    fun getViewSize(): Array<Int> {
+        return arrayOf(this.width, this.height)
+    }
+
+    fun getTextSize(textRect: Rectangle): Array<Int> {
         val textRect = textRect as TextRectangle
         val text = textRect.getText()
         val textBound = Rect()

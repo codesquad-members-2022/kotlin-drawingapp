@@ -7,22 +7,29 @@ class Plane(private val listener: RectangleListener) {
 
     private val rectangleList = mutableListOf<Rectangle>()
     private var selectedRect: Rectangle? = null
-    private var draggedX = 0f
-    private var draggedY = 0f
+    private lateinit var rectInitSize: Array<Int>
+    private lateinit var rectMaxPoint: Array<Int>
+    private val draggedPoint: Array<Float> = arrayOf(0f, 0f)
 
-    fun createNewPhotoRectangle(photo: Bitmap, width: Float, height: Float) {
-        val newRect = RectangleFactory(PhotoRectangle()).getInstance() as PhotoRectangle
-        newRect.setBitmap(photo)
-        addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
+    fun setInitRectSizeAndMaxPoint(rectSize: Array<Int>, rectMaxPoint: Array<Int>) {
+        this.rectInitSize = rectSize
+        this.rectMaxPoint = rectMaxPoint
     }
 
-    fun createNewNormalRectangle(width: Float, height: Float) {
-        val newRect = RectangleFactory(NormalRectangle()).getInstance()
-        addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
+    fun createNewPhotoRectangle(photo: Bitmap) {
+        val newRect = RectangleFactory(PhotoRectangle()).getInstance(rectInitSize, rectMaxPoint, photo)
+        rectangleList.add(newRect)
+        listener.onCreateRectangle(newRect)
+    }
+
+    fun createNewNormalRectangle() {
+        val newRect = RectangleFactory(NormalRectangle()).getInstance(rectInitSize, rectMaxPoint)
+        rectangleList.add(newRect)
+        listener.onCreateRectangle(newRect)
     }
 
     fun createNewTextRectangle() {
-        val newRect = RectangleFactory(TextRectangle()).getInstance()
+        val newRect = RectangleFactory(TextRectangle()).getInstance(rectInitSize, rectMaxPoint)
         listener.onMeasureTextSize(newRect)
     }
 
@@ -30,12 +37,6 @@ class Plane(private val listener: RectangleListener) {
         textRect.setSize(textSize[0], textSize[1])
         rectangleList.add(textRect)
         listener.onCreateRectangle(textRect)
-    }
-
-    private fun addNewNormalRectangleOrPhotoRectangle(newRect: Rectangle, width: Float, height: Float) {
-        newRect.setSize(width.toInt(), height.toInt())
-        rectangleList.add(newRect)
-        listener.onCreateRectangle(newRect)
     }
 
     fun getRectangle(index: Int) = rectangleList[index]
@@ -125,9 +126,9 @@ class Plane(private val listener: RectangleListener) {
 
     fun increasePosition(isX: Boolean) {
         selectedRect?.let {
-            if (isX) {
+            if (isX && it.point[0] < (rectMaxPoint[0] - it.size[0] - 5)) {
                 it.point[0] += 1f
-            } else {
+            } else if (!isX && it.point[1] < (rectMaxPoint[1] - it.size[1] - 5)) {
                 it.point[1] += 1f
             }
         } ?: return
@@ -135,25 +136,31 @@ class Plane(private val listener: RectangleListener) {
     }
 
     private fun setTouchedPoint(x: Float, y: Float) {
-        draggedX = x
-        draggedY = y
+        draggedPoint[0] = x
+        draggedPoint[1] = y
     }
 
     private fun setDraggedPoint(x: Float, y: Float) {
-        draggedX = x - draggedX
-        draggedY = y - draggedY
+        draggedPoint[0] = x - draggedPoint[0]
+        draggedPoint[1] = y - draggedPoint[1]
     }
 
     fun dragRectangle(x: Float, y: Float) {
         setDraggedPoint(x, y)
         selectedRect?.run {
-            this.point[0] += draggedX
-            this.point[1] += draggedY
+            this.point[0] += draggedPoint[0]
+            this.point[1] += draggedPoint[1]
             if (this.point[0] < 1) {
                 this.point[0] = 1f
             }
             if (this.point[1] < 1) {
                 this.point[1] = 1f
+            }
+            if (this.point[0] + this.size[0] >= rectMaxPoint[0]) {
+                this.point[0] = rectMaxPoint[0] - this.size[0].toFloat() - 5
+            }
+            if (this.point[1] + this.size[1] >= rectMaxPoint[1]) {
+                this.point[1] = rectMaxPoint[1] - this.size[1].toFloat() - 5
             }
         } ?: return
         setTouchedPoint(x, y)

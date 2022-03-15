@@ -11,10 +11,14 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     private val plane = Plane(this)
     private var selectedRectIndex = -1
 
-    override fun addNewRectangle(width: Float, height: Float, photo: Bitmap?) {
+    override fun setInitRectSizeAndMaxPoint(rectSize: Array<Int>, rectMaxPoint: Array<Int>) {
+        plane.setInitRectSizeAndMaxPoint(rectSize, rectMaxPoint)
+    }
+
+    override fun addNewRectangle(photo: Bitmap?) {
         photo?.let {
-            plane.createNewPhotoRectangle(photo, width, height)
-        } ?: plane.createNewNormalRectangle(width, height)
+            plane.createNewPhotoRectangle(photo)
+        } ?: plane.createNewNormalRectangle()
     }
 
     override fun createNewTextRectangle() {
@@ -44,9 +48,9 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     override fun changePosition(x: Float, y: Float, isX: Boolean) {
         if (x > 220f && x < 255f) {
             if (y > 20f && y < 50) {
-                plane.reducePosition(isX)
-            } else if (y >= 50 && y < 75) {
                 plane.increasePosition(isX)
+            } else if (y >= 50 && y < 75) {
+                plane.reducePosition(isX)
             }
         }
     }
@@ -54,9 +58,9 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
     override fun changeSize(x: Float, y: Float, isWidth: Boolean) {
         if (x > 220f && x < 255f) {
             if (y > 20f && y < 50) {
-                plane.reduceSize(isWidth)
-            } else if (y >= 50 && y < 75) {
                 plane.increaseSize(isWidth)
+            } else if (y >= 50 && y < 75) {
+                plane.reduceSize(isWidth)
             }
         }
     }

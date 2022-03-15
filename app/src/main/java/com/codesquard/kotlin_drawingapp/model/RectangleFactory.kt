@@ -1,5 +1,7 @@
 package com.codesquard.kotlin_drawingapp.model
 
+import android.graphics.Bitmap
+
 class RectangleFactory(private val rectangle: Rectangle) {
 
     private fun setRectangleID() {
@@ -13,15 +15,15 @@ class RectangleFactory(private val rectangle: Rectangle) {
         rectangle.setID(randomID)
     }
 
-    private fun setRectanglePoint() {
-        val pointX = (0..1200).random().toFloat()
-        val pointY = (0..1000).random().toFloat()
+    private fun setRectanglePoint(pointArray: Array<Int>) {
+        val pointX = (0..pointArray[0]).random().toFloat()
+        val pointY = (0..pointArray[1]).random().toFloat()
         rectangle.setPoint(pointX, pointY)
     }
 
-    private fun setRectangleSize() {
-        val width = 150
-        val height = 120
+    private fun setRectangleSize(sizeArray: Array<Int>) {
+        val width = sizeArray[0]
+        val height = sizeArray[1]
         rectangle.setSize(width, height)
     }
 
@@ -44,13 +46,22 @@ class RectangleFactory(private val rectangle: Rectangle) {
         }
     }
 
-    fun getInstance(): Rectangle {
+    private fun setRectanglePhoto(photo: Bitmap?) {
+        if (rectangle is PhotoRectangle) {
+            photo?.let {
+                rectangle.setBitmap(photo)
+            }
+        }
+    }
+
+    fun getInstance(sizeArray: Array<Int>, pointArray: Array<Int>, photo: Bitmap? = null): Rectangle {
         setRectangleID()
-        setRectanglePoint()
+        setRectanglePoint(pointArray)
         setRectangleColor()
         setRectangleAlpha()
-        setRectangleSize()
+        setRectangleSize(sizeArray)
         setRectangleText()
+        setRectanglePhoto(photo)
         return rectangle
     }
 
