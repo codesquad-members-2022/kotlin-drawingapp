@@ -20,6 +20,8 @@ class MainContract {
 
         fun createImage(bitmap: Bitmap)
 
+        fun createTextView()
+
         fun selectDrawObject(x: Float, y: Float)
 
         fun setCurrentSelectedDrawObjectAlpha(alpha: Int)

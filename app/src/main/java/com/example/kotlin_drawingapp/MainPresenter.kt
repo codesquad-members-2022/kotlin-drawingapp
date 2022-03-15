@@ -3,7 +3,11 @@ package com.example.kotlin_drawingapp
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.util.Size
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import com.example.kotlin_drawingapp.model.Color
+import com.example.kotlin_drawingapp.model.CustomTextViewFactory
 import com.example.kotlin_drawingapp.model.ImageFactory
 import com.example.kotlin_drawingapp.model.RectangleFactory
 import com.example.kotlin_drawingapp.model.draw.DrawObject
@@ -21,6 +25,11 @@ class MainPresenter(
 
     override fun createImage(bitmap: Bitmap) {
         drawingRepository.saveDrawObject(ImageFactory.create(bitmap))
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
+    }
+
+    override fun createTextView() {
+        drawingRepository.saveDrawObject(CustomTextViewFactory.create())
         mainView.showDrawObject(drawingRepository.getAllDrawObject())
     }
 
@@ -45,6 +54,7 @@ class MainPresenter(
             when (replacement) {
                 is DrawObject.Rectangle -> replacement.alpha = alpha
                 is DrawObject.Image -> replacement.alpha = alpha
+                is DrawObject.CustomTextView -> replacement.alpha = alpha
             }
             drawingRepository.saveCurrentSelectedDrawObject(replacement)
             drawingRepository.modifyDrawObject(tmpCurrentSelectedDrawObject, replacement)
@@ -68,6 +78,12 @@ class MainPresenter(
             when (drawObject) {
                 is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
                 is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
+                is DrawObject.CustomTextView -> mainView.showDrawObjectInfo(
+                    Color(drawObject.paint.color.red, drawObject.paint.color.green, drawObject.paint.color.blue)
+                    , drawObject.alpha,
+                    drawObject.currentPoint,
+                    drawObject.currentSize
+                )
             }
         }
     }
