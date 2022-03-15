@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Size
 import android.view.MotionEvent
 import android.view.View
 
@@ -12,9 +13,32 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         fun onClick(point: PointF)
     }
 
+    interface OnDrawViewPointUpdateListener {
+        fun onUpdate(target: DrawObject, point: Point)
+    }
+
+    interface OnDrawViewMoveEventListener {
+        fun onUpdate(point: Point)
+    }
+
+    private var drawViewPointUpdateListener: OnDrawViewPointUpdateListener? = null
     private var drawViewTouchListener: OnDrawViewTouchListener? = null
+    private var drawViewMoveEventListener: OnDrawViewMoveEventListener? = null
+    var currentSelectedDrawObject: DrawObject? = null
+    private var temporaryDrawObject: DrawObject? = null
+    private var lastPosX = 0
+    private var lastPosY = 0
+
     fun setOnDrawViewTouchListener(listenerDrawView: OnDrawViewTouchListener) {
         drawViewTouchListener = listenerDrawView
+    }
+
+    fun setOnDrawViewUpdateListener(listenerPoint: OnDrawViewPointUpdateListener) {
+        drawViewPointUpdateListener = listenerPoint
+    }
+
+    fun setOnDrawViewMoveEventListener(listenerMoveEvent: OnDrawViewMoveEventListener) {
+        drawViewMoveEventListener = listenerMoveEvent
     }
 
     private var drawnObjectList = listOf<DrawObject>()
@@ -49,7 +73,18 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
         }
 
+        drawTemporaryDrawObject(canvas)
         super.onDraw(canvas)
+    }
+
+    private fun drawTemporaryDrawObject(canvas: Canvas?) {
+        temporaryDrawObject?.let {
+            when (temporaryDrawObject) {
+                is DrawObject.Rectangle -> drawRectangle(canvas, it as DrawObject.Rectangle)
+                is DrawObject.Image -> drawImage(canvas, it as DrawObject.Image)
+                else -> return
+            }
+        }
     }
 
     private fun drawImage(canvas: Canvas?, image: DrawObject.Image) {
@@ -84,12 +119,45 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 drawViewTouchListener?.onClick(PointF(event.x, event.y))
             }
+
+            MotionEvent.ACTION_MOVE -> {
+                if (temporaryDrawObject == null) {
+                    temporaryDrawObject = copyForTemporaryDrawObject(currentSelectedDrawObject)
+                    temporaryDrawObject?.let {
+                        lastPosX = event.getX(0).toInt()
+                        lastPosY = event.getY(0).toInt()
+                    }
+                }
+
+                temporaryDrawObject?.apply {
+                    currentPoint.x += event.getX(0).toInt() - lastPosX
+                    currentPoint.y += event.getY(0).toInt() - lastPosY
+
+                    lastPosX = event.getX(0).toInt()
+                    lastPosY = event.getY(0).toInt()
+                }
+                currentSelectedDrawObject?.let {
+                    drawViewMoveEventListener?.onUpdate(Point(event.x.toInt(), event.y.toInt()))
+                }
+                invalidate()
+            }
+
+            MotionEvent.ACTION_UP -> {
+                currentSelectedDrawObject?.let { current ->
+                    temporaryDrawObject?.let { temp ->
+                        drawViewPointUpdateListener?.onUpdate(current, temp.currentPoint)
+                    }
+                }
+                temporaryDrawObject = null
+                invalidate()
+            }
         }
-        return super.onTouchEvent(event)
+        return true
     }
 
     private fun setRectanglePaint(rect: DrawObject.Rectangle): Paint {
@@ -99,5 +167,30 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = Color.argb(alpha, rect.rgb.r, rect.rgb.g, rect.rgb.b)
 
         return paint
+    }
+
+    private fun copyForTemporaryDrawObject(drawObject: DrawObject?): DrawObject? {
+        return when (drawObject) {
+            is DrawObject.Rectangle -> {
+                drawObject.copy(
+                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
+                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
+                    rgb = com.example.kotlin_drawingapp.model.Color(
+                        drawObject.rgb.r,
+                        drawObject.rgb.g,
+                        drawObject.rgb.b
+                    ),
+                    alpha = 5
+                )
+            }
+            is DrawObject.Image -> {
+                drawObject.copy(
+                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
+                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
+                    alpha = 5
+                )
+            }
+            else -> null
+        }
     }
 }

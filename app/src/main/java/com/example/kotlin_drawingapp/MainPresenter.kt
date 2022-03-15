@@ -1,6 +1,8 @@
 package com.example.kotlin_drawingapp
 
 import android.graphics.Bitmap
+import android.graphics.Point
+import android.util.Size
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.ImageFactory
 import com.example.kotlin_drawingapp.model.RectangleFactory
@@ -31,13 +33,9 @@ class MainPresenter(
         }
 
         drawingRepository.saveCurrentSelectedDrawObject(drawObject)
+        mainView.setCurrentSelectedDrawObject(drawObject)
         mainView.showDrawObject(drawingRepository.getAllDrawObject())
-        drawObject?.let {
-            when (drawObject) {
-                is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha)
-                is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha)
-            }
-        }
+        currentSelectedDrawObjectInfo(drawObject)
     }
 
     override fun setCurrentSelectedDrawObjectAlpha(alpha: Int) {
@@ -51,6 +49,46 @@ class MainPresenter(
             drawingRepository.saveCurrentSelectedDrawObject(replacement)
             drawingRepository.modifyDrawObject(tmpCurrentSelectedDrawObject, replacement)
             mainView.showDrawObject(drawingRepository.getAllDrawObject())
+        }
+    }
+
+    override fun modifyDrawObjectProperty(target: DrawObject, point: Point, size: Size) {
+        val newDrawObject = when (target) {
+            is DrawObject.Rectangle -> {
+                DrawObject.Rectangle(
+                    target.id,
+                    size,
+                    point,
+                    target.rgb,
+                    target.alpha
+                )
+            }
+
+            is DrawObject.Image -> {
+                DrawObject.Image(
+                    target.id,
+                    size,
+                    point,
+                    target.alpha,
+                    target.bitmap
+                )
+            }
+        }
+
+        newDrawObject.selected = true
+        drawingRepository.modifyDrawObject(target, newDrawObject)
+        drawingRepository.saveCurrentSelectedDrawObject(newDrawObject)
+        mainView.setCurrentSelectedDrawObject(newDrawObject)
+        currentSelectedDrawObjectInfo(newDrawObject)
+        mainView.showDrawObject(drawingRepository.getAllDrawObject())
+    }
+
+    private fun currentSelectedDrawObjectInfo(drawObject: DrawObject?) {
+        drawObject?.let {
+            when (drawObject) {
+                is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
+                is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
+            }
         }
     }
 }
