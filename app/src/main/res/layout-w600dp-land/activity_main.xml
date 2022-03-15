@@ -54,7 +54,7 @@
     android:layout_marginBottom="80dp"
     app:layout_constraintBottom_toTopOf="@+id/btn_normal_rect"
     app:layout_constraintEnd_toStartOf="@id/second_constraintLayout"
-    app:layout_constraintStart_toStartOf="parent"/>
+    app:layout_constraintStart_toEndOf="@+id/layout_layer"/>
 
   <com.codesquard.kotlin_drawingapp.view.TemporaryView
     android:id="@+id/temporary_view"
@@ -76,15 +76,14 @@
     app:layout_constraintStart_toEndOf="@+id/custom_view"
     app:layout_constraintTop_toTopOf="parent"/>
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/third_constraintLayout"
+  <androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/layout_layer"
     android:layout_width="150dp"
     android:layout_height="match_parent"
-    android:background="#E9E6FA"
-    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toStartOf="@+id/custom_view"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent"
+    android:orientation="vertical"
+    android:background="#E9E6FA"/>
 
   <TextView
     android:id="@+id/text_layer"
