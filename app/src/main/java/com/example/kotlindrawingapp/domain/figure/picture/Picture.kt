@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream
 data class Picture(
     override val id: ID,
     override var point: Point,
-    override val size: Size,
+    override var size: Size,
     override var rgb: RGB?,
     override var alpha: Alpha,
     var memory: ByteArray

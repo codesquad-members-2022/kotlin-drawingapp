@@ -16,13 +16,55 @@ class FigureRepository {
         plane.value = _plane
     }
 
+    fun addSquare(figure: Figure) {
+        _plane.addFigure(figure)
+        plane.value = _plane
+    }
+
     fun addPicture(bitmap: Bitmap) {
         _plane.addFigure(FigureFactory.createPicture(Size(), bitmap))
         plane.value = _plane
     }
 
+
+    fun addText(size: Pair<Int, Int>, text: String) {
+        _plane.addFigure(FigureFactory.createText(text, Size(size.first, size.second)))
+        plane.value = _plane
+    }
+
+    fun deleteSquare(figure: Figure) {
+        _plane.removeFigure(figure)
+        plane.value = _plane
+    }
+
     fun updateSquare(alpha: Int) {
         _plane.updateAlpha(Alpha(alpha))
+        plane.value = _plane
+    }
+
+    fun updatePointX(x: Float) {
+        _plane.updatePointX(x)
+        plane.value = _plane
+    }
+
+    fun updatePointY(y: Float) {
+        _plane.updatePointY(y)
+        plane.value = _plane
+    }
+
+    fun updatePoint(x: Float, y: Float) {
+        _plane.updatePointX(x)
+        _plane.updatePointY(y)
+        plane.value = _plane
+    }
+
+    fun updateWidth(width: Int) {
+        _plane.updateWidth(width)
+        plane.value = _plane
+    }
+
+    fun updateHeight(height: Int) {
+        _plane.updateHeight(height)
         plane.value = _plane
     }
 }

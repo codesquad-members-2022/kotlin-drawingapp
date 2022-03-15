@@ -7,6 +7,7 @@ import com.example.kotlindrawingapp.domain.figure.ID.Companion.generateID
 import com.example.kotlindrawingapp.domain.figure.Point.Companion.generatePoint
 import com.example.kotlindrawingapp.domain.figure.RGB.Companion.generateRGB
 import com.example.kotlindrawingapp.domain.figure.square.Square
+import com.example.kotlindrawingapp.domain.figure.text.Text
 
 object FigureFactory {
 
@@ -22,6 +23,17 @@ object FigureFactory {
             null,
             generateAlpha(),
             Picture.bitmapToByteArray(bitmap)
+        )
+    }
+
+    fun createText(text: String, size: Size): Text {
+        return Text(
+            generateID(),
+            generatePoint(),
+            size,
+            generateRGB(),
+            generateAlpha(),
+            text
         )
     }
 }

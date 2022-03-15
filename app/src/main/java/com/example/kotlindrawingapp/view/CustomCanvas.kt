@@ -1,4 +1,4 @@
-package com.example.kotlindrawingapp
+package com.example.kotlindrawingapp.view
 
 import android.content.Context
 import android.graphics.*
@@ -10,9 +10,11 @@ import com.example.kotlindrawingapp.domain.figure.plane.Plane
 import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.domain.figure.Point
 import com.example.kotlindrawingapp.domain.figure.square.Square
+import com.example.kotlindrawingapp.domain.figure.text.Text
 
 class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
+    private lateinit var listener: Movable
     private lateinit var plane: Plane
     private var paint: Paint = Paint()
     private var selectedPaint: Paint = Paint()
@@ -31,11 +33,23 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
         val width = figure.size.width
         val height = figure.size.height
         when (figure) {
-            is Square -> canvas.drawRect(moveX, moveY, moveX + width, moveY + height, temporaryPaint(figure))
+            is Square -> canvas.drawRect(
+                moveX,
+                moveY,
+                moveX + width,
+                moveY + height,
+                temporaryPaint(figure)
+            )
             is Picture -> {
                 val bitmap = Picture.byteArrayToBitmap(figure.memory)
                 val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
                 canvas.drawBitmap(newBitmap, moveX, moveY, temporaryPaint(figure))
+            }
+            is Text -> {
+                val text = figure.text
+                paint = temporaryPaint(figure)
+                paint.textSize = 80F
+                canvas.drawText(text, moveX, moveY, paint)
             }
         }
     }
@@ -52,9 +66,27 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
                 val newBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
                 canvas.drawBitmap(newBitmap, x, y, paintSquare(figure))
             }
+            is Text -> {
+                val text = figure.text
+                paint = paintSquare(figure)
+                paint.textSize = 80F
+                canvas.drawText(text, x, y, paint)
+            }
         }
         if (plane.selectedSquare.value == figure) {
-            canvas.drawRect(x, y, (x + width), (y + height), selectedPaintSquare())
+            when (figure) {
+                is Text -> {
+                    canvas.drawRect(
+                        x - 20,
+                        y - height,
+                        x + width + 20,
+                        y + 20,
+                        selectedPaintSquare()
+                    )
+                }
+                else -> canvas.drawRect(x, y, (x + width), (y + height), selectedPaintSquare())
+
+            }
         }
     }
 
@@ -101,23 +133,34 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             MotionEvent.ACTION_MOVE -> {
                 plane.selectedSquare.value?.let { figure ->
                     temporary = figure
+                    listener.move(moveX, moveY)
                     invalidate()
                 }
             }
             MotionEvent.ACTION_UP -> {
                 val selectedFigure = plane.selectedSquare.value
-                selectedFigure?.let {
+                selectedFigure?.let { selectedFigure ->
                     temporary?.let {
-                        it.update(Point(moveX, moveY))
-                        plane.removeFigure(selectedFigure)
-                        plane.addFigure(it)
+                        listener.move(moveX, moveY, it, selectedFigure)
                         temporary = null
-                        invalidate()
                     }
                 }
                 temporary = null
             }
         }
         return true
+    }
+
+    fun setListener(listener: Movable) {
+        this.listener = listener
+    }
+
+    fun getWidthAndHeight(text: String): Pair<Int, Int> {
+        val bounds = Rect()
+        Paint().apply {
+            textSize = 80F
+            getTextBounds(text, 0, text.length, bounds)
+        }
+        return Pair(bounds.width(), bounds.height())
     }
 }
