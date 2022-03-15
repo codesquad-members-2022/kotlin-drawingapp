@@ -11,13 +11,13 @@ class Plane(private val listener: RectangleListener) {
     private var draggedY = 0f
 
     fun createNewPhotoRectangle(photo: Bitmap, width: Float, height: Float) {
-        val newRect = PhotoRectangle()
+        val newRect = RectangleFactory(PhotoRectangle()).getInstance() as PhotoRectangle
         newRect.setBitmap(photo)
         addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
     }
 
     fun createNewNormalRectangle(width: Float, height: Float) {
-        val newRect = NormalRectangle()
+        val newRect = RectangleFactory(NormalRectangle()).getInstance()
         addNewNormalRectangleOrPhotoRectangle(newRect, width, height)
     }
 
@@ -33,7 +33,6 @@ class Plane(private val listener: RectangleListener) {
     }
 
     private fun addNewNormalRectangleOrPhotoRectangle(newRect: Rectangle, width: Float, height: Float) {
-        val newRect = RectangleFactory(newRect).getInstance()
         newRect.setSize(width.toInt(), height.toInt())
         rectangleList.add(newRect)
         listener.onCreateRectangle(newRect)
