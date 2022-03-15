@@ -1,17 +1,16 @@
 package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.net.Uri
-import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.BasePresenter
 import com.codesquad_han.kotlin_drawingapp.BaseView
-import com.codesquad_han.kotlin_drawingapp.model.Rectangle
-import com.codesquad_han.kotlin_drawingapp.model.RectangleImageviewData
+import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
+import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 
 interface RectangleContract {
 
     interface View : BaseView<Presenter> {
-        fun showRectangle(updatedRectangleList: MutableList<Rectangle>)   // 추가된 사각형을 포함한 리스트 받아와서 새로 그리기
+        fun showRectangle(updatedNormalRectangleList: MutableList<BaseRectangle>)   // 추가된 사각형을 포함한 리스트 받아와서 새로 그리기
 
         fun showPointX(newX: Int)
 
@@ -23,7 +22,7 @@ interface RectangleContract {
     }
 
     interface Presenter : BasePresenter {
-        var liveRectangleList: MutableLiveData<MutableList<Rectangle>>
+        var liveNormalRectangleList: MutableLiveData<MutableList<BaseRectangle>>
 
         fun addRectangle() // 사각형 생성
 

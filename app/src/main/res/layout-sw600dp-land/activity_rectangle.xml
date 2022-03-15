@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/constraintLayout"
+    tools:context=".rectangle.RectangleActivity">
+
+    <com.codesquad_han.kotlin_drawingapp.rectangle.RectangleDrawingView
+        android:id="@+id/rectangleDrawingView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.82" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutControlContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#B9E1E6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.18">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutControl"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_v_8"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.08" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.05"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvBackgroundColorDescription"
+                style="@style/tvPropertyDescription_600dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="배경색"
+                app:layout_constraintDimensionRatio="7:1"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.02"
+                app:layout_constraintTop_toBottomOf="@id/tvBackgroundColorDescription" />
+
+            <TextView
+                android:id="@+id/tvBackgroundColor"
+                style="@style/tvBackgound"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/textview_background_1"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:text="#000000"
+                app:layout_constraintDimensionRatio="5:1"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view2"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.035"
+                app:layout_constraintTop_toBottomOf="@id/tvBackgroundColor" />
+
+            <TextView
+                android:id="@+id/tvTransparencyDescription"
+                style="@style/tvPropertyDescription_600dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="투명도"
+                app:layout_constraintDimensionRatio="7:1"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view3"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.02"
+                app:layout_constraintTop_toBottomOf="@id/tvTransparencyDescription" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekBarTransparency"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="10"
+                android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view4"
+                app:layout_constraintWidth_percent="0.9" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.035"
+                app:layout_constraintTop_toBottomOf="@id/seekBarTransparency" />
+
+            <TextView
+                android:id="@+id/tvPointDescription"
+                style="@style/tvPropertyDescription_600dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="위치"
+                app:layout_constraintDimensionRatio="7:1"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view5"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.02"
+                app:layout_constraintTop_toBottomOf="@id/tvPointDescription" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutPointX"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/linearlayout_background_1"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                app:layout_constraintDimensionRatio="11:3"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view6"
+                app:layout_constraintWidth_percent="0.8">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+
+                    <TextView
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="50"
+                        android:text="X" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+
+                    <TextView
+                        android:id="@+id/tvPointX"
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="60"
+                        android:text="250"
+                        android:maxLines="1"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/ivPointXup"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_up" />
+
+                    <ImageView
+                        android:id="@+id/ivPointXdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_down" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.01"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutPointX" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutPointY"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/linearlayout_background_1"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                app:layout_constraintDimensionRatio="11:3"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view7"
+                app:layout_constraintWidth_percent="0.8">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+
+                    <TextView
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="50"
+                        android:text="Y" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+
+                    <TextView
+                        android:id="@+id/tvPointY"
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="60"
+                        android:text="120"
+                        android:maxLines="1"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/ivPointYup"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_up" />
+
+                    <ImageView
+                        android:id="@+id/ivPointYdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_down" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.035"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutPointY" />
+
+            <TextView
+                android:id="@+id/tvSizeDescription"
+                style="@style/tvPropertyDescription_600dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:maxLines="1"
+                android:text="크기"
+                app:layout_constraintDimensionRatio="7:1"
+                app:layout_constraintStart_toEndOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view8"
+                app:layout_constraintWidth_percent="0.8" />
+
+            <View
+                android:id="@+id/view9"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.02"
+                app:layout_constraintTop_toBottomOf="@id/tvSizeDescription" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutSizeW"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/linearlayout_background_1"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                app:layout_constraintDimensionRatio="11:3"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view9"
+                app:layout_constraintWidth_percent="0.8">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+
+                    <TextView
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="50"
+                        android:text="W" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+
+                    <TextView
+                        android:id="@+id/tvSizeW"
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="60"
+                        android:text="250"
+                        android:maxLines="1"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/ivSizeWup"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_up" />
+
+                    <ImageView
+                        android:id="@+id/ivSizeWdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_down" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view10"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent="0.01"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutSizeW" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutSizeH"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/linearlayout_background_1"
+                android:orientation="horizontal"
+                android:weightSum="100"
+                app:layout_constraintDimensionRatio="11:3"
+                app:layout_constraintStart_toStartOf="@id/gl_v_8"
+                app:layout_constraintTop_toBottomOf="@id/view10"
+                app:layout_constraintWidth_percent="0.8">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+
+                    <TextView
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="50"
+                        android:text="H" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="25" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:orientation="vertical"
+                    android:weightSum="100">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+
+                    <TextView
+                        android:id="@+id/tvSizeH"
+                        style="@style/tv_xy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="60"
+                        android:text="120"
+                        android:maxLines="1"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:id="@+id/ivSizeHup"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_up" />
+
+                    <ImageView
+                        android:id="@+id/ivSizeHdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_down" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOpenGallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/teal_200"
+            android:enabled="false"
+            android:text="사진 가져오기"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateRectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerateRectangle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#678CCC"
+            android:text="사각형 추가"
+            app:layout_constraintBottom_toTopOf="@id/btnGenerateTextRectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGenerateTextRectangle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#365A98"
+            android:text="텍스트 추가"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

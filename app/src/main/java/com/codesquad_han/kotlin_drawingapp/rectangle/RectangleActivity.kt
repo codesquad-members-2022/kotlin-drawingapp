@@ -14,10 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
+import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
 import com.codesquad_han.kotlin_drawingapp.model.Plane
-import com.codesquad_han.kotlin_drawingapp.model.Rectangle
+import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
-import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
 class RectangleActivity : AppCompatActivity(), RectangleContract.View, RectangleViewClickInterface {
@@ -83,7 +83,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     // presenter 초기화 및 livedata 옵저버 등록
     fun initPresenter(rectangleFactory: RectangleFactory) {
         presenter = RectanglePresenter(RectangleRepositoryImpl(Plane(rectangleFactory)), this)
-        presenter.liveRectangleList.observe(this) {
+        presenter.liveNormalRectangleList.observe(this) {
             showRectangle(it)
         }
     }
@@ -153,10 +153,10 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     }
 
     // 만든 사각형 커스텀 뷰에 추가로 그리기
-    override fun showRectangle(updatedRectangleList: MutableList<Rectangle>) {
-        Log.d("AppTest", "update rectangle list size : ${updatedRectangleList.size}")
+    override fun showRectangle(updatedNormalRectangleList: MutableList<BaseRectangle>) {
+        Log.d("AppTest", "update rectangle list size : ${updatedNormalRectangleList.size}")
         binding.rectangleDrawingView?.let {
-            it.drawRectangle(updatedRectangleList)
+            it.drawRectangle(updatedNormalRectangleList)
         }
     }
 

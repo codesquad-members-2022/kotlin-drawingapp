@@ -1,18 +1,19 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
-import android.content.Context
-import android.content.res.Resources
-import com.codesquad_han.kotlin_drawingapp.R
+import com.codesquad_han.kotlin_drawingapp.model.property.BackgroundColor
+import com.codesquad_han.kotlin_drawingapp.model.property.Point
+import com.codesquad_han.kotlin_drawingapp.model.property.Size
+import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
 
 class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
     private var x = x
     private var y = y
     private var wordList = wordList
 
-    fun generateRectangle(): Rectangle {
+    fun generateRectangle(): NormalRectangle {
         val id = getRandomString(3) + "-" + getRandomString(3) + "-" + getRandomString(3)
 
-        return Rectangle(
+        return NormalRectangle(
             id,
             Point((0..x).random(), (0..y).random()),
             Size(300, 240),  // Pixcel C API 31 에서 1dp = 2px, 따라서 2배해준 값 사용
@@ -22,10 +23,10 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
         )
     }
 
-    fun generateTextRectangle(): Rectangle {
+    fun generateTextRectangle(): TextRectangle {
         val id = getRandomString(3) + "-" + getRandomString(3) + "-" + getRandomString(3)
 
-        return Rectangle(
+        return TextRectangle(
             id,
             Point((0..x).random(), (0..y).random()),
             Size(0, 0),
