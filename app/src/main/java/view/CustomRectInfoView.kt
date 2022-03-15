@@ -17,12 +17,14 @@ class CustomRectInfoView(
     defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
+    var rectId=""
+    val photoId=""
     init {
         LayoutInflater.from(context).inflate(R.layout.customview_layer, this, true)
         val text: TextView = findViewById(R.id.tv_name)
         val image: ImageView = findViewById(R.id.iv_figure)
         text.text = name
     }
-    
+
 
 }

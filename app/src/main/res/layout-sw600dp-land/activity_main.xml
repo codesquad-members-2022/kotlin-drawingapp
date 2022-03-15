@@ -11,21 +11,20 @@
         android:id="@+id/linear_list"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical"
         android:background="@color/sideBar"
-        >
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="리스트"
-            android:textColor="@color/black"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="50dp"
             android:layout_marginRight="50dp"
+            android:text="리스트"
+            android:textColor="@color/black"
 
             >
 
@@ -34,14 +33,18 @@
 
     <FrameLayout
         android:id="@+id/image_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-594dp"
-        tools:layout_editor_absoluteY="127dp">
+        android:layout_width="1300dp"
+        android:layout_height="900dp"
+        app:layout_constraintEnd_toStartOf="@+id/relativeLayout"
+        app:layout_constraintStart_toEndOf="@+id/linear_list"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
     </FrameLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@color/sideBar"
@@ -162,8 +165,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/linear_xPos"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/imageview_border"
             android:orientation="horizontal">
 

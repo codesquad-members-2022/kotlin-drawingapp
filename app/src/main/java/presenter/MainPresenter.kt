@@ -18,6 +18,12 @@ class MainPresenter(
 
     }
 
+    override fun selectRectangleByList(rectId: String) {
+        plane.getCustomRectangleById(rectId)?.let{
+            view.displaySelectedRectAttribute(it)
+        }
+    }
+
     override fun changeColor(rectView: RectView) {
         if (rectView.photoId == "") {
             plane.changeColor(rectView.rectId)
