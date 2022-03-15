@@ -7,12 +7,37 @@
     android:layout_height="match_parent"
     tools:context="view.MainActivity">
 
+    <LinearLayout
+        android:id="@+id/linear_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:background="@color/sideBar"
+        >
+
+        <TextView
+            android:id="@+id/tv_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리스트"
+            android:textColor="@color/black"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="50dp"
+
+            >
+
+        </TextView>
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-170dp"
-        tools:layout_editor_absoluteY="160dp">
+        tools:layout_editor_absoluteX="-594dp"
+        tools:layout_editor_absoluteY="127dp">
 
     </FrameLayout>
 

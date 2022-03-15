@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var editTvHeight:EditText
     private lateinit var editTvXpos:EditText
     private lateinit var editTvYpos:EditText
+    private lateinit var layer: LinearLayout
+    private var squareIndex = 1
+    private var textIndex = 1
+    private var photoIndex= 1
+    private lateinit var customLayerView: CustomRectInfoView
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
         selectedCustomRectangleView?.changeColor(colorValue)
         tvRgbValue.text = colorValue.getRGBHexValue()
@@ -56,12 +61,14 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         editTvXpos.setText("${point.xPos}")
         editTvYpos.setText("${point.yPos}")
     }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter = MainPresenter(this, this)
         mainLayout = findViewById(R.id.image_container)
+        layer= findViewById(R.id.linear_list)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
         val btnMakePhotoView = findViewById<Button>(R.id.btn_addPhoto)
@@ -82,6 +89,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
         btnMakeRectangle.setOnClickListener {
             presenter.createRectanglePaint()
+            customLayerView= CustomRectInfoView(this, "Rect $squareIndex")
+            squareIndex++
+            layer.addView(customLayerView)
         }
 
         btnMakePhotoView.setOnClickListener {
@@ -105,6 +115,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnMakeSentenceView.setOnClickListener {
             presenter.createSentencePaint()
+            customLayerView= CustomRectInfoView(this, "Text $textIndex")
+            textIndex++
+            layer.addView(customLayerView)
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -250,6 +263,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                             bitmap = ImageDecoder.decodeBitmap(source)
                         }
                         presenter.createPhotoPaint(bitmap)
+                        customLayerView= CustomRectInfoView(this, "Photo $photoIndex")
+                        photoIndex++
+                        layer.addView(customLayerView)
                     }
 
                 } catch (e: Exception) {
