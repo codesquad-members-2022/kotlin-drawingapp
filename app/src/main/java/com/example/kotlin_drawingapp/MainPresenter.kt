@@ -53,27 +53,7 @@ class MainPresenter(
     }
 
     override fun modifyDrawObjectProperty(target: DrawObject, point: Point, size: Size) {
-        val newDrawObject = when (target) {
-            is DrawObject.Rectangle -> {
-                DrawObject.Rectangle(
-                    target.id,
-                    size,
-                    point,
-                    target.rgb,
-                    target.alpha
-                )
-            }
-
-            is DrawObject.Image -> {
-                DrawObject.Image(
-                    target.id,
-                    size,
-                    point,
-                    target.alpha,
-                    target.bitmap
-                )
-            }
-        }
+        val newDrawObject = target.create(size, point)
 
         newDrawObject.selected = true
         drawingRepository.modifyDrawObject(target, newDrawObject)

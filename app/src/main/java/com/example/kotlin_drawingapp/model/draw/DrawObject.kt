@@ -35,6 +35,10 @@ sealed class DrawObject {
                 id, point.x, point.y, size.width, size.height, rgb.r, rgb.g, rgb.b, alpha
             )
         }
+
+        override fun create(size: Size, point: Point): Rectangle {
+            return Rectangle(id, size, point, rgb, alpha)
+        }
     }
 
     data class Image(
@@ -49,5 +53,11 @@ sealed class DrawObject {
             currentSize = size
             currentPoint = point
         }
+
+        override fun create(size: Size, point: Point): Image {
+            return Image(id, size, point, alpha, bitmap)
+        }
     }
+
+    abstract fun create(size: Size, point: Point): DrawObject
 }
