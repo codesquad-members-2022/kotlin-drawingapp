@@ -5,7 +5,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/grey"
     tools:context=".MainActivity">
 
     <com.example.kotlin_drawingapp.model.draw.DrawView
@@ -23,10 +23,10 @@
         android:id="@+id/tv_background_color_string"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/background_string"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
@@ -37,13 +37,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:background="@color/white"
+        android:background="@drawable/corner_radius"
         android:gravity="center"
+        android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/tv_background_color_string"
+        tools:text="FF000000"
 
         />
 
@@ -51,10 +53,11 @@
         android:id="@+id/tv_alpha_string"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:width="0dp"
         android:text="@string/alpha_string"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
@@ -65,6 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:max="10"
+        android:thumb="@drawable/seekbar_thumb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/tv_alpha_string" />
