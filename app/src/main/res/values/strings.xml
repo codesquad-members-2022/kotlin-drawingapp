@@ -10,4 +10,8 @@
     <string name="label_button_text">텍스트</string>
     <string name="label_textview_layer">레이어</string>
     <string name="description_icon">description_icon</string>
+    <string name="label_popup_send_to_back">맨 뒤로 보내기</string>
+    <string name="label_popup_send_back">뒤로 보내기</string>
+    <string name="label_popup_send_to_front">맨 앞으로 보내기</string>
+    <string name="label_popup_send_front">앞으로 보내기</string>
 </resources>

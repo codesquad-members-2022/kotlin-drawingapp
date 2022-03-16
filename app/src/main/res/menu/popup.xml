@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popup_send_to_back"
+        android:title="@string/label_popup_send_to_back" />
+
+    <item
+        android:id="@+id/popup_send_back"
+        android:title="@string/label_popup_send_back" />
+
+    <item
+        android:id="@+id/popup_send_front"
+        android:title="@string/label_popup_send_front" />
+
+    <item
+        android:id="@+id/popup_send_to_front"
+        android:title="@string/label_popup_send_to_front" />
+</menu>

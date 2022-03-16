@@ -4,9 +4,8 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.MenuInflater
+import android.widget.*
 import androidx.core.content.ContextCompat
 import com.example.kotlindrawingapp.R
 
@@ -27,6 +26,25 @@ class LayerCustomView(
         val image: ImageView = findViewById(R.id.iv_figure)
         text.text = name
         image.setImageResource(imageDrawable)
+
+        this.setOnLongClickListener {
+            val popupMenu = PopupMenu(context, it)
+            popupMenu.menuInflater.inflate(R.menu.popup, popupMenu.menu)
+
+            //TODO - 메뉴 별 기능추가하기
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.popup_send_to_back -> { }
+                    R.id.popup_send_back -> { }
+                    R.id.popup_send_front -> { }
+                    R.id.popup_send_to_front -> { }
+                }
+                true
+            }
+
+            popupMenu.show()
+            true
+        }
     }
 
 
