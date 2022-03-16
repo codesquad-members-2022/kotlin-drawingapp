@@ -6,7 +6,9 @@ import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 
 interface RectangleRepository {
 
-    fun addRectangle()
+    fun addNormalRectangle()
+
+    fun addTextRectangle()
 
     fun getRectangleList() : MutableList<BaseRectangle>
 

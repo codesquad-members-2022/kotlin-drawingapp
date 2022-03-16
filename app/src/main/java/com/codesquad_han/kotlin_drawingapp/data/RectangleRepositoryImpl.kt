@@ -4,8 +4,13 @@ import android.net.Uri
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 
 class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
-    override fun addRectangle() {
-        plane.generateRectangle()
+
+    override fun addNormalRectangle() {
+        plane.generateNormalRectangle()
+    }
+
+    override fun addTextRectangle() {
+        plane.generateTextRectangle()
     }
 
     override fun getRectangleList() = plane.returnRectangleList()

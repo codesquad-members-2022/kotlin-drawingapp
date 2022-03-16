@@ -16,7 +16,6 @@ import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
 import com.codesquad_han.kotlin_drawingapp.model.Plane
-import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
 import com.google.android.material.snackbar.Snackbar
 
@@ -70,7 +69,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             it.setClickListener(this)
         }
 
-        setBtnMakeRectangle()
+        setBtnMakeNormalRectangle()
+        setBtnMakeTextRectangle()
         setTransparencySeekBar()
         setBtnGallery()
 
@@ -88,7 +88,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setBtnMakeRectangle() {
+    fun setBtnMakeNormalRectangle() {
         binding.btnGenerateRectangle?.setOnClickListener {
             presenter.start()
         }

@@ -10,7 +10,7 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
     private var y = y
     private var wordList = wordList
 
-    fun generateRectangle(): NormalRectangle {
+    fun generateNormalRectangle(): NormalRectangle {
         val id = getRandomString(3) + "-" + getRandomString(3) + "-" + getRandomString(3)
 
         return NormalRectangle(

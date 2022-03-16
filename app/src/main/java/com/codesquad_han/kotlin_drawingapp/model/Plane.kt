@@ -6,8 +6,8 @@ class Plane(rectangleFactory: RectangleFactory) {
     private var rectangleList = mutableListOf<BaseRectangle>()
     private var rectangleFactory = rectangleFactory
 
-    fun generateRectangle() {
-        val rectangle = rectangleFactory.generateRectangle()
+    fun generateNormalRectangle() {
+        val rectangle = rectangleFactory.generateNormalRectangle()
         rectangleList.add(rectangle)
     }
 

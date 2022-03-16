@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
 import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
-import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 
 class RectanglePresenter(
     val rectangleRepository: RectangleRepository,
@@ -22,13 +21,14 @@ class RectanglePresenter(
         addRectangle()
     }
 
-    override fun addRectangle() {  // 사각형 추가 후 라이브데이터 갱신
-        rectangleRepository.addRectangle()
+    override fun addRectangle() {  // 일반 사각형(이미지 삽입 기능 포함) 추가 후 라이브데이터 갱신
+        rectangleRepository.addNormalRectangle()
         liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
-    override fun addTextRectangle() {
-
+    override fun addTextRectangle() { // 텍스트 기반 사각형 추가 후 라이브데이터 갱신
+        rectangleRepository.addTextRectangle()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신

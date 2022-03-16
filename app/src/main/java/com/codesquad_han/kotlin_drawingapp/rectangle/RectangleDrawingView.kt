@@ -57,46 +57,8 @@ class RectangleDrawingView : View {
         }
 
         // 임시뷰 사각형 그리기
-        tempNormalRectangle?.let { tempRectangle ->
-            tempPaint.setColor(
-                Color.argb(
-                    5 * 255 / 10,
-                    tempRectangle.backgroundColor.r,
-                    tempRectangle.backgroundColor.g,
-                    tempRectangle.backgroundColor.b
-                )
-            )
-
-            if (tempRectangle.imageUri == null) {
-                canvas.drawRect(
-                    tempRectangle.point.x.toFloat(),
-                    tempRectangle.point.y.toFloat(),
-                    (tempRectangle.point.x + tempRectangle.size.width).toFloat(),
-                    (tempRectangle.point.y + tempRectangle.size.height).toFloat(),
-                    tempPaint
-                )
-            }
-
-            tempRectangle.imageUri?.let {
-                var bitmap: Bitmap
-                if (Build.VERSION.SDK_INT < 29) { //
-                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                } else {
-                    val source = ImageDecoder.createSource(context.contentResolver, it)
-                    bitmap = ImageDecoder.decodeBitmap(source)
-                }
-
-                var imagePaint = Paint()
-                imagePaint.alpha = 5 * 255 / 10
-                canvas.drawBitmap(
-                    bitmap, null, Rect(
-                        tempRectangle.point.x,
-                        tempRectangle.point.y,
-                        (tempRectangle.point.x + tempRectangle.size.width),
-                        (tempRectangle.point.y + tempRectangle.size.height)
-                    ), imagePaint
-                )
-            }
+        tempNormalRectangle?.let {
+            it.drawRectangle(context, canvas)
         }
 
     }
