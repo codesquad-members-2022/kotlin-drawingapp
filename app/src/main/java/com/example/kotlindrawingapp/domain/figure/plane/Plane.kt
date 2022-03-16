@@ -71,6 +71,10 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
         return _squares[idx]
     }
 
+    fun findByFigure(figure: Figure?): Int {
+        return _squares.indexOf(figure)
+    }
+
     fun updatePointX(newX: Float) {
         item?.let {
             val y = it.point.y

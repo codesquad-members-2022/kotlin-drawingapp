@@ -9,13 +9,14 @@ import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.kotlindrawingapp.R
 import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.presenter.Presenter
 import com.example.kotlindrawingapp.repository.FigureRepository
 
-class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener {
+class MainActivity : AppCompatActivity(), Contract.View, Movable {
 
     private lateinit var presenter: Presenter
     private lateinit var colorTextView: TextView
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener 
     private lateinit var height: TextView
     private lateinit var seekBar: SeekBar
     private lateinit var customView: CustomCanvas
-    private lateinit var customLayerView: LayerCustomView
     private lateinit var squareButton: Button
     private lateinit var pictureButton: Button
     private lateinit var textButton: Button
@@ -65,35 +65,27 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener 
                 y.text = it.point.y.toString()
                 width.text = it.size.width.toString()
                 height.text = it.size.height.toString()
+                presenter.editLayer(it)
             }
         }
 
         squareButton.setOnClickListener {
-            presenter.loadFigure()
-            customLayerView =
-                LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
-            squareIndex++
-            layer.addView(customLayerView)
+            val layerCustomView = LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
+            presenter.loadFigure(layerCustomView)
         }
 
         pictureButton.setOnClickListener {
             albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            customLayerView = LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
-            pictureIndex++
-            layer.addView(customLayerView)
         }
 
         textButton.setOnClickListener {
             presenter.loadRandomText(object : Sizeable {
                 override fun getWidthAndHeight(text: String) {
                     val size = customView.getWidthAndHeight(text)
-                    presenter.loadText(size, text)
+                    val layerCustomView = LayerCustomView(this@MainActivity, "Text $textIndex", R.drawable.ic_baseline_text_fields_24)
+                    presenter.loadText(size, text, layerCustomView)
                 }
             })
-            customLayerView =
-                LayerCustomView(this, "Text $textIndex", R.drawable.ic_baseline_text_fields_24)
-            textIndex++
-            layer.addView(customLayerView)
         }
         onCoordinateEvent()
         onSizeEvent()
@@ -198,7 +190,8 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener 
                         val source = ImageDecoder.createSource(this.contentResolver, uri)
                         ImageDecoder.decodeBitmap(source)
                     }
-                    presenter.loadPicture(bitmap)
+                    val layerCustomView = LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
+                    presenter.loadPicture(bitmap, layerCustomView)
                 }
             }
         }
@@ -228,20 +221,15 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable, LayerListener 
         y.text = tempY.toString()
     }
 
-    override fun drawSquare(index: Int) {
-        customLayerView =
-            LayerCustomView(this, "Rect $index", R.drawable.ic_baseline_crop_square_24)
-        layer.addView(customLayerView)
+    override fun showLayer(layerCustomView: LayerCustomView) {
+        layer.addView(layerCustomView)
     }
 
-    override fun drawPicture(index: Int) {
-        customLayerView = LayerCustomView(this, "Photo $index", R.drawable.ic_image)
-        layer.addView(customLayerView)
+    override fun showSelectedLayer(layerView: LayerCustomView) {
+        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer_pressed)
     }
 
-    override fun drawText(index: Int) {
-        customLayerView =
-            LayerCustomView(this, "Text $index", R.drawable.ic_baseline_text_fields_24)
-        layer.addView(customLayerView)
+    override fun showNotSelectedLayer(layerView: LayerCustomView) {
+        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer)
     }
 }
