@@ -36,7 +36,7 @@ sealed class DrawObject {
             )
         }
 
-        override fun create(size: Size, point: Point): Rectangle {
+        override fun createNewDrawObject(size: Size, point: Point): Rectangle {
             return Rectangle(id, size, point, rgb, alpha)
         }
     }
@@ -54,7 +54,7 @@ sealed class DrawObject {
             currentPoint = point
         }
 
-        override fun create(size: Size, point: Point): Image {
+        override fun createNewDrawObject(size: Size, point: Point): Image {
             return Image(id, size, point, alpha, bitmap)
         }
     }
@@ -73,10 +73,10 @@ sealed class DrawObject {
             currentPoint = point
         }
 
-        override fun create(size: Size, point: Point): DrawObject {
+        override fun createNewDrawObject(size: Size, point: Point): DrawObject {
             return CustomTextView(id, size, point, endPos, paint, text, alpha)
         }
     }
 
-    abstract fun create(size: Size, point: Point): DrawObject
+    abstract fun createNewDrawObject(size: Size, point: Point): DrawObject
 }

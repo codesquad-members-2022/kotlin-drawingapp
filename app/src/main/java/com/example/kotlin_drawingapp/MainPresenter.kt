@@ -63,7 +63,7 @@ class MainPresenter(
     }
 
     override fun modifyDrawObjectProperty(target: DrawObject, point: Point, size: Size) {
-        val newDrawObject = target.create(size, point)
+        val newDrawObject = target.createNewDrawObject(size, point)
 
         newDrawObject.selected = true
         drawingRepository.modifyDrawObject(target, newDrawObject)
