@@ -11,7 +11,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.model.*
-import com.codesquad_han.kotlin_drawingapp.model.Point
+import com.codesquad_han.kotlin_drawingapp.model.property.BackgroundColor
+import com.codesquad_han.kotlin_drawingapp.model.property.Point
+import com.codesquad_han.kotlin_drawingapp.model.property.Size
+import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
 
 class RectangleDrawingView : View {
 
@@ -20,9 +23,9 @@ class RectangleDrawingView : View {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 
-    private var selectedRectangle: Rectangle? = null
-    private var tempRectangle: Rectangle? = null
-    private var rectangleList = mutableListOf<Rectangle>()
+    private var selectedNormalRectangle: BaseRectangle? = null
+    private var tempNormalRectangle: BaseRectangle? = null
+    private var rectangleList = mutableListOf<BaseRectangle>()
 
     private var paint = Paint()
     private var tempPaint = Paint()
@@ -35,48 +38,11 @@ class RectangleDrawingView : View {
 
     override fun onDraw(canvas: Canvas) {
         rectangleList.forEach { rectangle ->
-            paint.setColor(
-                Color.argb(
-                    rectangle.transparency.transparency * 255 / 10,
-                    rectangle.backgroundColor.r,
-                    rectangle.backgroundColor.g,
-                    rectangle.backgroundColor.b
-                )
-            )
 
-            if (rectangle.imageUri == null) {
-                canvas.drawRect(
-                    rectangle.point.x.toFloat(),
-                    rectangle.point.y.toFloat(),
-                    (rectangle.point.x + rectangle.size.width).toFloat(),
-                    (rectangle.point.y + rectangle.size.height).toFloat(),
-                    paint
-                )
-            }
+            rectangle.drawRectangle(context, canvas)
 
-            // 사각형에 할당된 이미지 uri가 있다면 그리도록 한다
-            rectangle.imageUri?.let {
-                var bitmap: Bitmap
-                if (Build.VERSION.SDK_INT < 29) { //
-                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                } else {
-                    val source = ImageDecoder.createSource(context.contentResolver, it)
-                    bitmap = ImageDecoder.decodeBitmap(source)
-                }
-
-                var imagePaint = Paint()
-                imagePaint.alpha = rectangle.transparency.transparency * 255 / 10
-                canvas.drawBitmap(
-                    bitmap, null, Rect(
-                        rectangle.point.x,
-                        rectangle.point.y,
-                        (rectangle.point.x + rectangle.size.width),
-                        (rectangle.point.y + rectangle.size.height)
-                    ), imagePaint
-                )
-            }
-
-            selectedRectangle?.let {
+            // 선택된 사각형 있으면 윤곽선 그리기
+            selectedNormalRectangle?.let {
                 if (rectangle.id == it.id) {
                     canvas.drawRect(
                         rectangle.point.x.toFloat(),
@@ -91,46 +57,8 @@ class RectangleDrawingView : View {
         }
 
         // 임시뷰 사각형 그리기
-        tempRectangle?.let { tempRectangle ->
-            tempPaint.setColor(
-                Color.argb(
-                    5 * 255 / 10,
-                    tempRectangle.backgroundColor.r,
-                    tempRectangle.backgroundColor.g,
-                    tempRectangle.backgroundColor.b
-                )
-            )
-
-            if (tempRectangle.imageUri == null) {
-                canvas.drawRect(
-                    tempRectangle.point.x.toFloat(),
-                    tempRectangle.point.y.toFloat(),
-                    (tempRectangle.point.x + tempRectangle.size.width).toFloat(),
-                    (tempRectangle.point.y + tempRectangle.size.height).toFloat(),
-                    tempPaint
-                )
-            }
-
-            tempRectangle.imageUri?.let {
-                var bitmap: Bitmap
-                if (Build.VERSION.SDK_INT < 29) { //
-                    bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                } else {
-                    val source = ImageDecoder.createSource(context.contentResolver, it)
-                    bitmap = ImageDecoder.decodeBitmap(source)
-                }
-
-                var imagePaint = Paint()
-                imagePaint.alpha = 5 * 255 / 10
-                canvas.drawBitmap(
-                    bitmap, null, Rect(
-                        tempRectangle.point.x,
-                        tempRectangle.point.y,
-                        (tempRectangle.point.x + tempRectangle.size.width),
-                        (tempRectangle.point.y + tempRectangle.size.height)
-                    ), imagePaint
-                )
-            }
+        tempNormalRectangle?.let {
+            it.drawRectangle(context, canvas)
         }
 
     }
@@ -145,45 +73,31 @@ class RectangleDrawingView : View {
                 checkTouchPoint(currentPoint.x, currentPoint.y)
             }
             MotionEvent.ACTION_MOVE -> {
-                if (selectedRectangle != null) {
+                if (selectedNormalRectangle != null) {
                     if (checkTwoPoint(PointF(event.getX(0), event.getY(0)))) {
-                        if (tempRectangle == null) {
-                            tempRectangle = Rectangle(
-                                selectedRectangle!!.id,
-                                Point(selectedRectangle!!.point.x, selectedRectangle!!.point.y),
-                                Size(
-                                    selectedRectangle!!.size.width,
-                                    selectedRectangle!!.size.height
-                                ),
-                                BackgroundColor(
-                                    selectedRectangle!!.backgroundColor.r,
-                                    selectedRectangle!!.backgroundColor.g,
-                                    selectedRectangle!!.backgroundColor.b
-                                ),
-                                Transparency(5),
-                                selectedRectangle!!.imageUri
-                            )
+                        if (tempNormalRectangle == null) {
+                            tempNormalRectangle = selectedNormalRectangle!!.getTempRectangle()
                             invalidate()
                         }
 
-                        tempRectangle!!.point.x =
-                            (event.getX(0) - (tempRectangle!!.size.width / 2)).toInt()
-                        tempRectangle!!.point.y =
-                            (event.getY(0) - (tempRectangle!!.size.height / 2)).toInt()
+                        tempNormalRectangle!!.point.x =
+                            (event.getX(0) - (tempNormalRectangle!!.size.width / 2)).toInt()
+                        tempNormalRectangle!!.point.y =
+                            (event.getY(0) - (tempNormalRectangle!!.size.height / 2)).toInt()
                         // 임시뷰 움직이는 동안 좌표 변화 보여주기
-                        clickListener.updatePointText(tempRectangle!!.point.x, tempRectangle!!.point.y)
+                        clickListener.updatePointText(tempNormalRectangle!!.point.x, tempNormalRectangle!!.point.y)
                         invalidate()
                     }
                 }
             }
             MotionEvent.ACTION_UP -> {
-                if (tempRectangle != null) {
-                    var newX = tempRectangle!!.point.x
-                    var newY = tempRectangle!!.point.y
-                    tempRectangle = null
+                if (tempNormalRectangle != null) {
+                    var newX = tempNormalRectangle!!.point.x
+                    var newY = tempNormalRectangle!!.point.y
+                    tempNormalRectangle = null
 
                     // 임시 사각형 뷰로 선택 사각형 위치 이동
-                    clickListener.updateSelectedRectanglePoint(selectedRectangle!!.id, newX, newY)
+                    clickListener.updateSelectedRectanglePoint(selectedNormalRectangle!!.id, newX, newY)
                 }
             }
         }
@@ -198,7 +112,7 @@ class RectangleDrawingView : View {
     }
 
     // 사각형 추가 혹은 선택된 사각형 투명도 변경 시 호출
-    fun drawRectangle(updatedRectangleList: MutableList<Rectangle>) {
+    fun drawRectangle(updatedRectangleList: MutableList<BaseRectangle>) {
         rectangleList = updatedRectangleList
         invalidate()
     }
@@ -212,10 +126,10 @@ class RectangleDrawingView : View {
                 && touchY >= rectangleList[i].point.y
                 && touchY <= rectangleList[i].point.y + rectangleList[i].size.height
             ) {
-                selectedRectangle = rectangleList[i]
+                selectedNormalRectangle = rectangleList[i]
                 selected = true
 
-                selectedRectangle?.let { // 액티비티에서 선택한 사각형 색상, 투명도 나타내기
+                selectedNormalRectangle?.let { // 액티비티에서 선택한 사각형 색상, 투명도 나타내기
                     clickListener.clickDrawingView(
                         getColorStr(it),
                         it.transparency.transparency,
@@ -230,7 +144,7 @@ class RectangleDrawingView : View {
         }
 
         if (!selected) {
-            selectedRectangle = null
+            selectedNormalRectangle = null
             clickListener.clickDrawingView(
                 "", -1, false, "",
                 0, 0, 0, 0
@@ -241,20 +155,20 @@ class RectangleDrawingView : View {
     }
 
     fun checkTwoPoint(point: PointF): Boolean {
-        if (tempRectangle == null) {
-            return (point.x >= selectedRectangle!!.point.x &&
-                    point.x <= selectedRectangle!!.point.x + selectedRectangle!!.size.width &&
-                    point.y >= selectedRectangle!!.point.y &&
-                    point.y <= selectedRectangle!!.point.y + selectedRectangle!!.size.height)
+        if (tempNormalRectangle == null) {
+            return (point.x >= selectedNormalRectangle!!.point.x &&
+                    point.x <= selectedNormalRectangle!!.point.x + selectedNormalRectangle!!.size.width &&
+                    point.y >= selectedNormalRectangle!!.point.y &&
+                    point.y <= selectedNormalRectangle!!.point.y + selectedNormalRectangle!!.size.height)
         } else {
-            return (point.x >= tempRectangle!!.point.x &&
-                    point.x <= tempRectangle!!.point.x + tempRectangle!!.size.width &&
-                    point.y >= tempRectangle!!.point.y &&
-                    point.y <= tempRectangle!!.point.y + tempRectangle!!.size.height)
+            return (point.x >= tempNormalRectangle!!.point.x &&
+                    point.x <= tempNormalRectangle!!.point.x + tempNormalRectangle!!.size.width &&
+                    point.y >= tempNormalRectangle!!.point.y &&
+                    point.y <= tempNormalRectangle!!.point.y + tempNormalRectangle!!.size.height)
         }
     }
 
-    fun getColorStr(selectedRectangle: Rectangle): String {
+    fun getColorStr(selectedRectangle: BaseRectangle): String {
         var red = Integer.toHexString(selectedRectangle.backgroundColor.r)
         var green = Integer.toHexString(selectedRectangle.backgroundColor.g)
         var blue = Integer.toHexString(selectedRectangle.backgroundColor.b)

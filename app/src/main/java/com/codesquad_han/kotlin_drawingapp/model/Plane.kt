@@ -3,16 +3,17 @@ package com.codesquad_han.kotlin_drawingapp.model
 import android.net.Uri
 
 class Plane(rectangleFactory: RectangleFactory) {
-    private var rectangleList = mutableListOf<Rectangle>()
+    private var rectangleList = mutableListOf<BaseRectangle>()
     private var rectangleFactory = rectangleFactory
 
-    fun generateRectangle() {
-        val rectangle = rectangleFactory.generateRectangle()
+    fun generateNormalRectangle() {
+        val rectangle = rectangleFactory.generateNormalRectangle()
         rectangleList.add(rectangle)
     }
 
     fun generateTextRectangle(){
         val textRectangle = rectangleFactory.generateTextRectangle()
+        rectangleList.add(textRectangle)
     }
 
     fun returnRectangleList() = rectangleList

@@ -3,7 +3,7 @@ package com.codesquad_han.kotlin_drawingapp.rectangle
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
-import com.codesquad_han.kotlin_drawingapp.model.Rectangle
+import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
 
 class RectanglePresenter(
     val rectangleRepository: RectangleRepository,
@@ -11,7 +11,7 @@ class RectanglePresenter(
 ) :
     RectangleContract.Presenter {
 
-    override var liveRectangleList = MutableLiveData<MutableList<Rectangle>>()
+    override var liveNormalRectangleList = MutableLiveData<MutableList<BaseRectangle>>()
 
     init {
         rectangleView.presenter = this
@@ -21,48 +21,49 @@ class RectanglePresenter(
         addRectangle()
     }
 
-    override fun addRectangle() {  // 사각형 추가 후 라이브데이터 갱신
-        rectangleRepository.addRectangle()
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+    override fun addRectangle() {  // 일반 사각형(이미지 삽입 기능 포함) 추가 후 라이브데이터 갱신
+        rectangleRepository.addNormalRectangle()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
-    override fun addTextRectangle() {
-
+    override fun addTextRectangle() { // 텍스트 기반 사각형 추가 후 라이브데이터 갱신
+        rectangleRepository.addTextRectangle()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateTransparency(id: String, transparency: Int) { // 선택된 사각형 투명도 데이터 변경 후 라이브데이터 갱신
         rectangleRepository.updateTransparency(id, transparency)
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateImageUri(id: String, imageUri: Uri?) { // 선택한 사각형에 갤러리에서 선택한 이미지 삽입 시 데이터 변경 후 라이브데이터 갱신
         rectangleRepository.updateImageUri(id, imageUri)
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateSelectedRectanglePoint(id: String, newX: Int, newY: Int) {
         rectangleRepository.updateSelctedRectanglePoint(id, newX, newY)
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updatePointX(value: Int, id: String) {
         rectangleView.showPointX(rectangleRepository.updatePointX(value, id))
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updatePointY(value: Int, id: String) {
         rectangleView.showPointY(rectangleRepository.updatePointY(value, id))
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateSizeWidth(value: Int, id: String) {
         rectangleView.showSizeW(rectangleRepository.updateSizeWidth(value, id))
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     override fun updateSizeHeight(value: Int, id: String) {
         rectangleView.showSizeH(rectangleRepository.updateSizeHeight(value, id))
-        liveRectangleList.value = rectangleRepository.getRectangleList()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

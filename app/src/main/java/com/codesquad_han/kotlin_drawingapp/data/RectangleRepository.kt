@@ -1,13 +1,16 @@
 package com.codesquad_han.kotlin_drawingapp.data
 
 import android.net.Uri
-import com.codesquad_han.kotlin_drawingapp.model.Rectangle
+import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
+import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
 
 interface RectangleRepository {
 
-    fun addRectangle()
+    fun addNormalRectangle()
 
-    fun getRectangleList() : MutableList<Rectangle>
+    fun addTextRectangle()
+
+    fun getRectangleList() : MutableList<BaseRectangle>
 
     fun updateTransparency(id: String, transparency: Int)
 
