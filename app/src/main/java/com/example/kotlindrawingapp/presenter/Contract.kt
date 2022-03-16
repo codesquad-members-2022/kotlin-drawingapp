@@ -30,6 +30,8 @@ interface Contract {
 
         fun editRectangleAlpha(alpha: Int)
 
+        fun editFigure(x: Float, y: Float)
+
         fun editFigurePointX(x: Float)
 
         fun editFigurePointY(y: Float)

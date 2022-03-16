@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             customView.drawRectangle(it)
         }
 
-        presenter.selectedSquare.observe(this) {
+        presenter.selectedSquare.observe(this) { it ->
             it?.let {
                 colorTextView.text = it.rgb?.decimalToHex() ?: "NONE"
                 seekBar.progress = it.alpha?.alpha
@@ -65,12 +65,13 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                 y.text = it.point.y.toString()
                 width.text = it.size.width.toString()
                 height.text = it.size.height.toString()
-                presenter.editLayer(it)
             }
+            presenter.editLayer(it)
         }
 
         squareButton.setOnClickListener {
-            val layerCustomView = LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
+            val layerCustomView =
+                LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
             presenter.loadFigure(layerCustomView)
         }
 
@@ -82,7 +83,11 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             presenter.loadRandomText(object : Sizeable {
                 override fun getWidthAndHeight(text: String) {
                     val size = customView.getWidthAndHeight(text)
-                    val layerCustomView = LayerCustomView(this@MainActivity, "Text $textIndex", R.drawable.ic_baseline_text_fields_24)
+                    val layerCustomView = LayerCustomView(
+                        this@MainActivity,
+                        "Text $textIndex",
+                        R.drawable.ic_baseline_text_fields_24
+                    )
                     presenter.loadText(size, text, layerCustomView)
                 }
             })
@@ -190,7 +195,8 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                         val source = ImageDecoder.createSource(this.contentResolver, uri)
                         ImageDecoder.decodeBitmap(source)
                     }
-                    val layerCustomView = LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
+                    val layerCustomView =
+                        LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
                     presenter.loadPicture(bitmap, layerCustomView)
                 }
             }
@@ -210,13 +216,11 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             }
         }
 
-    override fun move(x: Float, y: Float, figure: Figure, selectedFigure: Figure) {
-        presenter.editFigurePoint(x, y)
-        presenter.removeFigure(selectedFigure)
-        presenter.loadFigure(figure)
+    override fun move(x: Float, y: Float) {
+        presenter.editFigure(x, y)
     }
 
-    override fun move(tempX: Float, tempY: Float) {
+    override fun moveTemporary(tempX: Float, tempY: Float) {
         x.text = tempX.toString()
         y.text = tempY.toString()
     }

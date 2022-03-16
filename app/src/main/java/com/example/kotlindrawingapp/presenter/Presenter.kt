@@ -50,6 +50,10 @@ class Presenter(
         repository.updateSquare(alpha)
     }
 
+    override fun editFigure(x: Float, y: Float) {
+        repository.updateFigure(x, y)
+    }
+
     override fun editFigurePointX(x: Float) {
         repository.updatePointX(x)
     }
@@ -71,7 +75,7 @@ class Presenter(
     }
 
     override fun editLayer(figure: Figure?) {
-        val index = plane.value?.findByFigure(figure)
+        val index = plane.value?.findByFigure(selectedSquare.value)
         index ?: return
         layerList.forEachIndexed { idx, layerCustomView ->
             if (idx == index) {

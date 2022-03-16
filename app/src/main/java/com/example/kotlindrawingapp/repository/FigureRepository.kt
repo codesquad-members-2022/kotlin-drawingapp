@@ -67,4 +67,8 @@ class FigureRepository {
         _plane.updateHeight(height)
         plane.value = _plane
     }
+
+    fun updateFigure(x: Float, y: Float) {
+        updatePoint(x, y)
+    }
 }

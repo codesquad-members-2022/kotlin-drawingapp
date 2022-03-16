@@ -39,11 +39,6 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     }
 
     fun touchPoint(point: Point) {
-        item?.let {
-            item = null
-            _selectedSquare.value = item
-        }
-
         selected(point)?.let {
             item = it
             _selectedSquare.value = item
