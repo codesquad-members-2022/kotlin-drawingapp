@@ -115,182 +115,66 @@
         android:id="@+id/textview_position"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/position_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
-    <TextView
-        android:id="@+id/textview_x"
-        android:layout_width="wrap_content"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_x"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="X"
+        app:titleValue="X"
+        android:layout_margin="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/textview_position" />
 
-    <TextView
-        android:id="@+id/textview_current_x"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_x"
-        app:layout_constraintTop_toBottomOf="@id/textview_position" />
-
-    <Button
-        android:id="@+id/btn_current_x_plus"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_y"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_x_minus"
+        app:titleValue="Y"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_x" />
-
-    <Button
-        android:id="@+id/btn_current_x_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_x_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_x" />
-
-    <TextView
-        android:id="@+id/textview_y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="Y"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_x_plus" />
-
-    <TextView
-        android:id="@+id/textview_current_y"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_y"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_x_plus" />
-
-    <Button
-        android:id="@+id/btn_current_y_plus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_y_minus"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_y" />
-
-    <Button
-        android:id="@+id/btn_current_y_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_y_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_y" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_x" />
 
     <TextView
         android:id="@+id/textview_size"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/size_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_y_plus" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_y" />
 
-    <TextView
-        android:id="@+id/textview_width"
-        android:layout_width="wrap_content"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_width"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="W"
+        app:titleValue="W"
+        android:layout_margin="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/textview_size" />
 
-    <TextView
-        android:id="@+id/textview_current_width"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_width"
-        app:layout_constraintTop_toBottomOf="@id/textview_size" />
-
-    <Button
-        android:id="@+id/btn_current_width_plus"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_height"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_width_minus"
+        app:titleValue="H"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_width" />
-
-    <Button
-        android:id="@+id/btn_current_width_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_width_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_width" />
-
-    <TextView
-        android:id="@+id/textview_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="H"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_width_plus" />
-
-    <TextView
-        android:id="@+id/textview_current_height"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_height"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_width_plus" />
-
-    <Button
-        android:id="@+id/btn_current_height_plus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_height_minus"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_height" />
-
-    <Button
-        android:id="@+id/btn_current_height_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_height_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_height" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_width" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
