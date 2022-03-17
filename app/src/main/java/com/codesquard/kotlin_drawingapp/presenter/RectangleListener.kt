@@ -6,10 +6,14 @@ interface RectangleListener {
 
     fun onCreateRectangle(newRect: Rectangle)
 
-    fun onSelectRectangle(index: Int = -1)
+    fun onSelectRectangle(index: Int)
+
+    fun onUnSelectRectangle()
 
     fun onUpdateRectangle()
 
     fun onDragRectangle(tempRect: Rectangle?)
+
+    fun onMeasureTextSize(textRect: Rectangle)
 
 }

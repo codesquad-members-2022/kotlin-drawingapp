@@ -6,43 +6,33 @@ import android.util.AttributeSet
 import android.view.View
 import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
+import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
-class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
+class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet),
+    CustomViewFrame {
 
     private var tempRect: Rectangle? = null
+
+    fun setTempRect(tempRect: Rectangle?) {
+        this.tempRect = tempRect
+    }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         dragRectangle(tempRect, canvas)
     }
 
-    private fun dragRectangle(tempRect: Rectangle?, canvas: Canvas?) {
-        tempRect?.apply temp@{
-            val startX = tempRect.point[0]
-            val startY = tempRect.point[1]
-            val endX = startX + tempRect.size[0]
-            val endY = startY + tempRect.size[1]
-            val paint = Paint().apply {
-                this.color = Color.argb(
-                    50,
-                    this@temp.color[0],
-                    this@temp.color[1],
-                    this@temp.color[2]
-                )
-            }
+    override fun setPaint(rect: Rectangle): Paint {
+        val paint = Paint()
+        paint.color = Color.argb(50, rect.color[0], rect.color[1], rect.color[2])
+        return paint
+    }
 
-            if (this is PhotoRectangle) {
-                val photo: Bitmap = this.getPhoto() ?: return
-                val rect = RectF(startX, startY, endX, endY)
-                canvas?.drawBitmap(photo, null, rect, paint)
-            } else {
-                canvas?.drawRect(startX, startY, endX, endY, paint)
-            }
+    private fun dragRectangle(tempRect: Rectangle?, canvas: Canvas?) {
+        tempRect?.let {
+            val paint = setPaint(it)
+            val size = setSize(it)
+            setSpecificRect(it, size, paint, canvas)
         }
     }
-
-    fun setTempRect(tempRect: Rectangle?) {
-        this.tempRect = tempRect
-    }
-
 }

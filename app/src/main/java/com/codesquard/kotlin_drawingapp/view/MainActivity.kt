@@ -1,13 +1,15 @@
 package com.codesquard.kotlin_drawingapp.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.DisplayMetrics
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Button
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,14 +24,19 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
-    private lateinit var firstBtn: Button
     private lateinit var mainLayout: ConstraintLayout
-    private lateinit var backgroundBtn: Button
-    private lateinit var alphaSlider: Slider
-    private lateinit var photoBtn: Button
-    private lateinit var presenter: TaskContract.Presenter
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
+    private lateinit var normalRectCreateBtn: Button
+    private lateinit var backgroundBtn: Button
+    private lateinit var photoRectCreateBtn: Button
+    private lateinit var textRectCreateBtn: Button
+    private lateinit var positionXBtn: Button
+    private lateinit var positionYBtn: Button
+    private lateinit var sizeWBtn: Button
+    private lateinit var sizeHBtn: Button
+    private lateinit var alphaSlider: Slider
+    private lateinit var presenter: TaskContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,16 +45,63 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         mainLayout = findViewById(R.id.main_layout)
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
-        backgroundBtn = findViewById(R.id.background_btn)
-        photoBtn = findViewById(R.id.photo_btn)
+        backgroundBtn = findViewById(R.id.btn_background)
+        normalRectCreateBtn = findViewById(R.id.btn_normal_rect)
+        photoRectCreateBtn = findViewById(R.id.btn_photo_rect)
+        textRectCreateBtn = findViewById(R.id.btn_text_rect)
         alphaSlider = findViewById(R.id.slider_alpha)
+        positionXBtn = findViewById(R.id.btn_position_x)
+        positionYBtn = findViewById(R.id.btn_position_y)
+        sizeWBtn = findViewById(R.id.btn_size_w)
+        sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
 
-        onClickRectBtn()
-        onClickPhotoBtn(requestPermissionLauncher)
+        onClickNormalRectBtn()
+        onClickPhotoRectBtn(requestPermissionLauncher)
+        onClickTextRectBtn()
+        onTouchBtnToChangeSize()
+        onTouchBtnToChangePosition()
+        setCustomViewTouchEvent()
+        measureCustomViewSize()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun onTouchBtnToChangeSize() {
+        sizeWBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y, true)
+                else -> v.performClick()
+            }
+            true
+        }
+        sizeHBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changeSize(event.x, event.y, false)
+                else -> v.performClick()
+            }
+            true
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun onTouchBtnToChangePosition() {
+        positionXBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y, true)
+                else -> v.performClick()
+            }
+            true
+        }
+        positionYBtn.setOnTouchListener { v: View, event: MotionEvent ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> presenter.changePosition(event.x, event.y, false)
+                else -> v.performClick()
+            }
+            true
+        }
     }
 
     private fun registerIntentToGetPhotoAsBitmap() =
@@ -64,9 +118,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
                 } else {
                     MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
                 }
-                val width = dp2px(150f)
-                val height = dp2px(120f)
-                presenter.addNewRectangle(width, height, photo)
+                presenter.addNewRectangle(photo)
             } else {
                 Snackbar.make(customView, "사진을 불러오지 못하였습니다", Snackbar.LENGTH_SHORT).show()
             }
@@ -92,8 +144,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         return requestPermissionLauncher
     }
 
-    private fun onClickPhotoBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
-        photoBtn.setOnClickListener {
+    private fun onClickTextRectBtn() {
+        textRectCreateBtn.setOnClickListener {
+            presenter.createNewTextRectangle()
+        }
+    }
+
+    private fun onClickPhotoRectBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
+        photoRectCreateBtn.setOnClickListener {
             requestPermissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
         }
     }
@@ -113,12 +171,9 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         })
     }
 
-    private fun onClickRectBtn() {
-        firstBtn = findViewById(R.id.create_btn)
-        firstBtn.setOnClickListener {
-            val width = dp2px(150f)
-            val height = dp2px(120f)
-            presenter.addNewRectangle(width, height)
+    private fun onClickNormalRectBtn() {
+        normalRectCreateBtn.setOnClickListener {
+            presenter.addNewRectangle()
         }
     }
 
@@ -154,29 +209,80 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         customView.invalidate()
     }
 
-    override fun updateRectangle() {
+    override fun enableRectColorBtnAndSlider() {
         onClickColorBtn()
         onSlideAlpha()
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val x = event?.x ?: 0f
-        val y = event?.y ?: 0f
-
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> presenter.selectRectangle(x, y)
-            MotionEvent.ACTION_MOVE -> {
-                presenter.dragRectangle(x, y)
-            }
-            MotionEvent.ACTION_UP -> showDraggedRectangle()
+    override fun showRectSize(w: String, h: String) {
+        sizeWBtn.text = "W   $w"
+        sizeHBtn.text = "H   $h"
+        if (w.isNotEmpty()) {
+            val width = pxToDp(w.toFloat()).toInt()
+            val height = pxToDp(h.toFloat()).toInt()
+            sizeWBtn.text = "W   $width"
+            sizeHBtn.text = "H   $height"
         }
-        return super.onTouchEvent(event)
     }
 
-    private fun dp2px(dp: Float): Float {
+    override fun showRectPosition(x: String, y: String) {
+        positionXBtn.text = "X   $x"
+        positionYBtn.text = "Y   $y"
+    }
+
+    override fun measureTextSize(textRect: Rectangle) {
+        val textSize = customView.getTextSize(textRect)
+        presenter.addNewTextRectangle(textRect, textSize)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setCustomViewTouchEvent() {
+        customView.setOnTouchListener { _, event ->
+            val x = event?.x ?: 0f
+            val y = event?.y ?: 0f
+
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    presenter.selectRectangle(x, y)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    presenter.dragRectangle(x, y)
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    showDraggedRectangle()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun getInitRectSize(width: Float, height: Float) = arrayOf(dpToPx(width), dpToPx(height))
+
+    private fun measureCustomViewSize() {
+        customView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val rectMaxPoint = customView.getViewSize()
+                presenter.setInitRectSizeAndMaxPoint(getInitRectSize(150f, 120f), rectMaxPoint)
+                customView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    private fun dpToPx(dp: Float): Int {
         val resources = this.resources
         val metrics = resources.displayMetrics
-        return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        val density = metrics.density
+        return (dp * density).toInt()
+    }
+
+    private fun pxToDp(px: Float): Int {
+        val resources = this.resources
+        val metrics = resources.displayMetrics
+        val density = metrics.density
+        return (px / density).toInt()
     }
 }
 
