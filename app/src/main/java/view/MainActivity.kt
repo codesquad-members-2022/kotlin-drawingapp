@@ -96,14 +96,70 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             layer.addView(customLayerView)
             customRectInfoViewList.add(customLayerView)
             presenter.createRectanglePaint()
-            customLayerView.setOnClickListener {
+            customLayerView.setOnClickListener { view ->
+                view as CustomRectInfoView
                 customRectangleViewList.map { it.eraseBorder() }
-                customRectInfoViewList.map{it.resetColor()}
-                it.setBackgroundColor(Color.GRAY)
+                customRectInfoViewList.map { it.resetColor() }
+                view.setBackgroundColor(Color.GRAY)
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
-                presenter.selectRectangleByList(customLayerView.rectId)
+                presenter.selectRectangleByList(view.rectId)
             }
+            customLayerView.setOnLongClickListener { view ->
+                view as CustomRectInfoView
+                val popupMenu = PopupMenu(this, view)
+                val mInflater = this.menuInflater
+                mInflater.inflate(R.menu.list_longclick_menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener {
+                    val indexOfSelectedItem = customRectInfoViewList.indexOf(view)
+                    customRectInfoViewList.map { originView ->
+                        layer.removeView(originView)
+                    }
+                    when (it.itemId) {
+
+                        R.id.item_move_back -> {
+                            if (indexOfSelectedItem >= 1) {
+                                val temp = customRectInfoViewList[indexOfSelectedItem - 1]
+                                customRectInfoViewList[indexOfSelectedItem - 1] = view
+                                customRectInfoViewList[indexOfSelectedItem] = temp
+                            }
+                        }
+                        R.id.item_move_front -> {
+                            if (indexOfSelectedItem + 1 < customRectInfoViewList.size) {
+                                val temp = customRectInfoViewList[indexOfSelectedItem + 1]
+                                customRectInfoViewList[indexOfSelectedItem + 1] = view
+                                customRectInfoViewList[indexOfSelectedItem] = temp
+                            }
+                        }
+                        R.id.item_move_head -> {
+                            val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                            customRectInfoViewList.remove(view)
+                            temp.add(view)
+                            customRectInfoViewList.map { info ->
+                                temp.add(info)
+                            }
+                            this.customRectInfoViewList = temp
+                        }
+                        R.id.item_move_tail -> {
+                            val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                            customRectInfoViewList.remove(view)
+                            customRectInfoViewList.map { info ->
+                                temp.add(info)
+                            }
+                            temp.add(view)
+                            this.customRectInfoViewList = temp
+                        }
+
+                    }
+                    customRectInfoViewList.map { modifyView ->
+                        layer.addView(modifyView)
+                    }
+                    true
+                }
+                popupMenu.show()
+                true
+            }
+
 
         }
 
@@ -133,14 +189,70 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             layer.addView(customLayerView)
             customRectInfoViewList.add(customLayerView)
             presenter.createSentencePaint()
-            customLayerView.setOnClickListener {
+            customLayerView.setOnClickListener { view ->
+                view as CustomRectInfoView
                 customRectangleViewList.map { it.eraseBorder() }
-                customRectInfoViewList.map{it.resetColor()}
-                it.setBackgroundColor(Color.GRAY)
+                customRectInfoViewList.map { it.resetColor() }
+                view.setBackgroundColor(Color.GRAY)
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
-                presenter.selectRectangleByList(customLayerView.rectId)
+                presenter.selectRectangleByList(view.rectId)
             }
+            customLayerView.setOnLongClickListener { view ->
+                view as CustomRectInfoView
+                val popupMenu = PopupMenu(this, view)
+                val mInflater = this.menuInflater
+                mInflater.inflate(R.menu.list_longclick_menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener {
+                    val indexOfSelectedItem = customRectInfoViewList.indexOf(view)
+                    customRectInfoViewList.map { originView ->
+                        layer.removeView(originView)
+                    }
+                    when (it.itemId) {
+
+                        R.id.item_move_back -> {
+                            if (indexOfSelectedItem >= 1) {
+                                val temp = customRectInfoViewList[indexOfSelectedItem - 1]
+                                customRectInfoViewList[indexOfSelectedItem - 1] = view
+                                customRectInfoViewList[indexOfSelectedItem] = temp
+                            }
+                        }
+                        R.id.item_move_front -> {
+                            if (indexOfSelectedItem + 1 < customRectInfoViewList.size) {
+                                val temp = customRectInfoViewList[indexOfSelectedItem + 1]
+                                customRectInfoViewList[indexOfSelectedItem + 1] = view
+                                customRectInfoViewList[indexOfSelectedItem] = temp
+                            }
+                        }
+                        R.id.item_move_head -> {
+                            val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                            customRectInfoViewList.remove(view)
+                            temp.add(view)
+                            customRectInfoViewList.map { info ->
+                                temp.add(info)
+                            }
+                            this.customRectInfoViewList = temp
+                        }
+                        R.id.item_move_tail -> {
+                            val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                            customRectInfoViewList.remove(view)
+                            customRectInfoViewList.map { info ->
+                                temp.add(info)
+                            }
+                            temp.add(view)
+                            this.customRectInfoViewList = temp
+                        }
+
+                    }
+                    customRectInfoViewList.map { modifyView ->
+                        layer.addView(modifyView)
+                    }
+                    true
+                }
+                popupMenu.show()
+                true
+            }
+
 
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
@@ -229,6 +341,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
@@ -294,13 +407,71 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                         layer.addView(customLayerView)
                         customRectInfoViewList.add(customLayerView)
                         presenter.createPhotoPaint(bitmap)
-                        customLayerView.setOnClickListener {
+                        customLayerView.setOnClickListener { view ->
+                            view as CustomRectInfoView
                             customRectangleViewList.map { it.eraseBorder() }
-                            customRectInfoViewList.map{it.resetColor()}
-                            it.setBackgroundColor(Color.GRAY)
+                            customRectInfoViewList.map { it.resetColor() }
+                            view.setBackgroundColor(Color.GRAY)
                             selectedRectangle?.opacity?.removeObserver(opacityObserver)
                             selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
-                            presenter.selectRectangleByList(customLayerView.rectId)
+
+                            presenter.selectRectangleByList(view.rectId)
+                        }
+                        customLayerView.setOnLongClickListener { view ->
+                            view as CustomRectInfoView
+                            val popupMenu = PopupMenu(this, view)
+                            val mInflater = this.menuInflater
+                            mInflater.inflate(R.menu.list_longclick_menu, popupMenu.menu)
+                            popupMenu.setOnMenuItemClickListener {
+                                val indexOfSelectedItem = customRectInfoViewList.indexOf(view)
+                                customRectInfoViewList.map { originView ->
+                                    layer.removeView(originView)
+                                }
+                                when (it.itemId) {
+
+                                    R.id.item_move_back -> {
+                                        if (indexOfSelectedItem >= 1) {
+                                            val temp =
+                                                customRectInfoViewList[indexOfSelectedItem - 1]
+                                            customRectInfoViewList[indexOfSelectedItem - 1] = view
+                                            customRectInfoViewList[indexOfSelectedItem] = temp
+                                        }
+                                    }
+                                    R.id.item_move_front -> {
+                                        if (indexOfSelectedItem + 1 < customRectInfoViewList.size) {
+                                            val temp =
+                                                customRectInfoViewList[indexOfSelectedItem + 1]
+                                            customRectInfoViewList[indexOfSelectedItem + 1] = view
+                                            customRectInfoViewList[indexOfSelectedItem] = temp
+                                        }
+                                    }
+                                    R.id.item_move_head -> {
+                                        val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                                        customRectInfoViewList.remove(view)
+                                        temp.add(view)
+                                        customRectInfoViewList.map { info ->
+                                            temp.add(info)
+                                        }
+                                        this.customRectInfoViewList = temp
+                                    }
+                                    R.id.item_move_tail -> {
+                                        val temp: ArrayList<CustomRectInfoView> = ArrayList(100)
+                                        customRectInfoViewList.remove(view)
+                                        customRectInfoViewList.map { info ->
+                                            temp.add(info)
+                                        }
+                                        temp.add(view)
+                                        this.customRectInfoViewList = temp
+                                    }
+
+                                }
+                                customRectInfoViewList.map { modifyView ->
+                                    layer.addView(modifyView)
+                                }
+                                true
+                            }
+                            popupMenu.show()
+                            true
                         }
                     }
 
@@ -375,6 +546,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     presenter.changePosition(it)
                 }
             }
+
             true
         }
 
