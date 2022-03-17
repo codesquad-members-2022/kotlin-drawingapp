@@ -9,10 +9,12 @@ import android.text.TextPaint
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
 import model.BackGroundColor
 import model.Photo
 import model.Rect
 import model.Sentence
+import java.lang.IllegalArgumentException
 
 
 class RectView(context: Context) : View(context) {
@@ -244,6 +246,31 @@ class RectView(context: Context) : View(context) {
         this.top= yPos
         this.bottom= this.top + this.rectHeight
         invalidate()
+    }
+
+    fun getBitmapFromView(): Bitmap? {
+        val bitmap = Bitmap.createBitmap(40, 40, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        if(this.backGroundRGB.isNotEmpty()) {
+            try {
+                val color = Color.parseColor(this.backGroundRGB)
+                canvas.drawColor(color)
+            } catch (e: IllegalArgumentException) {
+                canvas.drawColor(Color.BLACK)
+            }
+        }
+        this.draw(canvas)
+        return bitmap
+    }
+
+    fun getThumbnailPhoto():Bitmap?{
+        this.bitmap?.let{
+            val thumbnail = Bitmap.createBitmap(it)
+            thumbnail?.width= 40
+            thumbnail?.height=40
+            return thumbnail
+        }
+        return null
     }
 
 

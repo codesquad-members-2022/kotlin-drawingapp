@@ -4,16 +4,14 @@ import MainPresenter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.ImageDecoder
+import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.MotionEvent
+import android.view.View
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,6 +22,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.*
+import model.Point
+import model.Rect
+
 
 private const val REQUEST_CODE = 1000
 
@@ -342,6 +343,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
 
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>, grantResults: IntArray
@@ -558,6 +560,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
         customRectInfoViewList[rectCount].rectId = rect.rectId
+        customRectInfoViewList[rectCount].image.setImageBitmap(rectView.getBitmapFromView())
         rectCount++
     }
 
@@ -568,6 +571,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
         customRectInfoViewList[rectCount].rectId = photo.rectId
+        customRectInfoViewList[rectCount].image.setImageBitmap(rectView.getThumbnailPhoto())
         rectCount++
     }
 
@@ -577,6 +581,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
         customRectInfoViewList[rectCount].rectId = sentence.rectId
+        customRectInfoViewList[rectCount].image.setImageBitmap(rectView.getBitmapFromView())
         rectCount++
     }
 
