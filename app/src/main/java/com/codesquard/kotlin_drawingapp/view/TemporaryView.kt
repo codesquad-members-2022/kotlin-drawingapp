@@ -4,12 +4,9 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
-import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
-class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet),
-    CustomViewFrame {
+class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
     private var tempRect: Rectangle? = null
 
@@ -22,7 +19,7 @@ class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context
         dragRectangle(tempRect, canvas)
     }
 
-    override fun setPaint(rect: Rectangle): Paint {
+    fun setPaint(rect: Rectangle): Paint {
         val paint = Paint()
         paint.color = Color.argb(50, rect.color[0], rect.color[1], rect.color[2])
         return paint
@@ -31,8 +28,8 @@ class TemporaryView(context: Context, attributeSet: AttributeSet) : View(context
     private fun dragRectangle(tempRect: Rectangle?, canvas: Canvas?) {
         tempRect?.let {
             val paint = setPaint(it)
-            val size = setSize(it)
-            setSpecificRect(it, size, paint, canvas)
+            val size = CustomViewUtils.setSize(it)
+            CustomViewUtils.setSpecificRect(it, size, paint, canvas)
         }
     }
 }

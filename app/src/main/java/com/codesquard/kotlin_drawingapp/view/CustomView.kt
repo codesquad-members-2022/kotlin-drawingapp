@@ -7,7 +7,7 @@ import android.view.View
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
-class CustomView(context: Context, attr: AttributeSet) : View(context, attr), CustomViewFrame {
+class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
 
     private val rectangleList = mutableListOf<Rectangle>()
 
@@ -22,10 +22,10 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr), Cu
 
     private fun drawRectangle(rectangleList: MutableList<Rectangle>, canvas: Canvas?) {
         rectangleList.forEach {
-            val paint = setPaint(it)
-            val size = setSize(it)
-            setStroke(it, canvas)
-            setSpecificRect(it, size, paint, canvas)
+            val paint = CustomViewUtils.setPaint(it)
+            val size = CustomViewUtils.setSize(it)
+            CustomViewUtils.setStroke(it, canvas)
+            CustomViewUtils.setSpecificRect(it, size, paint, canvas)
         }
     }
 
