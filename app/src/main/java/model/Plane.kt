@@ -96,5 +96,7 @@ class Plane(private val context: Context) {
         selectedRect?.size?.value = (Size(width,height))
     }
 
-
+    fun getCustomRectangleById(rectId: String): Rect? {
+        return customRectangleList.find { it.rectId==rectId }
+    }
 }

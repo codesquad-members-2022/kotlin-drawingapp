@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -24,7 +25,7 @@ import androidx.lifecycle.Observer
 import com.codesquad.kotlin_drawingapp.R
 import model.*
 
-private const val REQUEST_CODE= 1000
+private const val REQUEST_CODE = 1000
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -32,10 +33,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private lateinit var presenter: MainPresenter
     private var selectedCustomRectangleView: RectView? = null
     private lateinit var tvRgbValue: TextView
-    private lateinit var editTvWidth:EditText
-    private lateinit var editTvHeight:EditText
-    private lateinit var editTvXpos:EditText
-    private lateinit var editTvYpos:EditText
+    private lateinit var editTvWidth: EditText
+    private lateinit var editTvHeight: EditText
+    private lateinit var editTvXpos: EditText
+    private lateinit var editTvYpos: EditText
+    private lateinit var layer: LinearLayout
+    private var squareIndex = 1
+    private var textIndex = 1
+    private var photoIndex = 1
+    private var rectCount = 0
+    private var customRectInfoViewList: ArrayList<CustomRectInfoView> = ArrayList(100)
+    private lateinit var customLayerView: CustomRectInfoView
     private val backgroundObserver = Observer<BackGroundColor> { colorValue ->
         selectedCustomRectangleView?.changeColor(colorValue)
         tvRgbValue.text = colorValue.getRGBHexValue()
@@ -45,43 +53,57 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
     private val customRectangleViewList: ArrayList<RectView> = arrayListOf()
     private var selectedRectangle: Rect? = null
-    private val sizeObserver = Observer<Size> { size->
+    private val sizeObserver = Observer<Size> { size ->
         selectedCustomRectangleView?.changeSize(size.width, size.height)
         editTvWidth.setText("${size.width}")
         editTvHeight.setText("${size.height}")
 
     }
-    private val posObserver = Observer<Point> { point->
+    private val posObserver = Observer<Point> { point ->
         selectedCustomRectangleView?.changePos(point.xPos.toFloat(), point.yPos.toFloat())
         editTvXpos.setText("${point.xPos}")
         editTvYpos.setText("${point.yPos}")
     }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter = MainPresenter(this, this)
         mainLayout = findViewById(R.id.image_container)
+        layer = findViewById(R.id.linear_list)
         val btnMakeRectangle = findViewById<Button>(R.id.btn_addRectangle)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
         val btnMakePhotoView = findViewById<Button>(R.id.btn_addPhoto)
-        val btnMakeSentenceView= findViewById<Button>(R.id.btn_addSentence)
+        val btnMakeSentenceView = findViewById<Button>(R.id.btn_addSentence)
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
-        val btnWidthUp= findViewById<Button>(R.id.btn_width_up)
-        val btnWidthDown= findViewById<Button>(R.id.btn_width_down)
-        val btnHeightUp= findViewById<Button>(R.id.btn_height_up)
-        val btnHeightDown= findViewById<Button>(R.id.btn_height_down)
-        val btnXposUp= findViewById<Button>(R.id.btn_xPos_up)
-        val btnYposUp= findViewById<Button>(R.id.btn_yPos_up)
-        val btnXposDown= findViewById<Button>(R.id.btn_xPos_down)
-        val btnYposDown= findViewById<Button>(R.id.btn_yPos_down)
-        editTvWidth= findViewById<EditText>(R.id.editText_width)
-        editTvHeight= findViewById<EditText>(R.id.editText_height)
-        editTvXpos= findViewById<EditText>(R.id.editText_xPos)
-        editTvYpos= findViewById<EditText>(R.id.editText_yPos)
+        val btnWidthUp = findViewById<Button>(R.id.btn_width_up)
+        val btnWidthDown = findViewById<Button>(R.id.btn_width_down)
+        val btnHeightUp = findViewById<Button>(R.id.btn_height_up)
+        val btnHeightDown = findViewById<Button>(R.id.btn_height_down)
+        val btnXposUp = findViewById<Button>(R.id.btn_xPos_up)
+        val btnYposUp = findViewById<Button>(R.id.btn_yPos_up)
+        val btnXposDown = findViewById<Button>(R.id.btn_xPos_down)
+        val btnYposDown = findViewById<Button>(R.id.btn_yPos_down)
+        editTvWidth = findViewById<EditText>(R.id.editText_width)
+        editTvHeight = findViewById<EditText>(R.id.editText_height)
+        editTvXpos = findViewById<EditText>(R.id.editText_xPos)
+        editTvYpos = findViewById<EditText>(R.id.editText_yPos)
         tvRgbValue = findViewById<TextView>(R.id.tv_rgb_value)
         btnMakeRectangle.setOnClickListener {
+            customLayerView = CustomRectInfoView(this, "Rect $squareIndex")
+            squareIndex++
+            layer.addView(customLayerView)
+            customRectInfoViewList.add(customLayerView)
             presenter.createRectanglePaint()
+            customLayerView.setOnClickListener {
+                Log.d("test","Clcicked")
+                customRectangleViewList.map { it.eraseBorder() }
+                selectedRectangle?.opacity?.removeObserver(opacityObserver)
+                selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
+                presenter.selectRectangleByList(customLayerView.rectId)
+            }
+
         }
 
         btnMakePhotoView.setOnClickListener {
@@ -96,7 +118,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                     else -> {
                         requestPermissions(
                             arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                            REQUEST_CODE)
+                            REQUEST_CODE
+                        )
                     }
                 }
             }
@@ -104,9 +127,21 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
 
         btnMakeSentenceView.setOnClickListener {
+            customLayerView = CustomRectInfoView(this, "Text $textIndex")
+            textIndex++
+            layer.addView(customLayerView)
+            customRectInfoViewList.add(customLayerView)
             presenter.createSentencePaint()
+            customLayerView.setOnClickListener {
+                customRectangleViewList.map { it.eraseBorder() }
+                selectedRectangle?.opacity?.removeObserver(opacityObserver)
+                selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
+                presenter.selectRectangleByList(customLayerView.rectId)
+            }
+
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
+            Log.d("test","Touched")
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 customRectangleViewList.map { it.eraseBorder() }
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
@@ -138,7 +173,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnHeightDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                if(it.rectHeight!=1) {
+                if (it.rectHeight != 1) {
                     presenter.changeSize(it, "height", -1)
                 }
             }
@@ -146,7 +181,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnWidthDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                if(it.rectWidth!=1) {
+                if (it.rectWidth != 1) {
                     presenter.changeSize(it, "width", -1)
                 }
             }
@@ -171,7 +206,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
         btnXposDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                if(it.left.toInt()!=1) {
+                if (it.left.toInt() != 1) {
                     presenter.changeXpos(it, -1)
                 }
             }
@@ -185,18 +220,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         btnYposDown.setOnClickListener {
             selectedCustomRectangleView?.let {
-                if(it.top.toInt()!=1) {
+                if (it.top.toInt() != 1) {
                     presenter.changeYPos(it, -1)
                 }
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE-> {
+            REQUEST_CODE -> {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
@@ -214,7 +251,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         AlertDialog.Builder(this).setTitle("권한이 필요합니다")
             .setMessage("사진을 불러오기 위해 권한설정이 필요합니다")
             .setPositiveButton("설정하러가기") { _, _ ->
-                val intent= Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     .setData(Uri.parse("package:$packageName"));
                 startActivity(intent)
             }
@@ -249,7 +286,18 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                                 ImageDecoder.createSource(this.contentResolver, currentImageUri)
                             bitmap = ImageDecoder.decodeBitmap(source)
                         }
+
+                        customLayerView = CustomRectInfoView(this, "Photo $photoIndex")
+                        photoIndex++
+                        layer.addView(customLayerView)
+                        customRectInfoViewList.add(customLayerView)
                         presenter.createPhotoPaint(bitmap)
+                        customLayerView.setOnClickListener {
+                            customRectangleViewList.map { it.eraseBorder() }
+                            selectedRectangle?.opacity?.removeObserver(opacityObserver)
+                            selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
+                            presenter.selectRectangleByList(customLayerView.rectId)
+                        }
                     }
 
                 } catch (e: Exception) {
@@ -269,17 +317,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         selectedCustomRectangleView?.drawBorder()
         val rgbValueTextView = findViewById<TextView>(R.id.tv_rgb_value)
         val opacitySeekBar = findViewById<SeekBar>(R.id.seekbar_opacity)
-        val editTvWidth= findViewById<EditText>(R.id.editText_width)
-        val editTvHeight= findViewById<EditText>(R.id.editText_height)
-        val editTvXpos= findViewById<EditText>(R.id.editText_xPos)
-        val editTvYpos= findViewById<EditText>(R.id.editText_yPos)
-        var tempView= RectView(this)
+        val editTvWidth = findViewById<EditText>(R.id.editText_width)
+        val editTvHeight = findViewById<EditText>(R.id.editText_height)
+        val editTvXpos = findViewById<EditText>(R.id.editText_xPos)
+        val editTvYpos = findViewById<EditText>(R.id.editText_yPos)
+        var tempView = RectView(this)
         editTvHeight.setText("${rect.size.value?.height}")
         editTvWidth.setText("${rect.size.value?.width}")
         editTvXpos.setText("${rect.point.value?.xPos}")
         editTvYpos.setText("${rect.point.value?.yPos}")
-        tempView.isVisible= false
-        if (selectedCustomRectangleView?.photoId == "") {
+        tempView.isVisible = false
+        if (selectedCustomRectangleView?.photoId == "" && selectedCustomRectangleView?.text == "") {
             rgbValueTextView.text = rect.backGroundColor.value?.getRGBHexValue()
             rect.opacity.value?.let {
                 opacitySeekBar.progress = it
@@ -288,13 +336,20 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             rect.opacity.observe(this, opacityObserver)
 
             tempView.drawRectangle(rect)
+        } else if (selectedCustomRectangleView?.text != "") {
+            rgbValueTextView.text = "No Color"
+            rect.opacity.value?.let {
+                opacitySeekBar.progress = it
+            }
+            rect.opacity.observe(this, opacityObserver)
+            tempView.drawSentence(rect as Sentence)
         } else {
             rgbValueTextView.text = "No Color"
             rect.opacity.value?.let {
                 opacitySeekBar.progress = it
             }
             rect.opacity.observe(this, opacityObserver)
-            selectedCustomRectangleView?.bitmap?.let{
+            selectedCustomRectangleView?.bitmap?.let {
                 tempView.drawPhoto(it, rect as Photo)
             }
         }
@@ -304,9 +359,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         tempView.changeOpacity(5)
         mainLayout.addView(tempView)
         selectedCustomRectangleView?.setOnTouchListener { view, motionEvent ->
-            tempView.isVisible=true
+            tempView.isVisible = true
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
-                selectedCustomRectangleView?.onTouch(motionEvent,tempView)
+                selectedCustomRectangleView?.onTouch(motionEvent, tempView)
                 tempView.invalidate()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 selectedCustomRectangleView?.let {
@@ -325,7 +380,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         rectView.drawRectangle(rect)
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
-
+        customRectInfoViewList[rectCount].rectId = rect.rectId
+        rectCount++
     }
 
     override fun drawPhoto(photo: Photo) {
@@ -334,6 +390,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         rectView.drawPhoto(image, photo)
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
+        customRectInfoViewList[rectCount].rectId = photo.rectId
+        rectCount++
     }
 
     override fun drawSentence(sentence: Sentence) {
@@ -341,6 +399,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         rectView.drawSentence(sentence)
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)
+        customRectInfoViewList[rectCount].rectId = sentence.rectId
+        rectCount++
     }
 
     override fun redrawRectangle(rect: Rect) {
@@ -357,9 +417,19 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         mainLayout.removeView(selectedCustomRectangleView)
         customRectangleViewList.remove(selectedCustomRectangleView)
         val rectView = RectView(this)
-        selectedCustomRectangleView?.bitmap?.let{
-            rectView.drawPhoto(it,photo)
+        selectedCustomRectangleView?.bitmap?.let {
+            rectView.drawPhoto(it, photo)
         }
+        selectedCustomRectangleView = rectView
+        mainLayout.addView(rectView)
+        customRectangleViewList.add(rectView)
+    }
+
+    override fun redrawSentence(sentence: Sentence) {
+        mainLayout.removeView(selectedCustomRectangleView)
+        customRectangleViewList.remove(selectedCustomRectangleView)
+        val rectView = RectView(this)
+        rectView.drawSentence(sentence)
         selectedCustomRectangleView = rectView
         mainLayout.addView(rectView)
         customRectangleViewList.add(rectView)

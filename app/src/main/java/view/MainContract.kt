@@ -14,10 +14,12 @@ interface MainContract {
         fun drawSentence(sentence: Sentence)
         fun redrawRectangle(rect:Rect)
         fun redrawPhoto(photo: Photo)
+        fun redrawSentence(sentence: Sentence)
     }
 
     interface Presenter {
         fun selectRectangle(xPos: Float, yPos: Float)
+        fun selectRectangleByList(rectId:String)
         fun changeColor(rectView: RectView)
         fun changeOpacity(rectView: RectView, opacity: Int)
         fun changePosition(rectView: RectView)
