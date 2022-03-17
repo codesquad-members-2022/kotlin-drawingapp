@@ -33,6 +33,10 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         plane.selectRectangle(x, y)
     }
 
+    override fun selectRectangle(rectId: String) {
+        plane.selectRectangle(rectId)
+    }
+
     override fun changeAlphaValue(value: Float) {
         plane.updateAlpha(value)
     }
@@ -79,7 +83,7 @@ class TaskPresenter(private val taskView: TaskContract.TaskView) : TaskContract.
         getRectColor()
         getRectSize()
         getRectPosition()
-        taskView.showSelectedRectangle()
+        taskView.showSelectedRectangle(index)
         taskView.enableRectColorBtnAndSlider()
     }
 

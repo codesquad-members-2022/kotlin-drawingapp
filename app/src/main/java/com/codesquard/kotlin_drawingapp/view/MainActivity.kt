@@ -21,10 +21,11 @@ import com.codesquard.kotlin_drawingapp.*
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity(), TaskContract.TaskView {
+class MainActivity : AppCompatActivity(), TaskContract.TaskView, ItemListListener {
 
     private lateinit var mainLayout: ConstraintLayout
     private lateinit var itemListLayout: LinearLayout
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn = findViewById(R.id.btn_size_w)
         sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
-        itemList = ItemList(itemListLayout)
+        itemList = ItemList(this, itemListLayout)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
@@ -188,13 +189,16 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     }
 
     override fun showRectangle(newRect: Rectangle) {
-        itemList.addNewItem(newRect.type, rectIcon, this)
+        itemList.addNewItem(newRect.id, newRect.type, rectIcon, this)
         customView.addNewRect(newRect)
         customView.invalidate()
     }
 
-    override fun showSelectedRectangle() {
+    override fun showSelectedRectangle(selectedRectIndex: Int) {
         customView.invalidate()
+        if (selectedRectIndex > -1) {
+            itemList.selectItem(selectedRectIndex)
+        }
     }
 
     override fun showRectColor(color: String) {
@@ -254,6 +258,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    itemList.unSelectItem()
                     presenter.selectRectangle(x, y)
                     true
                 }
@@ -270,10 +275,19 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         }
     }
 
-    private fun getInitRectSize(width: Float, height: Float) = arrayOf(dpToPx(width), dpToPx(height))
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        when (event?.action) {
+//            MotionEvent.ACTION_DOWN -> itemList.unSelectItem()
+        }
+        return true
+    }
+
+    private fun getInitRectSize(width: Float, height: Float) =
+        arrayOf(dpToPx(width), dpToPx(height))
 
     private fun measureCustomViewSize() {
-        customView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        customView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val rectMaxPoint = customView.getViewSize()
                 presenter.setInitRectSizeAndMaxPoint(getInitRectSize(150f, 120f), rectMaxPoint)
@@ -298,6 +312,10 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun setRectIcon(btn: Button) {
         rectIcon = btn.compoundDrawables[1]
+    }
+
+    override fun onSelectItem(rectId: String) {
+        presenter.selectRectangle(rectId)
     }
 }
 

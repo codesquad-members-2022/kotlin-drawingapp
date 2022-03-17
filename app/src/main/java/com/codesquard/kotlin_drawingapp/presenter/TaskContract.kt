@@ -9,7 +9,7 @@ interface TaskContract {
 
         fun showRectangle(newRect: Rectangle)
 
-        fun showSelectedRectangle()
+        fun showSelectedRectangle(selectedRectIndex: Int = -1)
 
         fun enableRectColorBtnAndSlider()
 
@@ -40,6 +40,8 @@ interface TaskContract {
         fun addNewTextRectangle(textRect: Rectangle, textSize: Array<Int>)
 
         fun selectRectangle(x: Float, y: Float)
+
+        fun selectRectangle(rectId: String)
 
         fun changeAlphaValue(value: Float)
 

@@ -66,6 +66,25 @@ class Plane(private val listener: RectangleListener) {
         }
     }
 
+    fun selectRectangle(rectId: String) {
+        unSelectRectangle()
+        val selectedRectIndex = getSelectedRectangleIndex(rectId)
+        selectedRect = rectangleList[selectedRectIndex]
+        selectedRect?.isSelected(true)
+        listener.onSelectRectangle(selectedRectIndex)
+    }
+
+    private fun getSelectedRectangleIndex(rectId: String): Int {
+        var selectedRectIndex = 0
+        rectangleList.forEachIndexed { index, rect ->
+            if (rect.id == rectId) {
+                selectedRectIndex = index
+                return@forEachIndexed
+            }
+        }
+        return selectedRectIndex
+    }
+
     private fun unSelectRectangle() {
         selectedRect?.run {
             this.isSelected(false)
