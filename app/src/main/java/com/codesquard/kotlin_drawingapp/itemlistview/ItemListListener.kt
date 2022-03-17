@@ -1,4 +1,4 @@
-package com.codesquard.kotlin_drawingapp.view
+package com.codesquard.kotlin_drawingapp.itemlistview
 
 interface ItemListListener {
 
