@@ -11,6 +11,7 @@ import android.util.Size
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_drawingapp.customview.CustomLayerListView
 import com.example.kotlin_drawingapp.customview.NumberUpDownView
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
 import com.example.kotlin_drawingapp.model.Color
@@ -126,10 +127,17 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                 }
             }
         })
+
+        binding.layoutObjectList.setOnClickListItemListener(object : CustomLayerListView.OnClickListItemListener {
+            override fun onClick(drawObject: DrawObject) {
+                presenter.selectDrawObject(drawObject.currentPoint.x.toFloat(), drawObject.currentPoint.y.toFloat())
+            }
+        })
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
         binding.drawView.draw(drawObject)
+        binding.layoutObjectList.updateDrawObjectList(drawObject)
     }
 
     override fun showDrawObjectInfo(color: Color, alpha: Int, point: Point, size: Size) {

@@ -8,29 +8,30 @@
     android:background="@color/grey"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textview_layer_string"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@drawable/layout_border"
+        android:gravity="bottom"
+        android:paddingStart="4dp"
+        android:text="@string/layer_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/drawView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.kotlin_drawingapp.customview.CustomLayerListView
         android:id="@+id/layout_object_list"
         android:layout_width="80dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/layout_border"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/drawView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@drawable/layout_border"
-            android:gravity="bottom"
-            android:paddingStart="4dp"
-            android:text="@string/layer_string"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
+        app:layout_constraintTop_toBottomOf="@id/textview_layer_string" />
 
     <com.example.kotlin_drawingapp.model.draw.DrawView
         android:id="@+id/drawView"
@@ -45,7 +46,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_generate_rect"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:background="@drawable/tools_left_position"
         android:text="@string/rectangle_string"
@@ -58,7 +59,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_generate_image"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:background="@drawable/tools_middle_position"
         android:text="@string/image_string"
@@ -71,7 +72,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_generate_textview"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:background="@drawable/tools_right_position"
         android:text="@string/text_string"
