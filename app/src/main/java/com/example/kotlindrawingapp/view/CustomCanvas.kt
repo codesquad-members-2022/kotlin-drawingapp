@@ -133,7 +133,7 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
             MotionEvent.ACTION_MOVE -> {
                 plane.selectedSquare.value?.let { figure ->
                     temporary = figure
-                    listener.move(moveX, moveY)
+                    listener.moveTemporary(moveX, moveY)
                     invalidate()
                 }
             }
@@ -141,7 +141,7 @@ class CustomCanvas(context: Context?, attrs: AttributeSet?) : View(context, attr
                 val selectedFigure = plane.selectedSquare.value
                 selectedFigure?.let { selectedFigure ->
                     temporary?.let {
-                        listener.move(moveX, moveY, it, selectedFigure)
+                        listener.move(moveX, moveY)
                         temporary = null
                     }
                 }

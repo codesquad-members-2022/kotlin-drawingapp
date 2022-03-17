@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.kotlindrawingapp.R
 import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.presenter.Contract
@@ -37,6 +38,10 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private lateinit var widthDownButton: ImageButton
     private lateinit var heightUpButton: ImageButton
     private lateinit var heightDownButton: ImageButton
+    private lateinit var layer: LinearLayout
+    private var squareIndex = 1
+    private var textIndex = 1
+    private var pictureIndex = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             customView.drawRectangle(it)
         }
 
-        presenter.selectedSquare.observe(this) {
+        presenter.selectedSquare.observe(this) { it ->
             it?.let {
                 colorTextView.text = it.rgb?.decimalToHex() ?: "NONE"
                 seekBar.progress = it.alpha?.alpha
@@ -61,15 +66,29 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                 width.text = it.size.width.toString()
                 height.text = it.size.height.toString()
             }
+            presenter.editLayer(it)
         }
 
-        squareButton.setOnClickListener { presenter.loadFigure() }
-        pictureButton.setOnClickListener { albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE) }
+        squareButton.setOnClickListener {
+            val layerCustomView =
+                LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
+            presenter.loadFigure(layerCustomView)
+        }
+
+        pictureButton.setOnClickListener {
+            albumPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
         textButton.setOnClickListener {
             presenter.loadRandomText(object : Sizeable {
                 override fun getWidthAndHeight(text: String) {
                     val size = customView.getWidthAndHeight(text)
-                    presenter.loadText(size, text)
+                    val layerCustomView = LayerCustomView(
+                        this@MainActivity,
+                        "Text $textIndex",
+                        R.drawable.ic_baseline_text_fields_24
+                    )
+                    presenter.loadText(size, text, layerCustomView)
                 }
             })
         }
@@ -162,6 +181,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
         y = findViewById(R.id.tv_y)
         width = findViewById(R.id.tv_width)
         height = findViewById(R.id.tv_height)
+        layer = findViewById(R.id.view_layer)
     }
 
     private val getAlbum =
@@ -175,7 +195,9 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                         val source = ImageDecoder.createSource(this.contentResolver, uri)
                         ImageDecoder.decodeBitmap(source)
                     }
-                    presenter.loadPicture(bitmap)
+                    val layerCustomView =
+                        LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
+                    presenter.loadPicture(bitmap, layerCustomView)
                 }
             }
         }
@@ -194,14 +216,24 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
             }
         }
 
-    override fun move(x: Float, y: Float, figure: Figure, selectedFigure: Figure) {
-        presenter.editFigurePoint(x, y)
-        presenter.removeFigure(selectedFigure)
-        presenter.loadFigure(figure)
+    override fun move(x: Float, y: Float) {
+        presenter.editFigure(x, y)
     }
 
-    override fun move(tempX: Float, tempY: Float) {
+    override fun moveTemporary(tempX: Float, tempY: Float) {
         x.text = tempX.toString()
         y.text = tempY.toString()
+    }
+
+    override fun showLayer(layerCustomView: LayerCustomView) {
+        layer.addView(layerCustomView)
+    }
+
+    override fun showSelectedLayer(layerView: LayerCustomView) {
+        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer_pressed)
+    }
+
+    override fun showNotSelectedLayer(layerView: LayerCustomView) {
+        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer)
     }
 }

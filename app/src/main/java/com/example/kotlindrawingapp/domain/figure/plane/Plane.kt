@@ -39,11 +39,6 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     }
 
     fun touchPoint(point: Point) {
-        item?.let {
-            item = null
-            _selectedSquare.value = item
-        }
-
         selected(point)?.let {
             item = it
             _selectedSquare.value = item
@@ -54,15 +49,15 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     }
 
     fun updateRGB() {
-        item?.update(RGB(100, 100, 100))
+        item?.rgb = RGB(100, 100, 100)
         _selectedSquare.value = item
     }
 
     fun updateAlpha(alpha: Alpha) {
         item?.let {
-            it.update(alpha)
+            it.alpha = alpha
             val index = _squares.indexOf(it)
-            _squares[index].update(alpha)
+            _squares[index].alpha = alpha
             _selectedSquare.value = it
         }
     }
@@ -71,12 +66,16 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
         return _squares[idx]
     }
 
+    fun findByFigure(figure: Figure?): Int {
+        return _squares.indexOf(figure)
+    }
+
     fun updatePointX(newX: Float) {
         item?.let {
             val y = it.point.y
-            it.update(Point(newX, y))
+            it.point = Point(newX, y)
             val index = _squares.indexOf(it)
-            _squares[index].update(Point(newX, y))
+            _squares[index].point = Point(newX, y)
             _selectedSquare.value = it
         }
     }
@@ -84,9 +83,9 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     fun updatePointY(newY: Float) {
         item?.let {
             val x = it.point.x
-            it.update(Point(x, newY))
+            it.point = Point(x, newY)
             val index = _squares.indexOf(it)
-            _squares[index].update(Point(x, newY))
+            _squares[index].point = Point(x, newY)
             _selectedSquare.value = it
         }
     }
@@ -94,9 +93,9 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     fun updateWidth(newWidth: Int) {
         item?.let {
             val height = it.size.height
-            it.update(Size(newWidth, height))
+            it.size = Size(newWidth, height)
             val index = _squares.indexOf(it)
-            _squares[index].update(Size(newWidth, height))
+            _squares[index].size = Size(newWidth, height)
             _selectedSquare.value = it
         }
     }
@@ -104,9 +103,9 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
     fun updateHeight(newHeight: Int) {
         item?.let {
             val width = it.size.width
-            it.update(Size(width, newHeight))
+            it.size = Size(width, newHeight)
             val index = _squares.indexOf(it)
-            _squares[index].update(Size(width, newHeight))
+            _squares[index].size = Size(width, newHeight)
             _selectedSquare.value = it
         }
     }

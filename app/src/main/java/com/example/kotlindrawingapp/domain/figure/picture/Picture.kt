@@ -26,4 +26,30 @@ data class Picture(
             return BitmapFactory.decodeByteArray(memory, 0, memory.size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Picture
+
+        if (id != other.id) return false
+        if (point != other.point) return false
+        if (size != other.size) return false
+        if (rgb != other.rgb) return false
+        if (alpha != other.alpha) return false
+        if (!memory.contentEquals(other.memory)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + point.hashCode()
+        result = 31 * result + size.hashCode()
+        result = 31 * result + (rgb?.hashCode() ?: 0)
+        result = 31 * result + alpha.hashCode()
+        result = 31 * result + memory.contentHashCode()
+        return result
+    }
 }
