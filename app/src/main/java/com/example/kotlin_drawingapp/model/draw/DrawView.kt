@@ -7,6 +7,9 @@ import android.util.AttributeSet
 import android.util.Size
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     interface OnDrawViewTouchListener {
@@ -58,6 +61,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             when (drawObject) {
                 is DrawObject.Rectangle -> drawRectangle(canvas, drawObject)
                 is DrawObject.Image -> drawImage(canvas, drawObject)
+                is DrawObject.CustomTextView -> drawCustomTextView(canvas, drawObject)
             }
         }
 
@@ -82,6 +86,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             when (temporaryDrawObject) {
                 is DrawObject.Rectangle -> drawRectangle(canvas, it as DrawObject.Rectangle)
                 is DrawObject.Image -> drawImage(canvas, it as DrawObject.Image)
+                is DrawObject.CustomTextView -> drawCustomTextView(canvas, it as DrawObject.CustomTextView)
                 else -> return
             }
         }
@@ -113,6 +118,24 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 rectangle.currentPoint.x.toFloat() + rectangle.currentSize.width.toFloat(),
                 rectangle.currentPoint.y.toFloat() + rectangle.currentSize.height.toFloat(),
                 paint
+            )
+        }
+    }
+
+    private fun drawCustomTextView(canvas: Canvas?, customTextView: DrawObject.CustomTextView) = with(customTextView) {
+        val textViewPaint = Paint()
+        textViewPaint.textSize = paint.textSize
+        textViewPaint.color = Color.argb(
+            (255 * (alpha / 10.0)).toInt(),
+            paint.color.red,
+            paint.color.green,
+            paint.color.blue
+        )
+        textViewPaint.isAntiAlias = true
+
+        canvas?.apply {
+            drawText(
+                text, 0, endPos, currentPoint.x.toFloat(), currentPoint.y.toFloat() + currentSize.height, textViewPaint
             )
         }
     }
@@ -190,6 +213,19 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                     alpha = 5
                 )
             }
+
+            is DrawObject.CustomTextView -> {
+                val paint = Paint()
+                paint.textSize = drawObject.paint.textSize
+                paint.color = Color.argb((255 * 0.5).toInt(), drawObject.paint.color.red, drawObject.paint.color.green, drawObject.paint.color.blue)
+
+                drawObject.copy(
+                    size = Size(drawObject.currentSize.width, drawObject.currentSize.height),
+                    point = Point(drawObject.currentPoint.x, drawObject.currentPoint.y),
+                    paint = paint
+                )
+            }
+
             else -> null
         }
     }

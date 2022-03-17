@@ -11,6 +11,7 @@ import android.util.Size
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlin_drawingapp.customview.NumberUpDownView
 import com.example.kotlin_drawingapp.databinding.ActivityMainBinding
 import com.example.kotlin_drawingapp.model.Color
 import com.example.kotlin_drawingapp.model.draw.DrawObject
@@ -61,6 +62,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             presenter.createRectangle()
         }
 
+        binding.btnGenerateTextview?.setOnClickListener {
+            presenter.createTextView()
+        }
+
         binding.drawView.setOnDrawViewTouchListener(object : DrawView.OnDrawViewTouchListener {
             override fun onClick(point: PointF) {
                 presenter.selectDrawObject(point.x, point.y)
@@ -69,8 +74,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         binding.drawView.setOnDrawViewMoveEventListener(object : DrawView.OnDrawViewMoveEventListener {
             override fun onUpdate(point: Point) {
-                binding.textviewCurrentX.text = point.x.toString()
-                binding.textviewCurrentY.text = point.y.toString()
+                binding.numberUpDownX.setText(point.x.toString())
+                binding.numberUpDownY.setText(point.y.toString())
             }
         })
 
@@ -90,53 +95,37 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        binding.btnCurrentXPlus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x + 1, it.currentPoint.y), it.currentSize)
+        binding.numberUpDownX.setOnChangedValueListener(object : NumberUpDownView.OnChangedValueListener {
+            override fun onChaged(value: Int) {
+                binding.drawView.currentSelectedDrawObject?.let {
+                    presenter.modifyDrawObjectProperty(it, Point(value, it.currentPoint.y), it.currentSize)
+                }
             }
-        }
+        })
 
-        binding.btnCurrentXMinus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x - 1, it.currentPoint.y), it.currentSize)
+        binding.numberUpDownY.setOnChangedValueListener(object : NumberUpDownView.OnChangedValueListener {
+            override fun onChaged(value: Int) {
+                binding.drawView.currentSelectedDrawObject?.let {
+                    presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x, value), it.currentSize)
+                }
             }
-        }
+        })
 
-        binding.btnCurrentYPlus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x, it.currentPoint.y + 1), it.currentSize)
+        binding.numberUpDownWidth.setOnChangedValueListener(object : NumberUpDownView.OnChangedValueListener {
+            override fun onChaged(value: Int) {
+                binding.drawView.currentSelectedDrawObject?.let {
+                    presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(value, it.currentSize.height))
+                }
             }
-        }
+        })
 
-        binding.btnCurrentYMinus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, Point(it.currentPoint.x, it.currentPoint.y - 1), it.currentSize)
+        binding.numberUpDownHeight.setOnChangedValueListener(object : NumberUpDownView.OnChangedValueListener {
+            override fun onChaged(value: Int) {
+                binding.drawView.currentSelectedDrawObject?.let {
+                    presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width, value))
+                }
             }
-        }
-
-        binding.btnCurrentWidthPlus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width + 1, it.currentSize.height))
-            }
-        }
-
-        binding.btnCurrentWidthMinus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width - 1, it.currentSize.height))
-            }
-        }
-
-        binding.btnCurrentHeightPlus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width, it.currentSize.height + 1))
-            }
-        }
-
-        binding.btnCurrentHeightMinus.setOnClickListener {
-            binding.drawView.currentSelectedDrawObject?.let {
-                presenter.modifyDrawObjectProperty(it, it.currentPoint, Size(it.currentSize.width, it.currentSize.height - 1))
-            }
-        }
+        })
     }
 
     override fun showDrawObject(drawObject: List<DrawObject>) {
@@ -146,10 +135,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun showDrawObjectInfo(color: Color, alpha: Int, point: Point, size: Size) {
         binding.tvBackgroundColor.text = String.format("%X", color.getRgb())
         binding.seekBar.progress = alpha
-        binding.textviewCurrentX.text = point.x.toString()
-        binding.textviewCurrentY.text = point.y.toString()
-        binding.textviewCurrentWidth.text = size.width.toString()
-        binding.textviewCurrentHeight.text = size.height.toString()
+        binding.numberUpDownX.setText(point.x.toString())
+        binding.numberUpDownY.setText(point.y.toString())
+        binding.numberUpDownWidth.setText(size.width.toString())
+        binding.numberUpDownHeight.setText(size.height.toString())
     }
 
     override fun setCurrentSelectedDrawObject(drawObject: DrawObject?) {

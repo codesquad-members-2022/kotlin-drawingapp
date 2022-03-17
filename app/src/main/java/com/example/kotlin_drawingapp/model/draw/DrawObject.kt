@@ -35,6 +35,10 @@ sealed class DrawObject {
                 id, point.x, point.y, size.width, size.height, rgb.r, rgb.g, rgb.b, alpha
             )
         }
+
+        override fun createNewDrawObject(size: Size, point: Point): Rectangle {
+            return Rectangle(id, size, point, rgb, alpha)
+        }
     }
 
     data class Image(
@@ -49,5 +53,30 @@ sealed class DrawObject {
             currentSize = size
             currentPoint = point
         }
+
+        override fun createNewDrawObject(size: Size, point: Point): Image {
+            return Image(id, size, point, alpha, bitmap)
+        }
     }
+
+    data class CustomTextView(
+        val id: String,
+        private var size: Size,
+        private var point: Point,
+        var endPos: Int,
+        val paint: Paint,
+        val text: String,
+        var alpha: Int
+    ) : DrawObject() {
+        init {
+            currentSize = size
+            currentPoint = point
+        }
+
+        override fun createNewDrawObject(size: Size, point: Point): DrawObject {
+            return CustomTextView(id, size, point, endPos, paint, text, alpha)
+        }
+    }
+
+    abstract fun createNewDrawObject(size: Size, point: Point): DrawObject
 }

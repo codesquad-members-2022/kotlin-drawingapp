@@ -5,7 +5,7 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/grey"
     tools:context=".MainActivity">
 
     <com.example.kotlin_drawingapp.model.draw.DrawView
@@ -19,16 +19,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_generate_rect"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tools_left_position"
+        android:text="@string/rectangle_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_generate_image"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_generate_image"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tools_middle_position"
+        android:text="@string/image_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_generate_textview"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/btn_generate_rect" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_generate_textview"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tools_right_position"
+        android:text="@string/text_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/drawView"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/btn_generate_image" />
+
     <TextView
         android:id="@+id/tv_background_color_string"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:text="@string/background_string"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,24 +77,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:background="@color/white"
+        android:background="@drawable/corner_radius"
         android:gravity="center"
+        android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/tv_background_color_string"
-
-        />
+        tools:text="FF000000" />
 
     <TextView
         android:id="@+id/tv_alpha_string"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:width="0dp"
         android:text="@string/alpha_string"
-        android:textSize="24sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
@@ -65,212 +106,75 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:max="10"
+        android:thumb="@drawable/seekbar_thumb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/tv_alpha_string" />
-
-    <Button
-        android:id="@+id/btn_generate_rect"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/rectangle_string"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/seekBar" />
-
-    <Button
-        android:id="@+id/btn_generate_image"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/image_string"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_generate_rect" />
 
     <TextView
         android:id="@+id/textview_position"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="위치"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/position_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_generate_image" />
+        app:layout_constraintTop_toBottomOf="@id/seekBar" />
 
-    <TextView
-        android:id="@+id/textview_x"
-        android:layout_width="wrap_content"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_x"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="X"
+        app:titleValue="X"
+        android:layout_margin="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/textview_position" />
 
-    <TextView
-        android:id="@+id/textview_current_x"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_x"
-        app:layout_constraintTop_toBottomOf="@id/textview_position" />
-
-    <Button
-        android:id="@+id/btn_current_x_plus"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_y"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_x_minus"
+        app:titleValue="Y"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_x" />
-
-    <Button
-        android:id="@+id/btn_current_x_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_x_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_x" />
-
-    <TextView
-        android:id="@+id/textview_y"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="Y"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_x_plus" />
-
-    <TextView
-        android:id="@+id/textview_current_y"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_y"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_x_plus" />
-
-    <Button
-        android:id="@+id/btn_current_y_plus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_y_minus"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_y" />
-
-    <Button
-        android:id="@+id/btn_current_y_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_y_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_y" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_x" />
 
     <TextView
         android:id="@+id/textview_size"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="크기"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/size_string"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_y_plus" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_y" />
 
-    <TextView
-        android:id="@+id/textview_width"
-        android:layout_width="wrap_content"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_width"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="W"
+        app:titleValue="W"
+        android:layout_margin="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/textview_size" />
 
-    <TextView
-        android:id="@+id/textview_current_width"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_width"
-        app:layout_constraintTop_toBottomOf="@id/textview_size" />
-
-    <Button
-        android:id="@+id/btn_current_width_plus"
+    <com.example.kotlin_drawingapp.customview.NumberUpDownView
+        android:id="@+id/number_up_down_height"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_width_minus"
+        app:titleValue="H"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_width" />
-
-    <Button
-        android:id="@+id/btn_current_width_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_width_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_width" />
-
-    <TextView
-        android:id="@+id/textview_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="H"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_width_plus" />
-
-    <TextView
-        android:id="@+id/textview_current_height"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:background="@color/white"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textview_height"
-        app:layout_constraintTop_toBottomOf="@id/btn_current_width_plus" />
-
-    <Button
-        android:id="@+id/btn_current_height_plus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="+"
-        app:layout_constraintEnd_toStartOf="@id/btn_current_height_minus"
-        app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_height" />
-
-    <Button
-        android:id="@+id/btn_current_height_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:text="-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_current_height_plus"
-        app:layout_constraintTop_toBottomOf="@id/textview_current_height" />
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_width" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
