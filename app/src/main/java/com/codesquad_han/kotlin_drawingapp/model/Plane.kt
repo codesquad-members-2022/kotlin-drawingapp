@@ -6,19 +6,26 @@ import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 class Plane(rectangleFactory: RectangleFactory) {
     private var rectangleList = mutableListOf<BaseRectangle>()
     private var rectangleFactory = rectangleFactory
+    private var normalRectangleCount = 1
+    private var imageRectangleCount = 1
+    private var textRectangleCount = 1
+
 
     fun generateNormalRectangle() {
         val rectangle = rectangleFactory.generateNormalRectangle()
+        rectangle.createNum = normalRectangleCount++
         rectangleList.add(rectangle)
     }
 
     fun generateTextRectangle(){
         val textRectangle = rectangleFactory.generateTextRectangle()
+        textRectangle.createNum = textRectangleCount++
         rectangleList.add(textRectangle)
     }
 
     fun generateImageRectangle(imageUri: Uri?){
         val imageRetangle = rectangleFactory.generateImageRectangle(imageUri)
+        imageRetangle.createNum = imageRectangleCount++
         rectangleList.add(imageRetangle)
     }
 

@@ -21,8 +21,6 @@ class RectangleDrawingView : View {
     private var tempNormalRectangle: BaseRectangle? = null
     private var rectangleList = mutableListOf<BaseRectangle>()
 
-    private var paint = Paint()
-    private var tempPaint = Paint()
     private var strokePaint = Paint()
     private lateinit var clickListener: RectangleViewClickInterface
 

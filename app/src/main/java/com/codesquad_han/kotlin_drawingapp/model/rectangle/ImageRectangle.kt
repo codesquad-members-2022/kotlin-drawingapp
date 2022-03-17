@@ -18,6 +18,7 @@ class ImageRectangle(
     override var backgroundColor: BackgroundColor,
     override var transparency: Transparency,
     override var imageUri: Uri?,
+    override var createNum: Int,
     text: String?
 ) : BaseRectangle {
 
@@ -36,6 +37,7 @@ class ImageRectangle(
 
         val imagePaint = Paint()
         imagePaint.alpha = this.transparency.transparency * 255 / 10
+
         if(isTemp){
             imagePaint.alpha = 255 / 10 * 5
         }
@@ -58,8 +60,9 @@ class ImageRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            null
+            createNum, null
         )
     }
 
+    override fun getObjectName() = "Photo $createNum"
 }

@@ -11,12 +11,15 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
 import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
+import com.codesquad_han.kotlin_drawingapp.rectangle.adapter.ObjectListAdapter
 import com.google.android.material.snackbar.Snackbar
 
 class RectangleActivity : AppCompatActivity(), RectangleContract.View, RectangleViewClickInterface {
@@ -31,6 +34,10 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     private var RECTANGLE_HEIGHT = 0
 
     private lateinit var SELECTED_RECTANGLE_ID: String
+
+    private lateinit var recyclerViewObjectList : RecyclerView
+    private lateinit var objectListAdpater: ObjectListAdapter
+    private var dataSet = listOf<BaseRectangle>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +85,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         setPointYchange()
         setSizeWchange()
         setSizeHchange()
+        setRecyclerView()
     }
 
     // presenter 초기화 및 livedata 옵저버 등록
@@ -85,6 +93,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         presenter = RectanglePresenter(RectangleRepositoryImpl(Plane(rectangleFactory)), this)
         presenter.liveNormalRectangleList.observe(this) {
             showRectangle(it)
+            dataSet = it.reversed()
+            objectListAdpater.updateDataSet(dataSet)
         }
     }
 
@@ -97,6 +107,38 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     fun setBtnMakeTextRectangle(){
         binding.btnGenerateTextRectangle?.setOnClickListener {
             presenter.addTextRectangle()
+        }
+    }
+
+    fun setBtnGallery() {
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
+                    // uri 전달하기!!!!
+                    presenter.addImageRectangle(it.data?.data)
+                } else {
+                    Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
+        val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    getContent.launch(Intent.createChooser(intent, "Gallery"))
+                } else {
+                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+        binding.btnOpenGallery?.let {
+            it.setOnClickListener {
+                // 갤러리 열고 uri 가져오기 구현하기
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         }
     }
 
@@ -150,6 +192,14 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                 presenter.updateSizeHeight(-1, SELECTED_RECTANGLE_ID)
             }
         }
+    }
+
+    fun setRecyclerView(){
+        recyclerViewObjectList = binding.recyclerViewObjectList!!
+        recyclerViewObjectList.layoutManager = LinearLayoutManager(this)
+
+        objectListAdpater = ObjectListAdapter(dataSet)
+        recyclerViewObjectList.adapter = objectListAdpater
     }
 
     // 만든 사각형 커스텀 뷰에 추가로 그리기
@@ -251,39 +301,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     presenter.updateTransparency(SELECTED_RECTANGLE_ID, seekbar.progress)
                 }
             })
-        }
-    }
-
-
-    fun setBtnGallery() {
-        val getContent =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
-                    // uri 전달하기!!!!
-                    presenter.addImageRectangle(it.data?.data)
-                } else {
-                    Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    val intent = Intent(Intent.ACTION_PICK)
-                    intent.type = "image/*"
-                    getContent.launch(Intent.createChooser(intent, "Gallery"))
-                } else {
-                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-
-        binding.btnOpenGallery?.let {
-            it.setOnClickListener {
-                // 갤러리 열고 uri 가져오기 구현하기
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
         }
     }
 

@@ -18,6 +18,7 @@ class NormalRectangle(
     override var backgroundColor: BackgroundColor,
     override var transparency: Transparency,
     override var imageUri: Uri?,
+    override var createNum: Int,
     text: String?
 ) : BaseRectangle {
 
@@ -61,10 +62,11 @@ class NormalRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            null
+            createNum,null
         )
 
         return normalRectangleClone
     }
 
+    override fun getObjectName() = "Rect $createNum"
 }

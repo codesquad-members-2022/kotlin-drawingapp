@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="selected">#3DE5F4</color>
+    <color name="sideBar">#B9E1E6</color>
+    <color name="recyclerviewBackground">#ECECEC</color>
 </resources>

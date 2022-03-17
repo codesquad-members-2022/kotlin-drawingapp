@@ -23,7 +23,7 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
             Size(300, 240),  // Pixcel C API 31 에서 1dp = 2px, 따라서 2배해준 값 사용
             BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
             Transparency((1..10).random()),
-            null, null
+            null, -1, null
         )
     }
 
@@ -36,7 +36,7 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
             Size(0, 0),
             BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
             Transparency((1..10).random()),
-            null, getRandomText()
+            null, -1, getRandomText()
         )
     }
 
@@ -49,7 +49,7 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
             Size(300, 240),
             BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
             Transparency((1..10).random()),
-            imageUri, null
+            imageUri, -1, null
         )
     }
 

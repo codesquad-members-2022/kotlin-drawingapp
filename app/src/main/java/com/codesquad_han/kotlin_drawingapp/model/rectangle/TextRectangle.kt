@@ -19,6 +19,7 @@ class TextRectangle(
     override var backgroundColor: BackgroundColor,
     override var transparency: Transparency,
     override var imageUri: Uri?,
+    override var createNum: Int,
     var text: String?
 ) : BaseRectangle {
 
@@ -61,9 +62,11 @@ class TextRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            text
+            createNum, text
         )
 
         return textRectangleClone
     }
+
+    override fun getObjectName() = "Text $createNum"
 }
