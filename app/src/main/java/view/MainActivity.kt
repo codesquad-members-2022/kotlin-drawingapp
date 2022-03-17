@@ -6,13 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
@@ -97,8 +97,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             customRectInfoViewList.add(customLayerView)
             presenter.createRectanglePaint()
             customLayerView.setOnClickListener {
-                Log.d("test","Clcicked")
                 customRectangleViewList.map { it.eraseBorder() }
+                customRectInfoViewList.map{it.resetColor()}
+                it.setBackgroundColor(Color.GRAY)
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
                 presenter.selectRectangleByList(customLayerView.rectId)
@@ -134,6 +135,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             presenter.createSentencePaint()
             customLayerView.setOnClickListener {
                 customRectangleViewList.map { it.eraseBorder() }
+                customRectInfoViewList.map{it.resetColor()}
+                it.setBackgroundColor(Color.GRAY)
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
                 presenter.selectRectangleByList(customLayerView.rectId)
@@ -141,14 +144,13 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
         }
         mainLayout.setOnTouchListener { _, motionEvent ->
-            Log.d("test","Touched")
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 customRectangleViewList.map { it.eraseBorder() }
                 selectedRectangle?.opacity?.removeObserver(opacityObserver)
                 selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
                 presenter.selectRectangle(motionEvent.x, motionEvent.y)
             }
-            true
+            false
         }
 
 
@@ -294,6 +296,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
                         presenter.createPhotoPaint(bitmap)
                         customLayerView.setOnClickListener {
                             customRectangleViewList.map { it.eraseBorder() }
+                            customRectInfoViewList.map{it.resetColor()}
+                            it.setBackgroundColor(Color.GRAY)
                             selectedRectangle?.opacity?.removeObserver(opacityObserver)
                             selectedRectangle?.backGroundColor?.removeObserver(backgroundObserver)
                             presenter.selectRectangleByList(customLayerView.rectId)
@@ -363,9 +367,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             if (motionEvent.action == MotionEvent.ACTION_MOVE) {
                 selectedCustomRectangleView?.onTouch(motionEvent, tempView)
                 tempView.invalidate()
-            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+            }
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
                 selectedCustomRectangleView?.let {
-                    it.onTouch(motionEvent, tempView)
+                    it.changePos(motionEvent.x, motionEvent.y)
                     mainLayout.removeView(tempView)
                     presenter.changePosition(it)
                 }
