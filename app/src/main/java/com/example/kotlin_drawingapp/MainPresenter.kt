@@ -54,7 +54,7 @@ class MainPresenter(
             when (replacement) {
                 is DrawObject.Rectangle -> replacement.alpha = alpha
                 is DrawObject.Image -> replacement.alpha = alpha
-                is DrawObject.CustomTextView -> replacement.alpha = alpha
+                is DrawObject.CustomText -> replacement.alpha = alpha
             }
             drawingRepository.saveCurrentSelectedDrawObject(replacement)
             drawingRepository.modifyDrawObject(tmpCurrentSelectedDrawObject, replacement)
@@ -78,7 +78,7 @@ class MainPresenter(
             when (drawObject) {
                 is DrawObject.Rectangle -> mainView.showDrawObjectInfo(drawObject.rgb, drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
                 is DrawObject.Image -> mainView.showDrawObjectInfo(Color(255, 255, 255), drawObject.alpha, drawObject.currentPoint, drawObject.currentSize)
-                is DrawObject.CustomTextView -> mainView.showDrawObjectInfo(
+                is DrawObject.CustomText -> mainView.showDrawObjectInfo(
                     Color(drawObject.paint.color.red, drawObject.paint.color.green, drawObject.paint.color.blue)
                     , drawObject.alpha,
                     drawObject.currentPoint,

@@ -59,7 +59,7 @@ sealed class DrawObject {
         }
     }
 
-    data class CustomTextView(
+    data class CustomText(
         val id: String,
         private var size: Size,
         private var point: Point,
@@ -74,7 +74,7 @@ sealed class DrawObject {
         }
 
         override fun createNewDrawObject(size: Size, point: Point): DrawObject {
-            return CustomTextView(id, size, point, endPos, paint, text, alpha)
+            return CustomText(id, size, point, endPos, paint, text, alpha)
         }
     }
 
