@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,6 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private lateinit var mainLayout: ConstraintLayout
+    private lateinit var objectListLayout: LinearLayout
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
     private lateinit var normalRectCreateBtn: Button
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         setContentView(R.layout.activity_main)
 
         mainLayout = findViewById(R.id.main_layout)
+        objectListLayout = findViewById(R.id.layout_layer)
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
         backgroundBtn = findViewById(R.id.btn_background)
@@ -283,6 +287,11 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         val metrics = resources.displayMetrics
         val density = metrics.density
         return (px / density).toInt()
+    }
+
+    private fun getIcon(): Drawable {
+        val icon = photoRectCreateBtn.compoundDrawables[1]
+        return icon
     }
 }
 
