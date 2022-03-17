@@ -27,7 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private lateinit var mainLayout: ConstraintLayout
-    private lateinit var objectListLayout: LinearLayout
+    private lateinit var itemListLayout: LinearLayout
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
     private lateinit var normalRectCreateBtn: Button
@@ -40,13 +40,15 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     private lateinit var sizeHBtn: Button
     private lateinit var alphaSlider: Slider
     private lateinit var presenter: TaskContract.Presenter
+    private lateinit var itemList: ItemList
+    private lateinit var rectIcon: Drawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mainLayout = findViewById(R.id.main_layout)
-        objectListLayout = findViewById(R.id.layout_layer)
+        itemListLayout = findViewById(R.id.layout_layer)
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
         backgroundBtn = findViewById(R.id.btn_background)
@@ -59,6 +61,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn = findViewById(R.id.btn_size_w)
         sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
+        itemList = ItemList(itemListLayout)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
@@ -150,12 +153,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun onClickTextRectBtn() {
         textRectCreateBtn.setOnClickListener {
+            setRectIcon(textRectCreateBtn)
             presenter.createNewTextRectangle()
         }
     }
 
     private fun onClickPhotoRectBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
         photoRectCreateBtn.setOnClickListener {
+            setRectIcon(photoRectCreateBtn)
             requestPermissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
         }
     }
@@ -177,11 +182,13 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun onClickNormalRectBtn() {
         normalRectCreateBtn.setOnClickListener {
+            setRectIcon(normalRectCreateBtn)
             presenter.addNewRectangle()
         }
     }
 
     override fun showRectangle(newRect: Rectangle) {
+        itemList.addNewItem(newRect.type, rectIcon, this)
         customView.addNewRect(newRect)
         customView.invalidate()
     }
@@ -222,8 +229,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn.text = "W   $w"
         sizeHBtn.text = "H   $h"
         if (w.isNotEmpty()) {
-            val width = pxToDp(w.toFloat()).toInt()
-            val height = pxToDp(h.toFloat()).toInt()
+            val width = pxToDp(w.toFloat())
+            val height = pxToDp(h.toFloat())
             sizeWBtn.text = "W   $width"
             sizeHBtn.text = "H   $height"
         }
@@ -289,9 +296,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         return (px / density).toInt()
     }
 
-    private fun getIcon(): Drawable {
-        val icon = photoRectCreateBtn.compoundDrawables[1]
-        return icon
+    private fun setRectIcon(btn: Button) {
+        rectIcon = btn.compoundDrawables[1]
     }
 }
 

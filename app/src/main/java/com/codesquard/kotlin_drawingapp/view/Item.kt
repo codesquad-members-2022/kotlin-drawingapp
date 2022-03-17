@@ -8,7 +8,8 @@ import android.widget.LinearLayout
 import com.google.android.material.textview.MaterialTextView
 
 class Item(
-    val icon: Drawable,
+    private val newRectType: String,
+    private val icon: Drawable,
     context: Context,
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -30,7 +31,7 @@ class Item(
     }
 
     private fun setDefaultTextView() {
-        textView.text = "실험"
+        textView.text = newRectType
         textView.textSize = dpToPx(8f).toFloat()
         textView.setPadding(0, 0, dpToPx(10f), 0)
         textView.setCompoundDrawables(icon, null, null, null)

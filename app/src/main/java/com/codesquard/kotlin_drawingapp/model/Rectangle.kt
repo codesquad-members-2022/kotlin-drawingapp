@@ -2,6 +2,7 @@ package com.codesquard.kotlin_drawingapp.model
 
 interface Rectangle {
     var id: String
+    val type: String
     var point: Array<Float>
     var size: Array<Int>
     var color: Array<Int>
