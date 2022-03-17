@@ -8,4 +8,8 @@
     <string name="remove_all_rectangles">초기화</string>
     <string name="rectangle_counts">사각형 갯수</string>
     <string name="load_photo">사진 불러오기</string>
+    <string name="change_color">Color</string>
+    <string name="zero">0</string>
+    <string name="rectangle_size">사각형 크기</string>
+    <string name="rectangle_location">사각형 위치</string>
 </resources>

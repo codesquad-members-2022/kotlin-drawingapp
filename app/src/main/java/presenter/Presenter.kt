@@ -1,34 +1,58 @@
 package presenter
 
-import data.Plane
-import data.Rectangle
+import android.graphics.Bitmap
+import data.*
 
 class Presenter : Contract.Presenter {
     private val plane = Plane()
 
-    override fun getRectangles(): MutableList<Rectangle> {
-        plane.setRandomRect()
-        return plane.getRandomRect()
+    override fun getRectangles(): MutableList<RegularRectangle> {
+        plane.makeRandomRegularRectangle()
+        return plane.getRandomRegularRectangle()
     }
 
     override fun getRectanglesNumber(): Int {
         return plane.getRectNumber()
     }
 
-    override fun getStrokes(rectangle: Rectangle): MutableList<Rectangle> {
-        plane.setRectangleStrokesList(rectangle)
+    override fun makeStrokes() {
+        plane.makeStrokeRectangle()
+    }
+
+    override fun getStrokes(): MutableList<StrokeRectangle> {
         return plane.getRectangleStrokesList()
     }
 
-    override fun isRectangle(x: Float?, y: Float?, rectangle: Rectangle): Boolean {
-        return plane.onRectangle(x, y, rectangle)
+    override fun isRectangle(x: Float?, y: Float?): Boolean {
+        return plane.lookupRectangleIsOnThePointer(x, y)
+    }
+
+    override fun getRecentClickedRectangle(): RegularRectangle? {
+        return plane.getRecentClickedRectangle()
+    }
+
+    override fun getRecentClickedImageRectangle(): ImageRectangle? {
+        return plane.getRecentClickedImageRectangle()
+    }
+
+    override fun getRecentlyClickedObject(): Rectangle? {
+        return plane.getRecentlyClickedObject()
     }
 
     override fun removeStrokes() {
+        plane.clearClickedList()
         plane.setStrokesListClear()
     }
 
-    override fun setRectangleColor(rectangle: Rectangle): MutableList<Rectangle>? {
-        return plane.setRectangleColorOrNull(rectangle)
+    override fun changeRectangleColor(rectangle: RegularRectangle): MutableList<RegularRectangle>? {
+        return plane.changeRectangleColorOrNull(rectangle)
+    }
+
+    override fun makeImageRectangle(bitmap: Bitmap) {
+        plane.setImageRect(bitmap)
+    }
+
+    override fun getImageRectangle(): MutableList<ImageRectangle> {
+        return plane.getImageRect()
     }
 }

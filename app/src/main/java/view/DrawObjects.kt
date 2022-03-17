@@ -1,28 +1,112 @@
 package view
 
-import data.Rectangle
+import data.RegularRectangle
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.util.Log
-import android.util.TypedValue
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.View
+import data.ImageRectangle
+import data.Rectangle
+import data.StrokeRectangle
 import presenter.Contract
 import presenter.Presenter
 
 class DrawObjects(context: Context, attributeSet: AttributeSet) :
-    ConstraintLayout(context, attributeSet), Contract.CustomView {
-    private var rectangle: Rectangle? = null
+    View(context, attributeSet), Contract.CustomView {
+    private var rectangle: RegularRectangle? = null
+    private var imageRectangle: ImageRectangle? = null
+    private var recentlyClickedObject: Rectangle? = null
     private var presenter: Contract.Presenter = Presenter()
-    private var rectangles: MutableList<Rectangle> = mutableListOf()
-    private var rectangleStrokes: MutableList<Rectangle> = mutableListOf()
+    private var rectangles: MutableList<RegularRectangle> = mutableListOf()
+    private var rectangleStrokes: MutableList<StrokeRectangle> = mutableListOf()
     private var bitmapImages: MutableList<Bitmap> = mutableListOf()
+    private var bitmapRectangles: MutableList<ImageRectangle> = mutableListOf()
+    private lateinit var temporaryView: TemporaryView
+    private val defaultAlphaValue = 220
+
     var customListener: CustomListener? = null
-    private val TAG = "CustomView"
+    var locationListener: WidthAndHeightListener? = null
+    private val TAG = "DrawObject"
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        Log.d(TAG, "onDraw")
+        drawAll(canvas)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val x = event?.x
+        val y = event?.y
+        temporaryView = TemporaryView(context, recentlyClickedObject)
+
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                updateRectangleStrokeList(x, y)
+                invalidate()
+                return true
+            }
+            MotionEvent.ACTION_MOVE -> {
+
+                presenter.removeStrokes()
+                moveRectanglesOnTemporaryView(x, y)
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                // alpha value is personally decided
+                recentlyClickedObject?.paint?.alpha = defaultAlphaValue
+                invalidate()
+
+                return false
+            }
+        }
+        return false
+    }
+
+    /* Helper Function */
+
+    override fun drawAll(canvas: Canvas?) {
+        val unifiedRectangles = mutableListOf<Rectangle>()
+        unifiedRectangles.addAll(rectangles)
+        unifiedRectangles.addAll(rectangleStrokes)
+        unifiedRectangles.addAll(bitmapRectangles)
+        unifiedRectangles.forEach { drawingObjects ->
+            drawingObjects.draw(canvas)
+        }
+    }
+
+    private fun updateRectangleStrokeList(
+        x: Float?,
+        y: Float?,
+    ) {
+        if (presenter.isRectangle(x, y)) {
+            presenter.makeStrokes()
+            rectangleStrokes = presenter.getStrokes()
+            getRecentRectangleColor()
+            return
+        }
+        presenter.removeStrokes()
+    }
+
+    private fun moveRectanglesOnTemporaryView(
+        x: Float?,
+        y: Float?,
+    ) {
+        invalidate()
+        temporaryView.getXY(x, y)
+        showRectangleWidthAndHeight()
+    }
+
+    private fun showRectangleWidthAndHeight() {
+        locationListener?.showWidthAndHeight(
+            "${recentlyClickedObject?.rectangle?.left}, " +
+                    "${recentlyClickedObject?.rectangle?.top}, " +
+                    "${recentlyClickedObject?.rectangle?.right}, " +
+                    "${recentlyClickedObject?.rectangle?.bottom}"
+        )
+    }
 
     fun countRectangles(): String {
         return rectangles.count().toString()
@@ -34,113 +118,49 @@ class DrawObjects(context: Context, attributeSet: AttributeSet) :
     }
 
     fun removeRectangleAndStrokes() {
+        rectangle = null
         rectangles.clear()
-        rectangleStrokes.clear()
+        bitmapImages.clear()
+        bitmapRectangles.clear()
+        presenter.removeStrokes()
         invalidate()
     }
 
     fun changeRectangleColor() {
-        if(rectangle != null) {
-            val nonNullRectangle = rectangle as Rectangle
-            rectangles = presenter.setRectangleColor(nonNullRectangle)!!
-            invalidate()
-        }
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        Log.d(TAG, "onAttachedWindow")
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        Log.d(TAG, "onMeasure")
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-        Log.d(TAG, "onLayout")
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        Log.d(TAG, "onDraw")
-        drawRectangle(canvas, rectangles)
-        drawRectangleStroke(canvas, rectangleStrokes)
-        drawImages(bitmapImages)
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        val x = event?.x
-        val y = event?.y
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                updateRectangleStrokeList(x, y, rectangles)
+        rectangle.let { rectangle ->
+            if (rectangle?.paint != null) {
+                val nonNullRectangle = rectangle
+                rectangles = presenter.changeRectangleColor(nonNullRectangle)!!
                 invalidate()
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                return false
-            }
-            MotionEvent.ACTION_UP -> {
-                return false
             }
         }
-        return false
     }
 
-    private fun updateRectangleStrokeList(
-        x: Float?,
-        y: Float?,
-        rectangles: MutableList<Rectangle>
-    ) {
-        rectangles.forEach { rectangle ->
-            if (presenter.isRectangle(x, y, rectangle)) {
-                rectangleStrokes = presenter.getStrokes(rectangle)
-                getRectangleColor(rectangle)
-                return
-            }
+    private fun getRecentClickedRectangles() {
+        this.rectangle = presenter.getRecentClickedRectangle()
+        this.imageRectangle = presenter.getRecentClickedImageRectangle()
+        this.recentlyClickedObject = presenter.getRecentlyClickedObject()
+    }
+
+    private fun getRecentRectangleColor() {
+        getRecentClickedRectangles()
+        if (this.rectangle == null) {
+            customListener?.isClicked("NULL")
+            return
         }
-        rectangleStrokes.clear()
+        customListener?.isClicked("#${this.rectangle?.paint.let { Integer.toHexString(it!!.color) }}")
     }
 
-    private fun getRectangleColor(rectangle: Rectangle) {
-        this.rectangle = rectangle
-        customListener?.isClicked("#${Integer.toHexString(rectangle.paint.color)}")
-    }
-
-    override fun drawRectangle(canvas: Canvas?, rectangles: MutableList<Rectangle>) {
-        rectangles.forEach { square ->
-            canvas?.drawRect(square.rectangles, square.paint)
+    fun saveAndGetImage(bitmapImages: MutableList<Bitmap>) {
+        if (bitmapImages.count() != 0) {
+            presenter.makeImageRectangle(bitmapImages[bitmapImages.count() - 1])
+            println("imageRectangle : DrawObjects ${bitmapImages.count()}")
         }
+        loadImageRectangles()
     }
 
-    override fun drawRectangleStroke(
-        canvas: Canvas?,
-        rectanglesStrokesList: MutableList<Rectangle>
-    ) {
-        rectanglesStrokesList.forEach { stroke ->
-            canvas?.drawRect(stroke.rectangles, stroke.paint)
-        }
+    private fun loadImageRectangles() {
+        bitmapRectangles = presenter.getImageRectangle()
     }
 
-    fun loadImages(bitmapImages: MutableList<Bitmap>) {
-        this.bitmapImages = bitmapImages
-    }
-
-    fun drawImages(bitmapImages: MutableList<Bitmap>) {
-        if(bitmapImages.count() != 0) {
-            var imageView = ImageView(context)
-            imageView.setImageBitmap(bitmapImages[0])
-            var constraintParam = LayoutParams(
-                150,
-                150
-            )
-            constraintParam.topToTop = LayoutParams.PARENT_ID
-            constraintParam.bottomToBottom = LayoutParams.PARENT_ID
-            constraintParam.leftMargin = 800
-            var image = (this.parent) as ConstraintLayout
-            image.addView(imageView, constraintParam)
-        }
-    }
 }

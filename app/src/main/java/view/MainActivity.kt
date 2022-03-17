@@ -24,11 +24,29 @@ class MainActivity : AppCompatActivity() {
         val rectangleCount = findViewById<TextView>(R.id.textview_rectangle_count)
         val rectangleColorButton = findViewById<Button>(R.id.textview_background_color_change)
         val photoLoader = findViewById<Button>(R.id.insert_photo_button)
-        var bitmapImages = mutableListOf<Bitmap>()
+        val rectangleLeftText = findViewById<TextView>(R.id.rectangle_left)
+        val rectangleTopText = findViewById<TextView>(R.id.rectangle_top)
+        val rectangleRightText = findViewById<TextView>(R.id.rectangle_right)
+        val rectangleBottomText = findViewById<TextView>(R.id.rectangle_bottom)
+        var bitmapImage: MutableList<Bitmap> = mutableListOf()
 
         customView.customListener = object : CustomListener {
             override fun isClicked(numbers: String) {
                 rectangleColorButton.text = numbers
+            }
+        }
+
+        customView.locationListener =  object : WidthAndHeightListener {
+            override fun showWidthAndHeight(numbers: String) {
+                val metrics = numbers.split(',')
+                val left = metrics[0]
+                val top = metrics[1]
+                val right = metrics[2]
+                val bottom = metrics[3]
+                rectangleLeftText.text = left
+                rectangleTopText.text = top
+                rectangleRightText.text = right
+                rectangleBottomText.text = bottom
             }
         }
 
@@ -39,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         removeButton.setOnClickListener {
             customView.removeRectangleAndStrokes()
+            rectangleColorButton.text = "clear"
             rectangleCount.text = "사각형수: ${customView.countRectangles()}"
         }
 
@@ -49,12 +68,13 @@ class MainActivity : AppCompatActivity() {
         val startForResult =
             registerForActivityResult(ActivityResultContracts.GetContent()) { image ->
                 val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, image))
-                bitmapImages.add(bitmap)
+                bitmapImage.add(bitmap)
+                customView.saveAndGetImage(bitmapImage)
+                println("main: count : ${bitmapImage.count()}")
             }
 
         photoLoader.setOnClickListener {
             startForResult.launch("image/*")
-            customView.loadImages(bitmapImages)
         }
     }
 }

@@ -1,26 +1,42 @@
 package presenter
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.media.Image
+import data.ImageRectangle
 import data.Rectangle
+import data.RegularRectangle
+import data.StrokeRectangle
 
 interface Contract {
     interface Presenter {
-        fun getRectangles(): MutableList<Rectangle>
+        fun getRectangles(): MutableList<RegularRectangle>
 
         fun getRectanglesNumber(): Int
 
-        fun getStrokes(rectangle: Rectangle): MutableList<Rectangle>
+        fun makeStrokes()
 
-        fun isRectangle(x:Float?, y:Float?, rectangle: Rectangle): Boolean
+        fun getStrokes(): MutableList<StrokeRectangle>
+
+        fun isRectangle(x:Float?, y:Float?): Boolean
 
         fun removeStrokes()
 
-        fun setRectangleColor(rectangle: Rectangle): MutableList<Rectangle>?
+        fun changeRectangleColor(rectangle: RegularRectangle): MutableList<RegularRectangle>?
+
+        fun getImageRectangle(): MutableList<ImageRectangle>
+
+        fun makeImageRectangle(bitmap: Bitmap)
+
+        fun getRecentClickedRectangle(): RegularRectangle?
+
+        fun getRecentClickedImageRectangle(): ImageRectangle?
+
+        fun getRecentlyClickedObject(): Rectangle?
     }
 
     interface CustomView {
-        fun drawRectangle(canvas: Canvas?, rectangles: MutableList<Rectangle>)
 
-        fun drawRectangleStroke(canvas: Canvas?, rectangles: MutableList<Rectangle>)
+        fun drawAll(canvas: Canvas?)
     }
 }
