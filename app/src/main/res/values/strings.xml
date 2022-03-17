@@ -7,4 +7,5 @@
     <string name="size_string">크기</string>
     <string name="image_string">사진</string>
     <string name="text_string">텍스트</string>
+    <string name="layer_string">레이어</string>
 </resources>

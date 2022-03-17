@@ -8,6 +8,29 @@
     android:background="@color/grey"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/layout_object_list"
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/layout_border"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/drawView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/layout_border"
+            android:gravity="bottom"
+            android:paddingStart="4dp"
+            android:text="@string/layer_string"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <com.example.kotlin_drawingapp.model.draw.DrawView
         android:id="@+id/drawView"
         android:layout_width="0dp"
@@ -16,7 +39,7 @@
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/layout_object_list"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -30,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_generate_image"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/layout_object_list" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_generate_image"
@@ -128,21 +151,21 @@
         android:id="@+id/number_up_down_x"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:titleValue="X"
         android:layout_margin="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_position" />
+        app:layout_constraintTop_toBottomOf="@id/textview_position"
+        app:titleValue="X" />
 
     <com.example.kotlin_drawingapp.customview.NumberUpDownView
         android:id="@+id/number_up_down_y"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        app:titleValue="Y"
-        app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/number_up_down_x" />
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_x"
+        app:titleValue="Y" />
 
     <TextView
         android:id="@+id/textview_size"
@@ -161,20 +184,20 @@
         android:id="@+id/number_up_down_width"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:titleValue="W"
         android:layout_margin="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/drawView"
-        app:layout_constraintTop_toBottomOf="@id/textview_size" />
+        app:layout_constraintTop_toBottomOf="@id/textview_size"
+        app:titleValue="W" />
 
     <com.example.kotlin_drawingapp.customview.NumberUpDownView
         android:id="@+id/number_up_down_height"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        app:titleValue="H"
-        app:layout_constraintStart_toEndOf="@id/drawView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/number_up_down_width" />
+        app:layout_constraintStart_toEndOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/number_up_down_width"
+        app:titleValue="H" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
