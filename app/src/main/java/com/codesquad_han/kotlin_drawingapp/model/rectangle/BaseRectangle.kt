@@ -1,4 +1,4 @@
-package com.codesquad_han.kotlin_drawingapp.model
+package com.codesquad_han.kotlin_drawingapp.model.rectangle
 
 import android.content.Context
 import android.graphics.Canvas
@@ -16,7 +16,7 @@ interface BaseRectangle{
     var transparency: Transparency
     var imageUri: Uri?
 
-    fun drawRectangle(context: Context, canvas: Canvas)
+    fun drawRectangle(context: Context, canvas: Canvas, isTemp: Boolean)
 
     fun getTempRectangle() : BaseRectangle
 }

@@ -2,19 +2,13 @@ package com.codesquad_han.kotlin_drawingapp.rectangle
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
-import android.provider.MediaStore
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.codesquad_han.kotlin_drawingapp.R
-import com.codesquad_han.kotlin_drawingapp.model.*
-import com.codesquad_han.kotlin_drawingapp.model.property.BackgroundColor
-import com.codesquad_han.kotlin_drawingapp.model.property.Point
-import com.codesquad_han.kotlin_drawingapp.model.property.Size
-import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
 class RectangleDrawingView : View {
 
@@ -39,7 +33,7 @@ class RectangleDrawingView : View {
     override fun onDraw(canvas: Canvas) {
         rectangleList.forEach { rectangle ->
 
-            rectangle.drawRectangle(context, canvas)
+            rectangle.drawRectangle(context, canvas, false)
 
             // 선택된 사각형 있으면 윤곽선 그리기
             selectedNormalRectangle?.let {
@@ -58,7 +52,7 @@ class RectangleDrawingView : View {
 
         // 임시뷰 사각형 그리기
         tempNormalRectangle?.let {
-            it.drawRectangle(context, canvas)
+            it.drawRectangle(context, canvas, true)
         }
 
     }

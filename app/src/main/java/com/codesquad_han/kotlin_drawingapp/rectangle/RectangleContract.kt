@@ -4,8 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.BasePresenter
 import com.codesquad_han.kotlin_drawingapp.BaseView
-import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
-import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
 interface RectangleContract {
 
@@ -24,9 +23,11 @@ interface RectangleContract {
     interface Presenter : BasePresenter {
         var liveNormalRectangleList: MutableLiveData<MutableList<BaseRectangle>>
 
-        fun addRectangle() // 사각형 생성
+        fun addRectangle() // 일반 사각형 생성
 
-        fun addTextRectangle() // 텍스트 생성
+        fun addTextRectangle() // 텍스트 사각형 생성
+
+        fun addImageRectangle(imageUri: Uri?) // 이미지 사각형 생성
 
         fun getRectangleList()
 

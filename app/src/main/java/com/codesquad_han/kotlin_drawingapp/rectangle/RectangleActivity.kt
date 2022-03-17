@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
-import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
 import com.google.android.material.snackbar.Snackbar
@@ -197,9 +197,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             binding.seekBarTransparency?.let {
                 it.progress = alpha
             }
-            binding.btnOpenGallery?.let {
-                it.isEnabled = true
-            }
             binding.tvPointX?.let {
                 it.text = x.toString()
             }
@@ -218,9 +215,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         } else {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.INVISIBLE
-            }
-            binding.btnOpenGallery?.let {
-                it.isEnabled = false
             }
         }
     }
@@ -267,7 +261,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                 if (it.resultCode == RESULT_OK) {
                     Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
                     // uri 전달하기!!!!
-                    presenter.updateImageUri(SELECTED_RECTANGLE_ID, it.data?.data)
+                    presenter.addImageRectangle(it.data?.data)
                 } else {
                     Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
                 }

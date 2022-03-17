@@ -13,6 +13,10 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
         plane.generateTextRectangle()
     }
 
+    override fun addImageRectangle(imageUri: Uri?) {
+        plane.generateImageRectangle(imageUri)
+    }
+
     override fun getRectangleList() = plane.returnRectangleList()
 
     override fun updateTransparency(id: String, transparency: Int) {
