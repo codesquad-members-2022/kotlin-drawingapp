@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView, ItemListListene
     }
 
     override fun showRectangle(newRect: Rectangle) {
-        itemList.addNewItem(newRect.id, newRect.type, rectIcon, this)
+        itemList.addNewItem(newRect.id, newRect.type, newRect.createdOrder, rectIcon, this)
         customView.addNewRect(newRect)
         customView.invalidate()
     }

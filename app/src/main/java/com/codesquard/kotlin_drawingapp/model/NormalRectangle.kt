@@ -6,6 +6,8 @@ class NormalRectangle : Rectangle {
 
     override val type: String = "Rect"
 
+    override var createdOrder = 0
+
     override lateinit var point: Array<Float>
 
     override lateinit var size: Array<Int>

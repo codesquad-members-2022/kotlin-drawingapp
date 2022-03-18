@@ -2,6 +2,7 @@ package com.codesquard.kotlin_drawingapp.model
 
 interface Rectangle {
     var id: String
+    var createdOrder: Int
     val type: String
     var point: Array<Float>
     var size: Array<Int>
@@ -33,4 +34,7 @@ interface Rectangle {
         this.isSelected = boolean
     }
 
+    fun setOrder(order: Int) {
+        this.createdOrder = order
+    }
 }

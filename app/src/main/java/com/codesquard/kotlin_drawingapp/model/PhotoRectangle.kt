@@ -8,6 +8,8 @@ class PhotoRectangle : Rectangle {
 
     override val type: String = "Photo"
 
+    override var createdOrder: Int = 0
+
     override lateinit var point: Array<Float>
 
     override lateinit var size: Array<Int>

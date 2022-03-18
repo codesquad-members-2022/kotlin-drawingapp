@@ -6,6 +6,8 @@ class TextRectangle : Rectangle {
 
     override val type: String = "Text"
 
+    override var createdOrder: Int = 0
+
     override lateinit var point: Array<Float>
 
     override lateinit var size: Array<Int>

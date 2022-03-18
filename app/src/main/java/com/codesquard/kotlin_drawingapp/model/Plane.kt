@@ -10,6 +10,7 @@ class Plane(private val listener: RectangleListener) {
     private lateinit var rectInitSize: Array<Int>
     private lateinit var rectMaxPoint: Array<Int>
     private val draggedPoint: Array<Float> = arrayOf(0f, 0f)
+    private val rectCreatedOrder = arrayOf(0, 0, 0)
 
     fun setInitRectSizeAndMaxPoint(rectSize: Array<Int>, rectMaxPoint: Array<Int>) {
         this.rectInitSize = rectSize
@@ -18,18 +19,24 @@ class Plane(private val listener: RectangleListener) {
 
     fun createNewPhotoRectangle(photo: Bitmap) {
         val newRect = RectangleFactory(PhotoRectangle()).getInstance(rectInitSize, rectMaxPoint, photo)
+        rectCreatedOrder[1]++
+        newRect.setOrder(rectCreatedOrder[1])
         rectangleList.add(newRect)
         listener.onCreateRectangle(newRect)
     }
 
     fun createNewNormalRectangle() {
         val newRect = RectangleFactory(NormalRectangle()).getInstance(rectInitSize, rectMaxPoint)
+        rectCreatedOrder[0]++
+        newRect.setOrder(rectCreatedOrder[0])
         rectangleList.add(newRect)
         listener.onCreateRectangle(newRect)
     }
 
     fun createNewTextRectangle() {
         val newRect = RectangleFactory(TextRectangle()).getInstance(rectInitSize, rectMaxPoint)
+        rectCreatedOrder[2]++
+        newRect.setOrder(rectCreatedOrder[2])
         listener.onMeasureTextSize(newRect)
     }
 

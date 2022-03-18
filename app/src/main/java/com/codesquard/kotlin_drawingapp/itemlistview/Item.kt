@@ -6,11 +6,13 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.textview.MaterialTextView
 
 class Item(
     private val rectId: String,
     private val rectType: String,
+    private val order: Int,
     private val icon: Drawable,
     context: Context,
     attributeSet: AttributeSet? = null,
@@ -27,12 +29,13 @@ class Item(
     }
 
     private fun setDefaultLayoutAttr() {
+        this.isClickable = true
     }
 
     private fun setDefaultTextView() {
         val defaultAttr = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         defaultAttr.marginStart = dpToPx(10f)
-        textView.text = rectType
+        textView.text = "$rectType $order"
         textView.textSize = dpToPx(8f).toFloat()
         textView.layoutParams = defaultAttr
         textView.setPadding(0, 0, dpToPx(10f), 0)
