@@ -28,4 +28,6 @@ interface RectangleRepository {
     fun updateSizeHeight(value: Int, id: String) : Int
 
     fun updateSelectedState(id: String, isSelectedExist: Boolean)
+
+    fun getSelectedRectangle(id: String): BaseRectangle?
 }

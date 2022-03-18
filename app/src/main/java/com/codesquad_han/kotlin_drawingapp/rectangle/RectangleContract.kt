@@ -46,5 +46,7 @@ interface RectangleContract {
         fun updateSizeHeight(value: Int, id: String)
 
         fun updateSelectedRectangle(id: String, isSelectedExist: Boolean)
+
+        fun getSelectedRectangle(id: String): BaseRectangle?
     }
 }

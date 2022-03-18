@@ -35,7 +35,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
     private lateinit var SELECTED_RECTANGLE_ID: String
 
-    private lateinit var recyclerViewObjectList : RecyclerView
+    private lateinit var recyclerViewObjectList: RecyclerView
     private lateinit var objectListAdpater: ObjectListAdapter
     private var dataSet = listOf<BaseRectangle>()
 
@@ -59,7 +59,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     val width = binding.rectangleDrawingView!!.width - RECTANGLE_WIDTH
                     val height = binding.rectangleDrawingView!!.height - RECTANGLE_HEIGHT
 
-                    rectangleFactory = RectangleFactory(width, height, getString(R.string.TestText).split(' '))
+                    rectangleFactory =
+                        RectangleFactory(width, height, getString(R.string.TestText).split(' '))
                     Log.d("AppTest", "width:$width, height:$height")
 
                     initPresenter(rectangleFactory)
@@ -104,7 +105,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setBtnMakeTextRectangle(){
+    fun setBtnMakeTextRectangle() {
         binding.btnGenerateTextRectangle?.setOnClickListener {
             presenter.addTextRectangle()
         }
@@ -142,7 +143,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setPointXchange(){
+    fun setPointXchange() {
         binding.ivPointXup?.let {
             it.setOnClickListener {
                 presenter.updatePointX(1, SELECTED_RECTANGLE_ID)
@@ -155,7 +156,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setPointYchange(){
+    fun setPointYchange() {
         binding.ivPointYup?.let {
             it.setOnClickListener {
                 presenter.updatePointY(1, SELECTED_RECTANGLE_ID)
@@ -168,7 +169,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setSizeWchange(){
+    fun setSizeWchange() {
         binding.ivSizeWup?.let {
             it.setOnClickListener {
                 presenter.updateSizeWidth(1, SELECTED_RECTANGLE_ID)
@@ -181,7 +182,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setSizeHchange(){
+    fun setSizeHchange() {
         binding.ivSizeHup?.let {
             it.setOnClickListener {
                 presenter.updateSizeHeight(1, SELECTED_RECTANGLE_ID)
@@ -194,12 +195,43 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setRecyclerView(){
+    fun setRecyclerView() {
         recyclerViewObjectList = binding.recyclerViewObjectList!!
         recyclerViewObjectList.layoutManager = LinearLayoutManager(this)
 
-        objectListAdpater = ObjectListAdapter(dataSet)
+        objectListAdpater = ObjectListAdapter(dataSet, selectObject = {
+            SELECTED_RECTANGLE_ID = it
+            presenter.updateSelectedRectangle(SELECTED_RECTANGLE_ID, true)
+            showControlUI(SELECTED_RECTANGLE_ID)
+        })
         recyclerViewObjectList.adapter = objectListAdpater
+    }
+
+    fun showControlUI(id: String){
+        val selectedRectangle = presenter.getSelectedRectangle(id)
+
+        binding.constraintLayoutControl?.let {
+            it.visibility = View.VISIBLE
+        }
+        binding.tvBackgroundColor?.let {
+            it.text = getColorStr(selectedRectangle!!)
+        }
+        binding.seekBarTransparency?.let {
+            it.progress = selectedRectangle!!.transparency.transparency
+        }
+        binding.tvPointX?.let {
+            it.text = selectedRectangle!!.point.x.toString()
+        }
+        binding.tvPointY?.let {
+            it.text = selectedRectangle!!.point.y.toString()
+        }
+        binding.tvSizeW?.let {
+            it.text = selectedRectangle!!.size.width.toString()
+        }
+        binding.tvSizeH?.let {
+            it.text = selectedRectangle!!.size.height.toString()
+        }
+
     }
 
     // 만든 사각형 커스텀 뷰에 추가로 그리기
@@ -211,32 +243,41 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     }
 
     override fun showPointX(newX: Int) {
-        binding.tvPointX?.let{
+        binding.tvPointX?.let {
             it.text = newX.toString()
         }
     }
 
     override fun showPointY(newY: Int) {
-        binding.tvPointY?.let{
+        binding.tvPointY?.let {
             it.text = newY.toString()
         }
     }
 
     override fun showSizeW(newW: Int) {
-        binding.tvSizeW?.let{
+        binding.tvSizeW?.let {
             it.text = newW.toString()
         }
     }
 
     override fun showSizeH(newH: Int) {
-        binding.tvSizeH?.let{
+        binding.tvSizeH?.let {
             it.text = newH.toString()
         }
     }
 
 
     ///////////////
-    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String, x: Int, y: Int, width: Int, height: Int) { // 커스텀 뷰 터치 시 호출
+    override fun clickDrawingView(
+        color: String,
+        alpha: Int,
+        selected: Boolean,
+        id: String,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int
+    ) { // 커스텀 뷰 터치 시 호출
         if (selected) {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.VISIBLE
@@ -293,7 +334,11 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     fun setTransparencySeekBar() {
         binding.seekBarTransparency?.let {
             it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekbar: SeekBar?, progress: Int, fromUser: Boolean) {
+                override fun onProgressChanged(
+                    seekbar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
                 }
 
                 override fun onStartTrackingTouch(seekbar: SeekBar) {
@@ -304,6 +349,19 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                 }
             })
         }
+    }
+
+    fun getColorStr(selectedRectangle: BaseRectangle): String {
+        var red = Integer.toHexString(selectedRectangle.backgroundColor.r)
+        var green = Integer.toHexString(selectedRectangle.backgroundColor.g)
+        var blue = Integer.toHexString(selectedRectangle.backgroundColor.b)
+
+        if (red.length == 1) red = "0" + red
+        if (green.length == 1) green = "0" + green
+        if (blue.length == 1) blue = "0" + blue
+
+        Log.d("AppTest", "selected rectangle color : #${red}${green}${blue}")
+        return "#${red}${green}${blue}"
     }
 
 }

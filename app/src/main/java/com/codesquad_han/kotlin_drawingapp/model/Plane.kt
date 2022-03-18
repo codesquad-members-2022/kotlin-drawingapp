@@ -109,5 +109,12 @@ class Plane(rectangleFactory: RectangleFactory) {
         }
     }
 
+    fun getSelectedRectangle(id: String): BaseRectangle?{
+        rectangleList.forEach {
+            if(it.id == id) return it
+        }
+        return null
+    }
+
     fun returnRectangleCount() = rectangleList.size
 }

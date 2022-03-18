@@ -8,7 +8,8 @@ import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.databinding.ItemRecyclerviewObjectListBinding
 import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
-class ObjectListAdapter(var dataSet: List<BaseRectangle>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ObjectListAdapter(var dataSet: List<BaseRectangle>,
+                        val selectObject: (rectangle: String) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class ViewHolder(val binding: ItemRecyclerviewObjectListBinding): RecyclerView.ViewHolder(binding.root){
 
@@ -25,6 +26,10 @@ class ObjectListAdapter(var dataSet: List<BaseRectangle>): RecyclerView.Adapter<
 
             if(dataSet[position].selected) holder.binding.root.setBackgroundResource(R.color.item_selected)
             else holder.binding.root.setBackgroundResource(R.color.item_unselected)
+
+            holder.binding.root.setOnClickListener {
+                selectObject.invoke(dataSet[position].id)
+            }
         }
     }
 
