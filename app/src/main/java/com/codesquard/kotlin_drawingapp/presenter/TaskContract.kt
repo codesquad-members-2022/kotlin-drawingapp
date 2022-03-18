@@ -9,7 +9,7 @@ interface TaskContract {
 
         fun showRectangle(newRect: Rectangle)
 
-        fun showSelectedRectangle(selectedRectIndex: Int = -1)
+        fun showSelectedRectangle(selectedRect: Rectangle? = null)
 
         fun enableRectColorBtnAndSlider()
 

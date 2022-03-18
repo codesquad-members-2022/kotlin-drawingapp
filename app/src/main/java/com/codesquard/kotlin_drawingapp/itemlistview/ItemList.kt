@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
@@ -13,37 +12,39 @@ class ItemList(private val listener: ItemListListener, private val itemLayout: L
 
     private val itemList = arrayListOf<Item>()
 
+    private var selectedItem: Item? = null
+
     fun addNewItem(rectId: String, rectType: String, order: Int, icon: Drawable, context: Context) {
         val newItem = Item(rectId, rectType, order, icon, context)
+        itemList.add(newItem)
+        itemLayout.addView((newItem), 1)
         newItem.setOnCustomClickListener {
             onItemLongClick(newItem)
         }
-        itemList.add(newItem)
-        itemLayout.addView((newItem), 1)
     }
 
-    private fun removeItem(index: Int) {
-        itemLayout.removeView(itemList[index])
-        itemList.removeAt(index)
+    private fun removeItem(selectedItem: Item) {
+        itemLayout.removeView(selectedItem)
+        itemList.remove(selectedItem)
     }
 
     private fun changePosition(index: Int) {
         val temp = itemList[index]
-        removeItem(index)
-        itemList.add(index, temp)
-        itemLayout.addView(temp, itemList.size - index - 1)
+        val changedIndex = index + 1
+        removeItem(temp)
+        itemList.add(changedIndex, temp)
+        itemLayout.addView(temp, itemList.size - changedIndex)
     }
 
     private fun onItemClick(item: Item) {
-        Log.d("클릭", "됨?")
         unSelectItem()
         selectItem(item)
         listener.onSelectItem(item.getRectId())
     }
 
     private fun onItemLongClick(item: Item) {
-        Log.d("롱클릭", "됨?")
-        val index = getIndex(item)
+        selectItem(item)
+        val index = getSelectedItemIndex()
         changePosition(index)
     }
 
@@ -81,25 +82,37 @@ class ItemList(private val listener: ItemListListener, private val itemLayout: L
         })
     }
 
-    private fun getIndex(orderedItem: Item): Int {
-        return itemList.indexOf(orderedItem)
+    private fun getSelectedItemIndex(): Int {
+        var index = 0
+        selectedItem?.let {
+            index = itemList.indexOf(it)
+        }
+        return index
     }
 
     private fun selectItem(item: Item) {
-        item.isSelected = true
-        item.setOnSelectedItemBackgroundColor()
+        unSelectItem()
+        selectedItem = item
+        item.changeSelectedItemBackgroundColor()
     }
 
-    fun selectItem(rectIndex: Int) {
-        val item = itemList[rectIndex]
-        item.isSelected = true
-        item.setOnSelectedItemBackgroundColor()
+    fun selectItem(itemId: String) {
+        unSelectItem()
+        selectedItem.let {
+            itemList.forEach {
+                if (it.getRectId() == itemId) {
+                    selectedItem = it
+                    it.changeSelectedItemBackgroundColor()
+                    return@let
+                }
+            }
+        }
     }
 
     fun unSelectItem() {
-        itemList.forEach {
+        selectedItem?.let {
             it.isSelected = false
-            it.setOnUnSelectedItemBackgroundColor()
+            it.changeUnSelectedItemBackgroundColor()
         }
     }
 

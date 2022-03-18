@@ -62,10 +62,12 @@ class Plane(private val listener: RectangleListener) {
             val notReversedListIndex = reversedRectList.size - 1 - index
 
             if ((x in rectFirstX..rectSecondX) && (y in rectFirstY..rectSecondY)) {
-                rect.isSelected(true)
                 setTouchedPoint(x, y)
                 selectedRect = rectangleList[notReversedListIndex]
-                listener.onSelectRectangle(notReversedListIndex)
+                selectedRect?.let {
+                    it.isSelected(true)
+                    listener.onSelectRectangle(it)
+                }
                 return
             } else {
                 listener.onUnSelectRectangle()
@@ -77,8 +79,10 @@ class Plane(private val listener: RectangleListener) {
         unSelectRectangle()
         val selectedRectIndex = getSelectedRectangleIndex(rectId)
         selectedRect = rectangleList[selectedRectIndex]
-        selectedRect?.isSelected(true)
-        listener.onSelectRectangle(selectedRectIndex)
+        selectedRect?.let {
+            it.isSelected(true)
+            listener.onSelectRectangle(it)
+        }
     }
 
     private fun getSelectedRectangleIndex(rectId: String): Int {

@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
-import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.textview.MaterialTextView
 
 class Item(
@@ -51,11 +50,11 @@ class Item(
         return (dp * density).toInt()
     }
 
-    fun setOnSelectedItemBackgroundColor() {
+    fun changeSelectedItemBackgroundColor() {
         this.setBackgroundColor(Color.parseColor("#9E90EC"))
     }
 
-    fun setOnUnSelectedItemBackgroundColor() {
+    fun changeUnSelectedItemBackgroundColor() {
         this.setBackgroundColor(Color.parseColor("#E9E6FA"))
     }
 

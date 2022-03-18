@@ -6,7 +6,7 @@ interface RectangleListener {
 
     fun onCreateRectangle(newRect: Rectangle)
 
-    fun onSelectRectangle(index: Int)
+    fun onSelectRectangle(selectedRect: Rectangle)
 
     fun onUnSelectRectangle()
 

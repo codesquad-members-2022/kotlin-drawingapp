@@ -23,6 +23,7 @@ import com.codesquard.kotlin_drawingapp.itemlistview.ItemListListener
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
@@ -195,10 +196,10 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView, ItemListListene
         customView.invalidate()
     }
 
-    override fun showSelectedRectangle(selectedRectIndex: Int) {
+    override fun showSelectedRectangle(selectedRect: Rectangle?) {
         customView.invalidate()
-        if (selectedRectIndex > -1) {
-            itemList.selectItem(selectedRectIndex)
+        selectedRect?.run {
+            itemList.selectItem(selectedRect.id)
         }
     }
 
@@ -274,13 +275,6 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView, ItemListListene
                 else -> false
             }
         }
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
-//            MotionEvent.ACTION_DOWN -> itemList.unSelectItem()
-        }
-        return true
     }
 
     private fun getInitRectSize(width: Float, height: Float) =
