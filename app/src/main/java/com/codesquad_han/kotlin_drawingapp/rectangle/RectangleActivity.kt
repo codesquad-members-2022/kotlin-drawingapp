@@ -262,10 +262,12 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
             // id 값을 활용해 현재 선택된 사각형 투명도 데이터 업데이트 후 뷰에 반영시키기
             SELECTED_RECTANGLE_ID = id
+            presenter.updateSelectedRectangle(SELECTED_RECTANGLE_ID, true)
         } else {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.INVISIBLE
             }
+            presenter.updateSelectedRectangle("", false)
         }
     }
 

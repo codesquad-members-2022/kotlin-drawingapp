@@ -2,6 +2,7 @@ package com.codesquad_han.kotlin_drawingapp.rectangle.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.databinding.ItemRecyclerviewObjectListBinding
@@ -21,6 +22,9 @@ class ObjectListAdapter(var dataSet: List<BaseRectangle>): RecyclerView.Adapter<
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder){
             holder.binding.tvObjectName.text = dataSet[position].getObjectName()
+
+            if(dataSet[position].selected) holder.binding.root.setBackgroundResource(R.color.item_selected)
+            else holder.binding.root.setBackgroundResource(R.color.item_unselected)
         }
     }
 

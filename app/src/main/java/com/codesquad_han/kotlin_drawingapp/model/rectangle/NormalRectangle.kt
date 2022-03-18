@@ -19,6 +19,7 @@ class NormalRectangle(
     override var transparency: Transparency,
     override var imageUri: Uri?,
     override var createNum: Int,
+    override var selected: Boolean,
     text: String?
 ) : BaseRectangle {
 
@@ -62,7 +63,7 @@ class NormalRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            createNum,null
+            createNum, false,null
         )
 
         return normalRectangleClone

@@ -16,6 +16,7 @@ interface BaseRectangle {
     var transparency: Transparency
     var imageUri: Uri?
     var createNum: Int
+    var selected: Boolean
 
     fun drawRectangle(context: Context, canvas: Canvas, isTemp: Boolean) // 임시뷰를 그려야 하는 상황에서는 isTemp = true
 

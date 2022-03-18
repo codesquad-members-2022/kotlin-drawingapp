@@ -96,5 +96,18 @@ class Plane(rectangleFactory: RectangleFactory) {
         return -1
     }
 
+    fun updateSelectedRectangle(id: String, isSelectedExist: Boolean){
+        if(isSelectedExist){
+            rectangleList.forEach {
+                it.selected = it.id == id
+            }
+        }
+        else{
+            rectangleList.forEach {
+                it.selected = false
+            }
+        }
+    }
+
     fun returnRectangleCount() = rectangleList.size
 }

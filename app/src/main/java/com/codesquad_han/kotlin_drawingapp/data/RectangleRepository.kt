@@ -26,4 +26,6 @@ interface RectangleRepository {
     fun updateSizeWidth(value: Int, id: String) : Int
 
     fun updateSizeHeight(value: Int, id: String) : Int
+
+    fun updateSelectedState(id: String, isSelectedExist: Boolean)
 }

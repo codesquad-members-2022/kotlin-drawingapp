@@ -46,4 +46,8 @@ class RectangleRepositoryImpl(var plane: Plane) : RectangleRepository {
     override fun updateSizeHeight(value: Int, id: String): Int {
         return plane.updateSizeHeight(value, id)
     }
+
+    override fun updateSelectedState(id: String, isSelectedExist: Boolean) {
+        plane.updateSelectedRectangle(id, isSelectedExist)
+    }
 }

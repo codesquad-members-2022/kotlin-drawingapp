@@ -20,6 +20,7 @@ class TextRectangle(
     override var transparency: Transparency,
     override var imageUri: Uri?,
     override var createNum: Int,
+    override var selected: Boolean,
     var text: String?
 ) : BaseRectangle {
 
@@ -62,7 +63,7 @@ class TextRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            createNum, text
+            createNum, false, text
         )
 
         return textRectangleClone
