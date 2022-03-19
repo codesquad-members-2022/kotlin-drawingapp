@@ -8,7 +8,7 @@ import com.example.drawingapp.util.generateRandom
 import kotlin.random.Random
 
 class Rectangle(
-    private val rectNumber: Int,
+    override val number: Int,
     private val rectangleId: String,
     private val rectanglePoint: Point,
     val color: Color,
@@ -20,8 +20,8 @@ class Rectangle(
     override val point: Point = Point(rect.left, rect.bottom)
 ) : Type {
 
-    override fun copy(): Type {
-        val num: Int = rectNumber
+    override fun deepCopy(): Type {
+        val num: Int = number
         val id: String = rectangleId
         val rectPoint = Point(rectanglePoint.x, rectanglePoint.y)
         val rectColor = Color(this.color.red, this.color.green, this.color.blue)
@@ -34,9 +34,8 @@ class Rectangle(
         return Rectangle(num, id, rectPoint, rectColor, alpha, size, rect, type, click, point)
     }
 
-
     override fun toString() =
-        "Rect${rectNumber} (${rectangleId}), X:${rectanglePoint.x},Y:${rectanglePoint.y}, W${size.width}, H${size.height}, " +
+        "Rect${number} (${rectangleId}), X:${rectanglePoint.x},Y:${rectanglePoint.y}, W${size.width}, H${size.height}, " +
                 "R:${color.red}, G:${color.green}, B:${color.blue}, Alpha: $alpha"
 
     companion object Factory{

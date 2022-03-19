@@ -6,6 +6,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import com.example.drawingapp.data.Plane
 import com.example.drawingapp.data.Repository
+import com.example.drawingapp.data.Text
 import com.example.drawingapp.data.input.InputType
 import com.example.drawingapp.data.Type
 import com.example.drawingapp.data.attribute.Picture
@@ -17,10 +18,6 @@ interface Contract {
 
         fun drawMessage(message: String)
 
-        fun drawRectangle(rectangle: Rectangle)
-
-        fun drawPicture(picture: Picture)
-
         fun setColorText(count: Int)
 
         fun onTouchRectangle(pointF: PointF)
@@ -30,6 +27,8 @@ interface Contract {
         fun changeAlpha(index: Int, alpha: Int)
 
         fun setSideBar()
+
+        fun addDrawList()
     }
 
     interface Presenter {
@@ -44,10 +43,6 @@ interface Contract {
 
         fun setPlaneXY(typeList: List<Type>)
 
-        fun drawPicture()
-
-        fun drawRectangle()
-
         fun resetClick()
 
         fun setClick(index: Int)
@@ -56,6 +51,14 @@ interface Contract {
 
         fun setRectangleInPlane()
 
+        fun setTextInPlane()
+
+        fun drawPicture(drawPicture: (Picture) -> Unit)
+
+        fun drawRectangle(draw: (Rectangle) -> Unit)
+
+        fun drawText(draw: (Text) -> Unit)
+        fun getLastRectangle(): Type?
     }
 
 }
