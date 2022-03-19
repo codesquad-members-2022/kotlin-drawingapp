@@ -1,4 +1,4 @@
-package com.codesquad_han.kotlin_drawingapp.model
+package com.codesquad_han.kotlin_drawingapp.model.rectangle
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,15 +8,19 @@ import com.codesquad_han.kotlin_drawingapp.model.property.Point
 import com.codesquad_han.kotlin_drawingapp.model.property.Size
 import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
 
-interface BaseRectangle{
+interface BaseRectangle {
     val id: String
     var point: Point
     var size: Size
     var backgroundColor: BackgroundColor
     var transparency: Transparency
     var imageUri: Uri?
+    var createNum: Int
+    var selected: Boolean
 
-    fun drawRectangle(context: Context, canvas: Canvas)
+    fun drawRectangle(context: Context, canvas: Canvas, isTemp: Boolean) // 임시뷰를 그려야 하는 상황에서는 isTemp = true
 
-    fun getTempRectangle() : BaseRectangle
+    fun getTempRectangle(): BaseRectangle
+
+    fun getObjectName(): String
 }

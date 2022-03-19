@@ -1,9 +1,13 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
+import android.net.Uri
 import com.codesquad_han.kotlin_drawingapp.model.property.BackgroundColor
 import com.codesquad_han.kotlin_drawingapp.model.property.Point
 import com.codesquad_han.kotlin_drawingapp.model.property.Size
 import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.ImageRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.NormalRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.TextRectangle
 
 class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
     private var x = x
@@ -19,7 +23,7 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
             Size(300, 240),  // Pixcel C API 31 에서 1dp = 2px, 따라서 2배해준 값 사용
             BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
             Transparency((1..10).random()),
-            null, null
+            null, -1, false, null
         )
     }
 
@@ -32,7 +36,20 @@ class RectangleFactory(x: Int, y: Int, wordList: List<String>) {
             Size(0, 0),
             BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
             Transparency((1..10).random()),
-            null, getRandomText()
+            null, -1, false, getRandomText()
+        )
+    }
+
+    fun generateImageRectangle(imageUri: Uri?): ImageRectangle {
+        val id = getRandomString(3) + "-" + getRandomString(3) + "-" + getRandomString(3)
+
+        return ImageRectangle(
+            id,
+            Point((0..x).random(), (0..y).random()),
+            Size(300, 240),
+            BackgroundColor((0..255).random(), (0..255).random(), (0..255).random()),
+            Transparency((1..10).random()),
+            imageUri, -1, false, null
         )
     }
 

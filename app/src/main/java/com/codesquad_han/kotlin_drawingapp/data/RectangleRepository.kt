@@ -1,14 +1,15 @@
 package com.codesquad_han.kotlin_drawingapp.data
 
 import android.net.Uri
-import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
-import com.codesquad_han.kotlin_drawingapp.model.NormalRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
 interface RectangleRepository {
 
     fun addNormalRectangle()
 
     fun addTextRectangle()
+
+    fun addImageRectangle(imageUri: Uri?)
 
     fun getRectangleList() : MutableList<BaseRectangle>
 
@@ -25,4 +26,8 @@ interface RectangleRepository {
     fun updateSizeWidth(value: Int, id: String) : Int
 
     fun updateSizeHeight(value: Int, id: String) : Int
+
+    fun updateSelectedState(id: String, isSelectedExist: Boolean)
+
+    fun getSelectedRectangle(id: String): BaseRectangle?
 }

@@ -11,12 +11,15 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codesquad_han.kotlin_drawingapp.R
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepositoryImpl
 import com.codesquad_han.kotlin_drawingapp.databinding.ActivityRectangleBinding
-import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 import com.codesquad_han.kotlin_drawingapp.model.Plane
 import com.codesquad_han.kotlin_drawingapp.model.RectangleFactory
+import com.codesquad_han.kotlin_drawingapp.rectangle.adapter.ObjectListAdapter
 import com.google.android.material.snackbar.Snackbar
 
 class RectangleActivity : AppCompatActivity(), RectangleContract.View, RectangleViewClickInterface {
@@ -31,6 +34,10 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     private var RECTANGLE_HEIGHT = 0
 
     private lateinit var SELECTED_RECTANGLE_ID: String
+
+    private lateinit var recyclerViewObjectList: RecyclerView
+    private lateinit var objectListAdpater: ObjectListAdapter
+    private var dataSet = listOf<BaseRectangle>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +59,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
                     val width = binding.rectangleDrawingView!!.width - RECTANGLE_WIDTH
                     val height = binding.rectangleDrawingView!!.height - RECTANGLE_HEIGHT
 
-                    rectangleFactory = RectangleFactory(width, height, getString(R.string.TestText).split(' '))
+                    rectangleFactory =
+                        RectangleFactory(width, height, getString(R.string.TestText).split(' '))
                     Log.d("AppTest", "width:$width, height:$height")
 
                     initPresenter(rectangleFactory)
@@ -78,6 +86,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         setPointYchange()
         setSizeWchange()
         setSizeHchange()
+        setRecyclerView()
     }
 
     // presenter 초기화 및 livedata 옵저버 등록
@@ -85,6 +94,8 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         presenter = RectanglePresenter(RectangleRepositoryImpl(Plane(rectangleFactory)), this)
         presenter.liveNormalRectangleList.observe(this) {
             showRectangle(it)
+            dataSet = it.reversed()
+            objectListAdpater.updateDataSet(dataSet)
         }
     }
 
@@ -94,13 +105,45 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setBtnMakeTextRectangle(){
+    fun setBtnMakeTextRectangle() {
         binding.btnGenerateTextRectangle?.setOnClickListener {
             presenter.addTextRectangle()
         }
     }
 
-    fun setPointXchange(){
+    fun setBtnGallery() {
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == RESULT_OK) {
+                    Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
+                    // uri 전달하기!!!!
+                    presenter.addImageRectangle(it.data?.data)
+                } else {
+                    Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
+        val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    val intent = Intent(Intent.ACTION_PICK)
+                    intent.type = "image/*"
+                    getContent.launch(Intent.createChooser(intent, "Gallery"))
+                } else {
+                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+        binding.btnOpenGallery?.let {
+            it.setOnClickListener {
+                // 갤러리 열고 uri 가져오기 구현하기
+                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+    }
+
+    fun setPointXchange() {
         binding.ivPointXup?.let {
             it.setOnClickListener {
                 presenter.updatePointX(1, SELECTED_RECTANGLE_ID)
@@ -113,7 +156,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setPointYchange(){
+    fun setPointYchange() {
         binding.ivPointYup?.let {
             it.setOnClickListener {
                 presenter.updatePointY(1, SELECTED_RECTANGLE_ID)
@@ -126,7 +169,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setSizeWchange(){
+    fun setSizeWchange() {
         binding.ivSizeWup?.let {
             it.setOnClickListener {
                 presenter.updateSizeWidth(1, SELECTED_RECTANGLE_ID)
@@ -139,7 +182,7 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
-    fun setSizeHchange(){
+    fun setSizeHchange() {
         binding.ivSizeHup?.let {
             it.setOnClickListener {
                 presenter.updateSizeHeight(1, SELECTED_RECTANGLE_ID)
@@ -152,6 +195,45 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    fun setRecyclerView() {
+        recyclerViewObjectList = binding.recyclerViewObjectList!!
+        recyclerViewObjectList.layoutManager = LinearLayoutManager(this)
+
+        objectListAdpater = ObjectListAdapter(dataSet, selectObject = {
+            SELECTED_RECTANGLE_ID = it
+            presenter.updateSelectedRectangle(SELECTED_RECTANGLE_ID, true)
+            showControlUI(SELECTED_RECTANGLE_ID)
+        })
+        recyclerViewObjectList.adapter = objectListAdpater
+    }
+
+    fun showControlUI(id: String){
+        val selectedRectangle = presenter.getSelectedRectangle(id)
+
+        binding.constraintLayoutControl?.let {
+            it.visibility = View.VISIBLE
+        }
+        binding.tvBackgroundColor?.let {
+            it.text = getColorStr(selectedRectangle!!)
+        }
+        binding.seekBarTransparency?.let {
+            it.progress = selectedRectangle!!.transparency.transparency
+        }
+        binding.tvPointX?.let {
+            it.text = selectedRectangle!!.point.x.toString()
+        }
+        binding.tvPointY?.let {
+            it.text = selectedRectangle!!.point.y.toString()
+        }
+        binding.tvSizeW?.let {
+            it.text = selectedRectangle!!.size.width.toString()
+        }
+        binding.tvSizeH?.let {
+            it.text = selectedRectangle!!.size.height.toString()
+        }
+
+    }
+
     // 만든 사각형 커스텀 뷰에 추가로 그리기
     override fun showRectangle(updatedNormalRectangleList: MutableList<BaseRectangle>) {
         Log.d("AppTest", "update rectangle list size : ${updatedNormalRectangleList.size}")
@@ -161,32 +243,41 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     }
 
     override fun showPointX(newX: Int) {
-        binding.tvPointX?.let{
+        binding.tvPointX?.let {
             it.text = newX.toString()
         }
     }
 
     override fun showPointY(newY: Int) {
-        binding.tvPointY?.let{
+        binding.tvPointY?.let {
             it.text = newY.toString()
         }
     }
 
     override fun showSizeW(newW: Int) {
-        binding.tvSizeW?.let{
+        binding.tvSizeW?.let {
             it.text = newW.toString()
         }
     }
 
     override fun showSizeH(newH: Int) {
-        binding.tvSizeH?.let{
+        binding.tvSizeH?.let {
             it.text = newH.toString()
         }
     }
 
 
     ///////////////
-    override fun clickDrawingView(color: String, alpha: Int, selected: Boolean, id: String, x: Int, y: Int, width: Int, height: Int) { // 커스텀 뷰 터치 시 호출
+    override fun clickDrawingView(
+        color: String,
+        alpha: Int,
+        selected: Boolean,
+        id: String,
+        x: Int,
+        y: Int,
+        width: Int,
+        height: Int
+    ) { // 커스텀 뷰 터치 시 호출
         if (selected) {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.VISIBLE
@@ -196,9 +287,6 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
             }
             binding.seekBarTransparency?.let {
                 it.progress = alpha
-            }
-            binding.btnOpenGallery?.let {
-                it.isEnabled = true
             }
             binding.tvPointX?.let {
                 it.text = x.toString()
@@ -215,13 +303,12 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
 
             // id 값을 활용해 현재 선택된 사각형 투명도 데이터 업데이트 후 뷰에 반영시키기
             SELECTED_RECTANGLE_ID = id
+            presenter.updateSelectedRectangle(SELECTED_RECTANGLE_ID, true)
         } else {
             binding.constraintLayoutControl?.let {
                 it.visibility = View.INVISIBLE
             }
-            binding.btnOpenGallery?.let {
-                it.isEnabled = false
-            }
+            presenter.updateSelectedRectangle("", false)
         }
     }
 
@@ -247,7 +334,11 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
     fun setTransparencySeekBar() {
         binding.seekBarTransparency?.let {
             it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekbar: SeekBar?, progress: Int, fromUser: Boolean) {
+                override fun onProgressChanged(
+                    seekbar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
                 }
 
                 override fun onStartTrackingTouch(seekbar: SeekBar) {
@@ -260,37 +351,17 @@ class RectangleActivity : AppCompatActivity(), RectangleContract.View, Rectangle
         }
     }
 
+    fun getColorStr(selectedRectangle: BaseRectangle): String {
+        var red = Integer.toHexString(selectedRectangle.backgroundColor.r)
+        var green = Integer.toHexString(selectedRectangle.backgroundColor.g)
+        var blue = Integer.toHexString(selectedRectangle.backgroundColor.b)
 
-    fun setBtnGallery() {
-        val getContent =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode == RESULT_OK) {
-                    Log.d("AppTest", "RectangleActivity/ data : ${it.data?.data}")
-                    // uri 전달하기!!!!
-                    presenter.updateImageUri(SELECTED_RECTANGLE_ID, it.data?.data)
-                } else {
-                    Snackbar.make(binding.root, "사진 불러오기 취소", Snackbar.LENGTH_SHORT).show()
-                }
-            }
+        if (red.length == 1) red = "0" + red
+        if (green.length == 1) green = "0" + green
+        if (blue.length == 1) blue = "0" + blue
 
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    val intent = Intent(Intent.ACTION_PICK)
-                    intent.type = "image/*"
-                    getContent.launch(Intent.createChooser(intent, "Gallery"))
-                } else {
-                    Snackbar.make(binding.root, "갤러리 접근 권한이 승인되지 않았습니다", Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-
-        binding.btnOpenGallery?.let {
-            it.setOnClickListener {
-                // 갤러리 열고 uri 가져오기 구현하기
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        }
+        Log.d("AppTest", "selected rectangle color : #${red}${green}${blue}")
+        return "#${red}${green}${blue}"
     }
 
 }

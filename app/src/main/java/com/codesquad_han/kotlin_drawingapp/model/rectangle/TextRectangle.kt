@@ -1,4 +1,4 @@
-package com.codesquad_han.kotlin_drawingapp.model
+package com.codesquad_han.kotlin_drawingapp.model.rectangle
 
 import android.content.Context
 import android.graphics.Canvas
@@ -13,25 +13,20 @@ import com.codesquad_han.kotlin_drawingapp.model.property.Size
 import com.codesquad_han.kotlin_drawingapp.model.property.Transparency
 
 class TextRectangle(
-    id: String,
-    point: Point,
-    size: Size,
-    backgroundColor: BackgroundColor,
-    transparency: Transparency,
-    imageUri: Uri?,
-    text: String?
+    override val id: String,
+    override var point: Point,
+    override var size: Size,
+    override var backgroundColor: BackgroundColor,
+    override var transparency: Transparency,
+    override var imageUri: Uri?,
+    override var createNum: Int,
+    override var selected: Boolean,
+    var text: String?
 ) : BaseRectangle {
-    override val id = id
-    override var point = point
-    override var size = size
-    override var backgroundColor = backgroundColor
-    override var transparency = transparency
-    override var imageUri = imageUri
-    var text = text
+
     var textSize = 70f
 
-
-    override fun drawRectangle(context: Context, canvas: Canvas) {
+    override fun drawRectangle(context: Context, canvas: Canvas, isTemp: Boolean) {
         var paint = Paint().also {
             it.setColor(
                 Color.argb(
@@ -44,7 +39,11 @@ class TextRectangle(
             it.textSize = textSize
         }
 
-        canvas.drawText(text!!, point.x.toFloat() + 10, point.y + textSize, paint )
+        if(isTemp){
+            paint.alpha = 255 / 10 * 5
+        }
+
+        canvas.drawText(text!!, point.x.toFloat() + 10, point.y + textSize, paint)
 
         var rect = Rect()
         paint.getTextBounds(text!!, 0, text!!.length, rect)
@@ -64,9 +63,11 @@ class TextRectangle(
             BackgroundColor(backgroundColor.r, backgroundColor.g, backgroundColor.b),
             Transparency(transparency.transparency),
             imageUri,
-            text
+            createNum, false, text
         )
 
         return textRectangleClone
     }
+
+    override fun getObjectName() = "Text $createNum"
 }

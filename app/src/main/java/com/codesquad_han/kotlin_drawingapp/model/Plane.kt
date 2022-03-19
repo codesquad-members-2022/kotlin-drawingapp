@@ -1,19 +1,32 @@
 package com.codesquad_han.kotlin_drawingapp.model
 
 import android.net.Uri
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
 class Plane(rectangleFactory: RectangleFactory) {
     private var rectangleList = mutableListOf<BaseRectangle>()
     private var rectangleFactory = rectangleFactory
+    private var normalRectangleCount = 1
+    private var imageRectangleCount = 1
+    private var textRectangleCount = 1
+
 
     fun generateNormalRectangle() {
         val rectangle = rectangleFactory.generateNormalRectangle()
+        rectangle.createNum = normalRectangleCount++
         rectangleList.add(rectangle)
     }
 
     fun generateTextRectangle(){
         val textRectangle = rectangleFactory.generateTextRectangle()
+        textRectangle.createNum = textRectangleCount++
         rectangleList.add(textRectangle)
+    }
+
+    fun generateImageRectangle(imageUri: Uri?){
+        val imageRetangle = rectangleFactory.generateImageRectangle(imageUri)
+        imageRetangle.createNum = imageRectangleCount++
+        rectangleList.add(imageRetangle)
     }
 
     fun returnRectangleList() = rectangleList
@@ -81,6 +94,26 @@ class Plane(rectangleFactory: RectangleFactory) {
             }
         }
         return -1
+    }
+
+    fun updateSelectedRectangle(id: String, isSelectedExist: Boolean){
+        if(isSelectedExist){
+            rectangleList.forEach {
+                it.selected = it.id == id
+            }
+        }
+        else{
+            rectangleList.forEach {
+                it.selected = false
+            }
+        }
+    }
+
+    fun getSelectedRectangle(id: String): BaseRectangle?{
+        rectangleList.forEach {
+            if(it.id == id) return it
+        }
+        return null
     }
 
     fun returnRectangleCount() = rectangleList.size

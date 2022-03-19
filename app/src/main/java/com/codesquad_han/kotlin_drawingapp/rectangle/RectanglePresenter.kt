@@ -3,7 +3,7 @@ package com.codesquad_han.kotlin_drawingapp.rectangle
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.codesquad_han.kotlin_drawingapp.data.RectangleRepository
-import com.codesquad_han.kotlin_drawingapp.model.BaseRectangle
+import com.codesquad_han.kotlin_drawingapp.model.rectangle.BaseRectangle
 
 class RectanglePresenter(
     val rectangleRepository: RectangleRepository,
@@ -28,6 +28,11 @@ class RectanglePresenter(
 
     override fun addTextRectangle() { // 텍스트 기반 사각형 추가 후 라이브데이터 갱신
         rectangleRepository.addTextRectangle()
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun addImageRectangle(imageUri: Uri?) { // 갤러링서 선태한 사진 기반 사각형 추가 후 라이브데이터 갱신
+        rectangleRepository.addImageRectangle(imageUri)
         liveNormalRectangleList.value = rectangleRepository.getRectangleList()
     }
 
@@ -64,6 +69,15 @@ class RectanglePresenter(
     override fun updateSizeHeight(value: Int, id: String) {
         rectangleView.showSizeH(rectangleRepository.updateSizeHeight(value, id))
         liveNormalRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun updateSelectedRectangle(id: String, isSelectedExist: Boolean) {
+        rectangleRepository.updateSelectedState(id, isSelectedExist)
+        liveNormalRectangleList.value = rectangleRepository.getRectangleList()
+    }
+
+    override fun getSelectedRectangle(id: String): BaseRectangle? {
+        return rectangleRepository.getSelectedRectangle(id)
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
