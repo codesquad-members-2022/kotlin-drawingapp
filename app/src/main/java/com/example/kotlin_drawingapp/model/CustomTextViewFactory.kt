@@ -13,7 +13,7 @@ class CustomTextViewFactory : Factory() {
 
         private fun createRandomString(): String {
             val randomStart = Random.nextInt(0, textSplit.size - 5)
-            var randomStringBuilder = StringBuilder()
+            val randomStringBuilder = StringBuilder()
             for (index in randomStart until randomStart + 5) {
                 randomStringBuilder.append(textSplit[index])
                     .append(' ')
@@ -42,14 +42,14 @@ class CustomTextViewFactory : Factory() {
             return Size(bounds.width(), bounds.height())
         }
 
-        fun create(): DrawObject.CustomTextView {
+        fun create(): DrawObject.CustomText {
             val text = createRandomString()
             val endPos = getRandomEndPos(text)
             val alpha = randomAlpha()
             val paint = createPaint(Random.nextInt(50, 100), randomColor(), alpha)
             val textViewSize = getTextViewSize(text, paint, endPos)
 
-            return DrawObject.CustomTextView(
+            return DrawObject.CustomText(
                 randomId(),
                 textViewSize,
                 randomPoint(),

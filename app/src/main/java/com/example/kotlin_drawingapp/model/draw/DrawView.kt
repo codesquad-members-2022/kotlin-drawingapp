@@ -61,7 +61,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             when (drawObject) {
                 is DrawObject.Rectangle -> drawRectangle(canvas, drawObject)
                 is DrawObject.Image -> drawImage(canvas, drawObject)
-                is DrawObject.CustomTextView -> drawCustomTextView(canvas, drawObject)
+                is DrawObject.CustomText -> drawCustomTextView(canvas, drawObject)
             }
         }
 
@@ -86,7 +86,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             when (temporaryDrawObject) {
                 is DrawObject.Rectangle -> drawRectangle(canvas, it as DrawObject.Rectangle)
                 is DrawObject.Image -> drawImage(canvas, it as DrawObject.Image)
-                is DrawObject.CustomTextView -> drawCustomTextView(canvas, it as DrawObject.CustomTextView)
+                is DrawObject.CustomText -> drawCustomTextView(canvas, it as DrawObject.CustomText)
                 else -> return
             }
         }
@@ -122,7 +122,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
     }
 
-    private fun drawCustomTextView(canvas: Canvas?, customTextView: DrawObject.CustomTextView) = with(customTextView) {
+    private fun drawCustomTextView(canvas: Canvas?, customText: DrawObject.CustomText) = with(customText) {
         val textViewPaint = Paint()
         textViewPaint.textSize = paint.textSize
         textViewPaint.color = Color.argb(
@@ -214,7 +214,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 )
             }
 
-            is DrawObject.CustomTextView -> {
+            is DrawObject.CustomText -> {
                 val paint = Paint()
                 paint.textSize = drawObject.paint.textSize
                 paint.color = Color.argb((255 * 0.5).toInt(), drawObject.paint.color.red, drawObject.paint.color.green, drawObject.paint.color.blue)
