@@ -110,6 +110,20 @@ class Plane private constructor(private val _squares: MutableList<Figure>) {
         }
     }
 
+    fun swap(from: Int, to: Int) {
+        _squares[to] = _squares[from].also { _squares[from] = _squares[to] }
+    }
+
+    fun updateLastPosition(index: Int) {
+        _squares.add(_squares[index])
+        _squares.removeAt(index)
+    }
+
+    fun updateFirstPosition(index: Int) {
+        _squares.add(0, _squares[index])
+        _squares.removeAt(index + 1)
+    }
+
     companion object {
         fun of(squares: List<Square>): Plane {
             return Plane(squares.toMutableList())

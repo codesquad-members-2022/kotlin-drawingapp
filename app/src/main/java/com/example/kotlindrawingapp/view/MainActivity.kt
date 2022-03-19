@@ -11,12 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.kotlindrawingapp.R
-import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.presenter.Contract
 import com.example.kotlindrawingapp.presenter.Presenter
 import com.example.kotlindrawingapp.repository.FigureRepository
 
-class MainActivity : AppCompatActivity(), Contract.View, Movable {
+class MainActivity : AppCompatActivity(), Contract.View, Movable, PopUpListener {
 
     private lateinit var presenter: Presenter
     private lateinit var colorTextView: TextView
@@ -39,6 +38,7 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
     private lateinit var heightUpButton: ImageButton
     private lateinit var heightDownButton: ImageButton
     private lateinit var layer: LinearLayout
+    private val layerList = mutableListOf<LayerCustomView>()
     private var squareIndex = 1
     private var textIndex = 1
     private var pictureIndex = 1
@@ -66,13 +66,20 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                 width.text = it.size.width.toString()
                 height.text = it.size.height.toString()
             }
-            presenter.editLayer(it)
+            presenter.loadSelectedLayer(it)
         }
 
         squareButton.setOnClickListener {
             val layerCustomView =
-                LayerCustomView(this, "Rect $squareIndex", R.drawable.ic_baseline_crop_square_24)
-            presenter.loadFigure(layerCustomView)
+                LayerCustomView(
+                    this,
+                    "Rect $squareIndex",
+                    R.drawable.ic_baseline_crop_square_24,
+                    this
+                )
+            layerList.add(layerCustomView)
+            layer.addView(layerCustomView)
+            presenter.loadFigure()
         }
 
         pictureButton.setOnClickListener {
@@ -86,9 +93,12 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                     val layerCustomView = LayerCustomView(
                         this@MainActivity,
                         "Text $textIndex",
-                        R.drawable.ic_baseline_text_fields_24
+                        R.drawable.ic_baseline_text_fields_24,
+                        this@MainActivity
                     )
-                    presenter.loadText(size, text, layerCustomView)
+                    layerList.add(layerCustomView)
+                    layer.addView(layerCustomView)
+                    presenter.loadText(size, text)
                 }
             })
         }
@@ -196,8 +206,10 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
                         ImageDecoder.decodeBitmap(source)
                     }
                     val layerCustomView =
-                        LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image)
-                    presenter.loadPicture(bitmap, layerCustomView)
+                        LayerCustomView(this, "Photo $pictureIndex", R.drawable.ic_image, this)
+                    layerList.add(layerCustomView)
+                    layer.addView(layerCustomView)
+                    presenter.loadPicture(bitmap)
                 }
             }
         }
@@ -225,15 +237,62 @@ class MainActivity : AppCompatActivity(), Contract.View, Movable {
         y.text = tempY.toString()
     }
 
-    override fun showLayer(layerCustomView: LayerCustomView) {
-        layer.addView(layerCustomView)
+    override fun showLayer(index: Int) {
+        layerList.forEachIndexed { idx, layerCustomView ->
+            when (idx) {
+                index -> layerCustomView.background =
+                    ContextCompat.getDrawable(this, R.drawable.custom_layer_pressed)
+                else -> layerCustomView.background =
+                    ContextCompat.getDrawable(this, R.drawable.custom_layer)
+            }
+        }
     }
 
-    override fun showSelectedLayer(layerView: LayerCustomView) {
-        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer_pressed)
+    override fun sendToBack(layerCustomView: LayerCustomView) {
+        val index = layerList.indexOf(layerCustomView)
+        index.takeIf { it >= 0 }
+            ?.let { index ->
+                layerList.removeAt(index)
+                layerList.add(layerCustomView)
+                layer.removeAllViews()
+                layerList.forEach { layer.addView(it) }
+                presenter.sendToBack(index)
+            }
     }
 
-    override fun showNotSelectedLayer(layerView: LayerCustomView) {
-        layerView.background = ContextCompat.getDrawable(this, R.drawable.custom_layer)
+    override fun sendBack(layerCustomView: LayerCustomView) {
+        val index = layerList.indexOf(layerCustomView)
+        index.takeIf { it < layerList.lastIndex }
+            ?.let { index ->
+                layerList[index + 1] =
+                    layerList[index].also { layerList[index] = layerList[index + 1] }
+                layer.removeAllViews()
+                layerList.forEach { layer.addView(it) }
+                presenter.swap(index, index + 1)
+            }
+    }
+
+    override fun sendFront(layerCustomView: LayerCustomView) {
+        val index = layerList.indexOf(layerCustomView)
+        index.takeIf { it > 0 }
+            ?.let { index ->
+                layerList[index - 1] =
+                    layerList[index].also { layerList[index] = layerList[index - 1] }
+                layer.removeAllViews()
+                layerList.forEach { layer.addView(it) }
+                presenter.swap(index, index - 1)
+            }
+    }
+
+    override fun sendToFront(layerCustomView: LayerCustomView) {
+        val index = layerList.indexOf(layerCustomView)
+        index.takeIf { it >= 0 }
+            ?.let { index ->
+                layerList.removeAt(index)
+                layerList.add(0, layerCustomView)
+                layer.removeAllViews()
+                layerList.forEach { layer.addView(it) }
+                presenter.sendToFront(index)
+            }
     }
 }

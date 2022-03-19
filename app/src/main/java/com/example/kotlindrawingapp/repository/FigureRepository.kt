@@ -71,4 +71,19 @@ class FigureRepository {
     fun updateFigure(x: Float, y: Float) {
         updatePoint(x, y)
     }
+
+    fun swap(from: Int, to: Int) {
+        _plane.swap(from, to)
+        plane.value = _plane
+    }
+
+    fun updateLastPositionFromIndex(index: Int) {
+        _plane.updateLastPosition(index)
+        plane.value = _plane
+    }
+
+    fun updateFirstPositionFromIndex(index: Int) {
+        _plane.updateFirstPosition(index)
+        plane.value = _plane
+    }
 }

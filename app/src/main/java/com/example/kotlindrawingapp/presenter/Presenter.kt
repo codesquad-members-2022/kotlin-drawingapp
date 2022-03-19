@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import com.example.kotlindrawingapp.domain.figure.Figure
 import com.example.kotlindrawingapp.domain.figure.text.Text.Companion.generateText
 import com.example.kotlindrawingapp.repository.FigureRepository
-import com.example.kotlindrawingapp.view.LayerCustomView
 import com.example.kotlindrawingapp.view.Sizeable
 
 class Presenter(
@@ -14,32 +13,25 @@ class Presenter(
 
     val selectedSquare = repository.selectedSquare
     val plane = repository.plane
-    private val layerList = mutableListOf<LayerCustomView>()
 
     override fun loadRandomText(callback: Sizeable) {
         callback.getWidthAndHeight(generateText())
     }
 
-    override fun loadFigure(layerCustomView: LayerCustomView) {
+    override fun loadFigure() {
         repository.addSquare()
-        layerList.add(layerCustomView)
-        view.showLayer(layerCustomView)
     }
 
     override fun loadFigure(figure: Figure) {
         repository.addSquare(figure)
     }
 
-    override fun loadPicture(bitmap: Bitmap, layerCustomView: LayerCustomView) {
+    override fun loadPicture(bitmap: Bitmap) {
         repository.addPicture(bitmap)
-        layerList.add(layerCustomView)
-        view.showLayer(layerCustomView)
     }
 
-    override fun loadText(size: Pair<Int, Int>, text: String, layerCustomView: LayerCustomView) {
+    override fun loadText(size: Pair<Int, Int>, text: String) {
         repository.addText(size, text)
-        layerList.add(layerCustomView)
-        view.showLayer(layerCustomView)
     }
 
     override fun removeFigure(figure: Figure) {
@@ -74,15 +66,22 @@ class Presenter(
         repository.updateHeight(height)
     }
 
-    override fun editLayer(figure: Figure?) {
+    override fun loadSelectedLayer(figure: Figure?) {
         val index = plane.value?.findByFigure(selectedSquare.value)
         index ?: return
-        layerList.forEachIndexed { idx, layerCustomView ->
-            if (idx == index) {
-                view.showSelectedLayer(layerCustomView)
-            } else {
-                view.showNotSelectedLayer(layerCustomView)
-            }
-        }
+        view.showLayer(index)
     }
+
+    override fun sendToBack(index: Int) {
+        repository.updateLastPositionFromIndex(index)
+    }
+
+    override fun sendToFront(index: Int) {
+        repository.updateFirstPositionFromIndex(index)
+    }
+
+    override fun swap(from: Int, to: Int) {
+        repository.swap(from, to)
+    }
+
 }
