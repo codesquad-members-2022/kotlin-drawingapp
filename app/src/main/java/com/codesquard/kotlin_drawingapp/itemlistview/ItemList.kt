@@ -7,6 +7,8 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 class ItemList(private val listener: ItemListListener, private val itemLayout: LinearLayout) {
 
@@ -19,33 +21,55 @@ class ItemList(private val listener: ItemListListener, private val itemLayout: L
         itemList.add(newItem)
         itemLayout.addView((newItem), 1)
         newItem.setOnCustomClickListener {
-            onItemLongClick(newItem)
+            onItemLongClick(context, itemList, newItem, itemLayout)
         }
     }
 
-    private fun removeItem(selectedItem: Item) {
-        itemLayout.removeView(selectedItem)
-        itemList.remove(selectedItem)
-    }
-
-    private fun changePosition(index: Int) {
-        val temp = itemList[index]
-        val changedIndex = index + 1
-        removeItem(temp)
-        itemList.add(changedIndex, temp)
-        itemLayout.addView(temp, itemList.size - changedIndex)
-    }
-
     private fun onItemClick(item: Item) {
-        unSelectItem()
         selectItem(item)
         listener.onSelectItem(item.getRectId())
     }
 
-    private fun onItemLongClick(item: Item) {
-        selectItem(item)
-        val index = getSelectedItemIndex()
-        changePosition(index)
+    private fun onItemLongClick(
+        context: Context,
+        itemList: ArrayList<Item>,
+        selectedItem: Item,
+        itemLayout: LinearLayout
+    ) {
+        showDialog(context, itemList, selectedItem, itemLayout)
+    }
+
+    private fun showDialog(
+        context: Context,
+        itemList: ArrayList<Item>,
+        selectedItem: Item,
+        itemLayout: LinearLayout
+    ) {
+        val singleItems = arrayOf("맨 앞으로 보내기", "앞으로 보내기", "뒤로 보내기", "맨 뒤로 보내기")
+        var checkedItem = 0
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle("사각")
+            .setNegativeButton("취소") { dialog, which ->
+                Snackbar.make(itemLayout, "기능 실행을 취소하였습니다", Snackbar.LENGTH_SHORT).show()
+            }.setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                checkedItem = which
+            }.setPositiveButton("실행") { dialog, which ->
+                Snackbar.make(
+                    itemLayout,
+                    "${singleItems[checkedItem]}를 실행했습니다",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+                var command: Command? = null
+                when (checkedItem) {
+                    0 -> command = Front()
+                    1 -> command = Forward()
+                    2 -> command = Backward()
+                    3 -> command = Back()
+                }
+                command?.runFunction(itemList, selectedItem, itemLayout)
+            }
+            .show()
     }
 
     /*@SuppressLint("ClickableViewAccessibility")
