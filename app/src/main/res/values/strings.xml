@@ -7,4 +7,5 @@
   <string name="rect_position">위치</string>
   <string name="rect_size">크기</string>
   <string name="text_rect">텍스트</string>
+  <string name="text_layer">레이어</string>
 </resources>

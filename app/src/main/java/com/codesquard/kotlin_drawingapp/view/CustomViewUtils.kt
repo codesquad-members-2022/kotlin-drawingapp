@@ -5,7 +5,7 @@ import com.codesquard.kotlin_drawingapp.model.PhotoRectangle
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
-interface CustomViewFrame {
+object CustomViewUtils {
 
     fun setPaint(rect: Rectangle): Paint {
         val paint = Paint()

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,20 +12,25 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.codesquard.kotlin_drawingapp.*
+import com.codesquard.kotlin_drawingapp.itemlistview.Command
+import com.codesquard.kotlin_drawingapp.itemlistview.ItemList
+import com.codesquard.kotlin_drawingapp.itemlistview.ItemListListener
 import com.codesquard.kotlin_drawingapp.model.Rectangle
 import com.codesquard.kotlin_drawingapp.presenter.TaskContract
 import com.codesquard.kotlin_drawingapp.presenter.TaskPresenter
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity(), TaskContract.TaskView {
+class MainActivity : AppCompatActivity(), TaskContract.TaskView, ItemListListener {
 
     private lateinit var mainLayout: ConstraintLayout
+    private lateinit var itemListLayout: LinearLayout
     private lateinit var customView: CustomView
     private lateinit var tempView: TemporaryView
     private lateinit var normalRectCreateBtn: Button
@@ -37,12 +43,15 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
     private lateinit var sizeHBtn: Button
     private lateinit var alphaSlider: Slider
     private lateinit var presenter: TaskContract.Presenter
+    private lateinit var itemList: ItemList
+    private lateinit var rectIcon: Drawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mainLayout = findViewById(R.id.main_layout)
+        itemListLayout = findViewById(R.id.layout_layer)
         customView = findViewById(R.id.custom_view)
         tempView = findViewById(R.id.temporary_view)
         backgroundBtn = findViewById(R.id.btn_background)
@@ -55,6 +64,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn = findViewById(R.id.btn_size_w)
         sizeHBtn = findViewById(R.id.btn_size_h)
         presenter = TaskPresenter(this)
+        itemList = ItemList(this, itemListLayout)
 
         val getPhoto = registerIntentToGetPhotoAsBitmap()
         val requestPermissionLauncher = registerPermission(getPhoto)
@@ -146,12 +156,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun onClickTextRectBtn() {
         textRectCreateBtn.setOnClickListener {
+            setRectIcon(textRectCreateBtn)
             presenter.createNewTextRectangle()
         }
     }
 
     private fun onClickPhotoRectBtn(requestPermissionLauncher: ActivityResultLauncher<String>) {
         photoRectCreateBtn.setOnClickListener {
+            setRectIcon(photoRectCreateBtn)
             requestPermissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
         }
     }
@@ -173,17 +185,29 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
     private fun onClickNormalRectBtn() {
         normalRectCreateBtn.setOnClickListener {
+            setRectIcon(normalRectCreateBtn)
             presenter.addNewRectangle()
         }
     }
 
+    override fun onChangeRectOrder(command: Command) {
+        val rectList = customView.getRectList()
+        val selectedRect = customView.getSelectedRect()
+        command.runChangeRectangleFunction(rectList, selectedRect)
+        customView.invalidate()
+    }
+
     override fun showRectangle(newRect: Rectangle) {
+        itemList.addNewItem(newRect.id, newRect.type, newRect.createdOrder, rectIcon, this)
         customView.addNewRect(newRect)
         customView.invalidate()
     }
 
-    override fun showSelectedRectangle() {
+    override fun showSelectedRectangle(selectedRect: Rectangle?) {
         customView.invalidate()
+        selectedRect?.run {
+            itemList.selectItem(selectedRect.id)
+        }
     }
 
     override fun showRectColor(color: String) {
@@ -218,8 +242,8 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         sizeWBtn.text = "W   $w"
         sizeHBtn.text = "H   $h"
         if (w.isNotEmpty()) {
-            val width = pxToDp(w.toFloat()).toInt()
-            val height = pxToDp(h.toFloat()).toInt()
+            val width = pxToDp(w.toFloat())
+            val height = pxToDp(h.toFloat())
             sizeWBtn.text = "W   $width"
             sizeHBtn.text = "H   $height"
         }
@@ -243,6 +267,7 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
 
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    itemList.unSelectItem()
                     presenter.selectRectangle(x, y)
                     true
                 }
@@ -259,10 +284,12 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         }
     }
 
-    private fun getInitRectSize(width: Float, height: Float) = arrayOf(dpToPx(width), dpToPx(height))
+    private fun getInitRectSize(width: Float, height: Float) =
+        arrayOf(dpToPx(width), dpToPx(height))
 
     private fun measureCustomViewSize() {
-        customView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        customView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val rectMaxPoint = customView.getViewSize()
                 presenter.setInitRectSizeAndMaxPoint(getInitRectSize(150f, 120f), rectMaxPoint)
@@ -283,6 +310,14 @@ class MainActivity : AppCompatActivity(), TaskContract.TaskView {
         val metrics = resources.displayMetrics
         val density = metrics.density
         return (px / density).toInt()
+    }
+
+    private fun setRectIcon(btn: Button) {
+        rectIcon = btn.compoundDrawables[1]
+    }
+
+    override fun onSelectItem(rectId: String) {
+        presenter.selectRectangle(rectId)
     }
 }
 
