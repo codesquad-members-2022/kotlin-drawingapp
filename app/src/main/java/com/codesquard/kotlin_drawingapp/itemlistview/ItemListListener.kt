@@ -4,4 +4,6 @@ interface ItemListListener {
 
     fun onSelectItem(rectId: String)
 
+    fun onChangeRectOrder(command: Command)
+
 }

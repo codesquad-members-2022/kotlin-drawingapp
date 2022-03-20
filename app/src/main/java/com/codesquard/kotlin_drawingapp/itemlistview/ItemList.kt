@@ -67,7 +67,10 @@ class ItemList(private val listener: ItemListListener, private val itemLayout: L
                     2 -> command = Backward()
                     3 -> command = Back()
                 }
-                command?.runFunction(itemList, selectedItem, itemLayout)
+                command?.let {
+                    it.runChangeLayoutFunction(itemList, selectedItem, itemLayout)
+                    listener.onChangeRectOrder(it)
+                }
             }
             .show()
     }
@@ -104,14 +107,6 @@ class ItemList(private val listener: ItemListListener, private val itemLayout: L
                 return true
             }
         })
-    }
-
-    private fun getSelectedItemIndex(): Int {
-        var index = 0
-        selectedItem?.let {
-            index = itemList.indexOf(it)
-        }
-        return index
     }
 
     private fun selectItem(item: Item) {

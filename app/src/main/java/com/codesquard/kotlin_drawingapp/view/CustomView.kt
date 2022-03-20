@@ -9,7 +9,7 @@ import com.codesquard.kotlin_drawingapp.model.TextRectangle
 
 class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
 
-    private val rectangleList = mutableListOf<Rectangle>()
+    private val rectangleList = arrayListOf<Rectangle>()
 
     fun addNewRect(newRect: Rectangle) {
         rectangleList.add(newRect)
@@ -20,7 +20,7 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
         drawRectangle(rectangleList, canvas)
     }
 
-    private fun drawRectangle(rectangleList: MutableList<Rectangle>, canvas: Canvas?) {
+    private fun drawRectangle(rectangleList: ArrayList<Rectangle>, canvas: Canvas?) {
         rectangleList.forEach {
             val paint = CustomViewUtils.setPaint(it)
             val size = CustomViewUtils.setSize(it)
@@ -43,6 +43,16 @@ class CustomView(context: Context, attr: AttributeSet) : View(context, attr) {
             this.getTextBounds(text, 0, text.length, textBound)
         }
         return arrayOf(textBound.width(), textBound.height())
+    }
+
+    fun getRectList() = rectangleList
+
+    fun getSelectedRect(): Rectangle {
+        rectangleList.forEach {
+            if (it.isSelected)
+                return it
+        }
+        return rectangleList[0]
     }
 }
 
